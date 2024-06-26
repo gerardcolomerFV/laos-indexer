@@ -1,0 +1,15 @@
+manifestVersion: subsquid.io/v0.1
+name: uerc721
+version: 1
+description: 'Traking uERC721 tokens'
+build: 
+deploy:
+  addons:
+    postgres: 
+  processor:
+    - name: ownership_chain-processor
+      cmd: [ "sqd", "process:prod:ownership_chain" ]
+    - name: laos-processor
+      cmd: [ "sqd", "process:prod:laos" ]
+  api:
+    cmd: [ "sqd", "serve:prod" ]

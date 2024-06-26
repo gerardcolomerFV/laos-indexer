@@ -8,7 +8,7 @@ type Asset @entity {
     id: ID! # ownership_contract + token_id constraint unique missing
     ownershipContract: OwnershipContract!
     tokenId: BigInt!
-    owner: String!
+    owner: String # pending update on each new transfer insert
     transfers: [Transfer!]! @derivedFrom(field: "asset")
 }
 

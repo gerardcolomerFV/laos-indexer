@@ -18,8 +18,8 @@ export class Asset {
     @BigIntColumn_({nullable: false})
     tokenId!: bigint
 
-    @StringColumn_({nullable: false})
-    owner!: string
+    @StringColumn_({nullable: true})
+    owner!: string | undefined | null
 
     @OneToMany_(() => Transfer, e => e.asset)
     transfers!: Transfer[]

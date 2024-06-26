@@ -8,6 +8,7 @@ import {Multicall} from '../abi/multicall'
 
 processor.run(new TypeormDatabase({supportHotBlocks: true, stateSchema: 'ownership_chain_processor'}), async (ctx) => {
     let rawTransfers: RawTransfer[] = getRawTransfers(ctx)
+    console.log(1)
 })
 
 interface RawTransfer {

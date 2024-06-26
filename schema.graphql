@@ -1,6 +1,61 @@
+type OwnershipContract @entity {
+    id: ID! # ownership_contract
+    laosContract: String!
+    assets: [Asset!]! @derivedFrom(field: "ownershipContract")
+}
+
+type Asset @entity {
+    id: ID! # ownership_contract + token_id constraint unique missing
+    ownershipContract: OwnershipContract!
+    tokenId: BigInt!
+    owner: String!
+    transfers: [Transfer!]! @derivedFrom(field: "asset")
+}
+
 type Transfer @entity {
-  id: ID!
-  from: String! @index
-  to: String! @index
-  value: BigInt!
+    id: ID!
+    asset: Asset!
+    from: String!
+    to: String!
+    timestamp: DateTime!
+    blockNumber: Int!
+    txHash: String! @index
+}
+
+type LaosContract @entity {
+    id: ID! # laos_contract
+    laosAssets: [LaosAsset!]! @derivedFrom(field: "laosContract")
+}
+
+type LaosAsset @entity {
+    id: ID! # laos_contract + token_id constraint unique missing
+    laosContract: LaosContract!
+    tokenId: BigInt!
+    initialOwner: String!
+    metadata: Metadata # pending update on each new metadata insert
+}
+
+type Metadata @entity {
+    id: ID!
+    laosAsset: LaosAsset!
+    tokenUri: TokenUri!
+    blockNumber: Int!
+    timestamp: DateTime!
+    txHash: String! @index
+}
+
+type TokenUri @entity {
+    id: ID! # token_uri
+    fetchState: String! # pending, fail, done
+    name: String
+    description: String
+    image: String
+    attributes: [Attribute!]
+    fetchedAt: DateTime!
+    metadata: [Metadata!]! @derivedFrom(field: "tokenUri")
+}
+
+type Attribute {
+    traitType: String!
+    value: String!
 }

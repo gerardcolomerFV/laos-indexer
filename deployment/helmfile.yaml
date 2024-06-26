@@ -19,4 +19,10 @@ helmfiles:
       - postgresDb: {{ .Values.postgresDb }}
       - postgresPassword: {{ .Values.postgresPassword }}
       - ipfsGateway: {{ .Values.ipfsGateway }}
+  - path: 'charts/api/helmfile.yaml'
+    values:
+      - namespace: {{ .Values.namespace }}
+      - postgresDb: {{ .Values.postgresDb }}
+      - postgresPassword: {{ .Values.postgresPassword }}
+      - ipfsGateway: {{ .Values.ipfsGateway }}
 

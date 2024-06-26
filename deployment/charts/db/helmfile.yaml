@@ -1,0 +1,8 @@
+releases:
+  - name: indexer-db-release
+    namespace: '{{ .Values.namespace }}'
+    createNamespace: false
+    chart: .
+    values:
+      - postgresDb: {{ .Values.postgresDb }}
+      - postgresPassword: {{ .Values.postgresPassword }}

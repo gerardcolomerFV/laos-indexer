@@ -1,0 +1,9 @@
+releases:
+  - name: indexer-release
+    namespace: '{{ .Values.namespace }}'
+    createNamespace: false
+    chart: .
+    values:
+      - ipfsGateway: {{ .Values.ipfsGateway }}
+      - postgresDb: {{ .Values.postgresDb }}
+      - postgresPassword: {{ .Values.postgresPassword }}

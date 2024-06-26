@@ -1,0 +1,22 @@
+repositories:
+  - name: stable
+    url: https://charts.helm.sh/stable
+
+environments:
+  default:
+    values:
+      - ./environments/dev/values.yaml
+
+helmfiles:
+  - path: 'charts/db/helmfile.yaml'
+    values:
+      - namespace: {{ .Values.namespace }}
+      - postgresDb: {{ .Values.postgresDb }}
+      - postgresPassword: {{ .Values.postgresPassword }}
+  - path: 'charts/processor/helmfile.yaml'
+    values:
+      - namespace: {{ .Values.namespace }}
+      - postgresDb: {{ .Values.postgresDb }}
+      - postgresPassword: {{ .Values.postgresPassword }}
+      - ipfsGateway: {{ .Values.ipfsGateway }}
+

@@ -1,5 +1,4 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, StringColumn as StringColumn_, OneToMany as OneToMany_} from "@subsquid/typeorm-store"
-import {Asset} from "./asset.model"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, StringColumn as StringColumn_} from "@subsquid/typeorm-store"
 
 @Entity_()
 export class OwnershipContract {
@@ -10,9 +9,6 @@ export class OwnershipContract {
     @PrimaryColumn_()
     id!: string
 
-    @StringColumn_({nullable: false})
-    laosContract!: string
-
-    @OneToMany_(() => Asset, e => e.ownershipContract)
-    assets!: Asset[]
+    @StringColumn_({nullable: true})
+    laosContract!: string | undefined | null
 }

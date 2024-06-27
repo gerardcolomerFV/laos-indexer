@@ -79,6 +79,11 @@
       "open": {
         "description": "Open a local browser window",
         "cmd": ["npx", "--yes", "opener"]
+      },
+      "cleangen": {
+        "description": "Restart",
+        "deps": ["down", "clean", "migration:clean", "up", "codegen","migration:generate"],
+        "cmd": ["squid-typeorm-migration", "apply"]
       }
     }
   }

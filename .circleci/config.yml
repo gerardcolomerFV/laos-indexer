@@ -93,10 +93,6 @@ workflows:
     jobs:
       - build-indexer:
           context: dockerhub
-          filters:
-            branches:
-              only:
-                - main
 
       - deployment-test:
           name: deployment-test

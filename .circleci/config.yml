@@ -85,8 +85,6 @@ jobs:
           name: Build and Deploy Node API
           command: |
             npm ci
-            npm run lint
-      - deployment-test
       - dockerize-and-push:
           image: freeverseio/laos-indexer
 
@@ -100,6 +98,13 @@ workflows:
               only:
                 - main
 
+      - deployment-test:
+          name: deployment-test
+          filters:
+            branches:
+              only:
+                - main
+
       - approval:
           type: approval
           name: approve-deploy-indexer
@@ -108,6 +113,7 @@ workflows:
 
       - deploy_to_cluster:
           requires:
+            - deployment-test
             - approve-deploy-indexer
           filters:
             branches:

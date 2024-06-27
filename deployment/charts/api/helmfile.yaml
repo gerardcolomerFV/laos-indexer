@@ -5,6 +5,7 @@ releases:
     chart: .
     values:
       - ipfsGateway: {{ .Values.ipfsGateway }}
+      - imageTag: {{ .Values.imageTag }}
       - postgresDb: {{ .Values.postgresDb }}
       - postgresPassword: {{ .Values.postgresPassword }}
       - host: {{ .Values.host }}

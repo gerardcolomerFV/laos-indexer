@@ -25,4 +25,5 @@ helmfiles:
       - postgresDb: {{ .Values.postgresDb }}
       - postgresPassword: {{ .Values.postgresPassword }}
       - ipfsGateway: {{ .Values.ipfsGateway }}
+      - host: {{ .Values.host }}
 

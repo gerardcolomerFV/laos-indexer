@@ -1,0 +1,128 @@
+version: 2.1
+
+orbs:
+  kube-orb: circleci/kubernetes@1.3.1
+  helm: circleci/helm@3.0.2
+
+commands:
+  install-helmfile:
+    description: Install helmfile
+    steps:
+      - run:
+          name: Install helmfile
+          command: ./circleci-scripts/install-helmfile.sh
+  dockerize-and-push:
+    parameters:
+      image:
+        type: string
+    steps:
+      - attach_workspace:
+          at: ./
+      - run:
+          name: Docker login
+          command: echo $DOCKER_PASSWD | docker login -u $DOCKER_ID --password-stdin
+      - run:
+          name: Build and push Docker image
+          command: |
+            echo "Docker images for $CIRCLE_SHA1 will be pushed"
+            docker build -t << parameters.image >>:$CIRCLE_SHA1 .
+            docker push << parameters.image >>:$CIRCLE_SHA1
+
+jobs:
+  deploy_to_cluster:
+    parameters:
+      environment:
+        type: string
+        default: development
+    description: Deploy to << parameters.environment >> environment
+    docker:
+      - image: cimg/deploy:2023.09
+    steps:
+      - checkout
+      - kube-orb/install-kubectl:
+          kubectl-version: 'v1.25.14'
+      - when:
+          condition:
+            equal: [ development, << parameters.environment >> ]
+          steps:
+            - kube-orb/install-kubeconfig:
+                kubeconfig: KUBECONFIG_DATA
+      - when:
+          condition:
+            equal: [ staging, << parameters.environment >> ]
+          steps:
+            - kube-orb/install-kubeconfig:
+                kubeconfig: KUBECONFIG_PROTOSTAR_STG_DATA
+      - helm/install_helm_client:
+          version: v3.13.0
+      - install-helmfile
+      - run:
+          name: Deploy to << parameters.environment >> environment
+          command: |
+            cd deployment
+            helmfile sync --environment << parameters.environment >>
+
+  deployment-test:
+    docker:
+      - image: cimg/base:2022.08
+    steps:
+      - checkout
+      - helm/install_helm_client:
+          version: v3.13.0
+      - install-helmfile
+      - run:
+          name: Test Helmfile
+          command: |
+            cd deployment
+            helmfile lint
+
+  build-indexer:
+    docker:
+      - image: cimg/node:lts
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Build and Deploy Node API
+          command: |
+            npm ci
+      - dockerize-and-push:
+          image: freeverseio/laos-indexer
+
+workflows:
+  ci-workflow:
+    jobs:
+      - approval:
+          type: approval
+          name: approve-build
+
+      - build-indexer:
+          context: dockerhub
+          requires:
+            - approve-build
+
+      - deployment-test:
+          filters:
+            branches:
+              only:
+                - main
+
+      - approval:
+          type: approval
+          name: approve-deploy-indexer
+          requires:
+            - build-indexer
+          filters:
+            branches:
+              only:
+                - main
+
+      - deploy_to_cluster:
+          requires:
+            - deployment-test
+            - approve-deploy-indexer
+          filters:
+            branches:
+              only:
+                - main

@@ -7,3 +7,4 @@ releases:
       - ipfsGateway: {{ .Values.ipfsGateway }}
       - postgresDb: {{ .Values.postgresDb }}
       - postgresPassword: {{ .Values.postgresPassword }}
+      - host: {{ .Values.host }}

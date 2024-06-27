@@ -5,6 +5,7 @@ FROM node-with-gyp AS builder
 WORKDIR /squid
 ADD package.json .
 ADD package-lock.json .
+ADD db db
 ADD schema.graphql .
 RUN npm ci
 ADD tsconfig.json .
@@ -21,6 +22,7 @@ COPY --from=deps /squid/package.json .
 COPY --from=deps /squid/package-lock.json .
 COPY --from=deps /squid/node_modules node_modules
 COPY --from=builder /squid/lib lib
+COPY --from=builder /squid/db db
 COPY --from=builder /squid/schema.graphql schema.graphql
 ADD commands.json .
 RUN echo -e "loglevel=silent\\nupdate-notifier=false" > /squid/.npmrc

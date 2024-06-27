@@ -2,3 +2,4 @@ namespace: protostar
 postgresDb: squid
 postgresPassword: postgres
 ipfsGateway: https://subsquid-laos.mypinata.cloud/ipfs/
+host: indexer.gorengine.com

@@ -6,6 +6,9 @@ environments:
   default:
     values:
       - ./environments/dev/values.yaml
+  development:
+    values:
+      - ./environments/dev/values.yaml
 
 helmfiles:
   - path: 'charts/db/helmfile.yaml'

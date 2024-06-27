@@ -20,7 +20,7 @@ spec:
     - host: {{ .Values.host }}
       http:
         paths:
-          - path: /graphql
+          - path: /
             pathType: Prefix
             backend:
               service:

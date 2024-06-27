@@ -1,7 +1,7 @@
 type OwnershipContract @entity {
     id: ID! # ownership_contract
     laosContract: String
-    assets: [Asset!] @derivedFrom(field: "ownershipContract")
+    assets: [Asset]! @derivedFrom(field: "ownershipContract")
 }
 
 type Asset @entity {

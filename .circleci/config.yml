@@ -18,12 +18,15 @@ commands:
     steps:
       - attach_workspace:
           at: ./
-      - run: echo $DOCKER_PASSWD | docker login -u $DOCKER_ID --password-stdin
-      - run: |          
-          echo "Docker images for CIRCLE_SHA1 will be pushed"
-          docker build -t << parameters.image >>:$CIRCLE_SHA1 .
-          docker push << parameters.image >>:$CIRCLE_SHA1
-  
+      - run:
+          name: Docker login
+          command: echo $DOCKER_PASSWD | docker login -u $DOCKER_ID --password-stdin
+      - run:
+          name: Build and push Docker image
+          command: |
+            echo "Docker images for $CIRCLE_SHA1 will be pushed"
+            docker build -t << parameters.image >>:$CIRCLE_SHA1 .
+            docker push << parameters.image >>:$CIRCLE_SHA1
 
 jobs:
   deploy_to_cluster:
@@ -59,7 +62,6 @@ jobs:
             cd deployment
             helmfile sync --environment << parameters.environment >>
 
-
   deployment-test:
     docker:
       - image: cimg/base:2022.08
@@ -91,11 +93,16 @@ jobs:
 workflows:
   ci-workflow:
     jobs:
+      - approval:
+          type: approval
+          name: approve-build
+
       - build-indexer:
           context: dockerhub
+          requires:
+            - approve-build
 
       - deployment-test:
-          name: deployment-test
           filters:
             branches:
               only:
@@ -106,6 +113,10 @@ workflows:
           name: approve-deploy-indexer
           requires:
             - build-indexer
+          filters:
+            branches:
+              only:
+                - main
 
       - deploy_to_cluster:
           requires:
@@ -115,5 +126,3 @@ workflows:
             branches:
               only:
                 - main
-
-            

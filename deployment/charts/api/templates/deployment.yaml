@@ -16,8 +16,8 @@ spec:
     spec:
       containers:
         - name: laos-indexer-api
-          image: freeverseio/laos-indexer
-          imagePullPolicy: Never
+          image: freeverseio/laos-indexer:{{ .Values.imageTag }}
+          imagePullPolicy: Always
           resources:
             requests:
               memory: '256Mi'

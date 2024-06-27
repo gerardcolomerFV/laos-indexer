@@ -15,7 +15,7 @@ spec:
   tls:
     - hosts:
         - {{ .Values.host }}
-      secretName: rewards-tls
+      secretName: indexer-tls
   rules:
     - host: {{ .Values.host }}
       http:

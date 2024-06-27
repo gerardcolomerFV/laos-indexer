@@ -96,23 +96,29 @@ workflows:
       - approval:
           type: approval
           name: approve-build
+          filters:
+            branches:
+              ignore:
+                - main
 
       - build-indexer:
           context: dockerhub
           requires:
             - approve-build
+          filters:
+            branches:
+              ignore:
+                - main
 
-      - deployment-test:
+      - build-indexer:
+          name: build for main
+          context: dockerhub
           filters:
             branches:
               only:
                 - main
 
-      - approval:
-          type: approval
-          name: approve-deploy-indexer
-          requires:
-            - build-indexer
+      - deployment-test:
           filters:
             branches:
               only:
@@ -121,7 +127,6 @@ workflows:
       - deploy_to_cluster:
           requires:
             - deployment-test
-            - approve-deploy-indexer
           filters:
             branches:
               only:

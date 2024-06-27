@@ -6,6 +6,9 @@ environments:
   default:
     values:
       - ./environments/dev/values.yaml
+  development:
+    values:
+      - ./environments/dev/values.yaml
 
 helmfiles:
   - path: 'charts/db/helmfile.yaml'
@@ -16,13 +19,16 @@ helmfiles:
   - path: 'charts/processor/helmfile.yaml'
     values:
       - namespace: {{ .Values.namespace }}
+      - imageTag: {{ requiredEnv "CIRCLE_SHA1" }}
       - postgresDb: {{ .Values.postgresDb }}
       - postgresPassword: {{ .Values.postgresPassword }}
       - ipfsGateway: {{ .Values.ipfsGateway }}
   - path: 'charts/api/helmfile.yaml'
     values:
       - namespace: {{ .Values.namespace }}
+      - imageTag: {{ requiredEnv "CIRCLE_SHA1" }}
       - postgresDb: {{ .Values.postgresDb }}
       - postgresPassword: {{ .Values.postgresPassword }}
       - ipfsGateway: {{ .Values.ipfsGateway }}
+      - host: {{ .Values.host }}
 

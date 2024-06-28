@@ -3,15 +3,19 @@ import {processor, CONTRACT_ADDRESS, Context} from './processor'
 import * as ERC721UniversalContract from '../abi/UniversalContract'
 import {getAccountKey20FromBaseUri} from './util'
 import { OwnershipContract, Transfer } from '../model'
+import {RawTransfer, DetectedEvents, RawOwnershipContract} from '../model/ownership/raw'
 
 import {Multicall} from '../abi/multicall'
 
+
 processor.run(new TypeormDatabase({supportHotBlocks: true, stateSchema: 'ownership_chain_processor'}), async (ctx) => {
-    let detectedEvents: DetectedEvents = getDetectedEvents(ctx)
+    
+    const ownerShipContracts = await ctx.store.find(OwnershipContract);
+    
+    console.log('ownerShipContracts:', ownerShipContracts); 
+    let detectedEvents: DetectedEvents = getDetectedEvents(ctx, ownerShipContracts)
     let rawOwnershipContracts: RawOwnershipContract[] = detectedEvents.ownershipContracts
     let rawTransfers: RawTransfer[] = detectedEvents.transfers
-    console.log('rawTransfers:', rawTransfers)
-    console.log('rawOwnershipContracts:', rawOwnershipContracts)
 
     // TODO init tx
     if (rawOwnershipContracts.length > 0) {
@@ -27,26 +31,6 @@ processor.run(new TypeormDatabase({supportHotBlocks: true, stateSchema: 'ownersh
     // TODO close tx
 })
 
-interface DetectedEvents{
-    transfers: RawTransfer[]
-    ownershipContracts: RawOwnershipContract[]
-}
-
-interface RawTransfer {
-    id: string
-    tokenId: bigint
-    from: string
-    to: string
-    timestamp: Date
-    blockNumber: number
-    txHash: string
-}
-
-interface RawOwnershipContract {
-    id: string
-    laosContract: string | null
-}
- 
 function createOwnershipContractsModel(rawOwnershipContracts: RawOwnershipContract[]): OwnershipContract[] {
     let ownershipContractModel: OwnershipContract[] = []
     for (let roc of rawOwnershipContracts) {
@@ -75,7 +59,7 @@ function createTransfersModel(rawTransfers: RawTransfer[]): Transfer[] {
     return transfersModel  
 }
 
-function getDetectedEvents(ctx: Context ): DetectedEvents {    
+function getDetectedEvents(ctx: Context, ownershipContracts: OwnershipContract[] ): DetectedEvents {    
     let transfers: RawTransfer[] = []
     let ownershipContractsToInsertInDb: RawOwnershipContract[] = []
 

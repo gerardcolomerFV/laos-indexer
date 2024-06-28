@@ -1,20 +1,14 @@
 import {TypeormDatabase} from '@subsquid/typeorm-store'
-import {processor, CONTRACT_ADDRESS, Context} from './processor'
+import {processor, Context} from './processor'
 import * as ERC721UniversalContract from '../abi/UniversalContract'
 import {getAccountKey20FromBaseUri} from './util'
-import { OwnershipContract, Transfer } from '../model'
-import {RawTransfer, DetectedEvents, RawOwnershipContract} from '../model/ownership/raw'
+import { OwnershipContract, Transfer, RawTransfer, DetectedEvents, RawOwnershipContract } from '../model'
 
-import {Multicall} from '../abi/multicall'
 
 
 processor.run(new TypeormDatabase({supportHotBlocks: true, stateSchema: 'ownership_chain_processor'}), async (ctx) => {
-    
     const ownerShipContracts = await ctx.store.find(OwnershipContract);
     let ownershipContractIds = new Set(ownerShipContracts.map(contract => contract.id));
-
-    
-    console.log('ownerShipContracts:', ownerShipContracts); 
     let detectedEvents: DetectedEvents = getDetectedEvents(ctx, ownershipContractIds)
     let rawOwnershipContracts: RawOwnershipContract[] = detectedEvents.ownershipContracts
     let rawTransfers: RawTransfer[] = detectedEvents.transfers

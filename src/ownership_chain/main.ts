@@ -1,43 +1,94 @@
-import {TypeormDatabase} from '@subsquid/typeorm-store'
+import {TypeormDatabase, TypeormDatabaseOptions, Store} from '@subsquid/typeorm-store'
+
+import { DataSource, EntityTarget, FindManyOptions } from 'typeorm';
 import {processor, Context} from './processor'
 import * as ERC721UniversalContract from '../abi/UniversalContract'
 import {getAccountKey20FromBaseUri} from './util'
-import { Asset, OwnershipContract, Transfer, RawTransfer, DetectedEvents, RawOwnershipContract } from '../model'
-import { v4 as uuidv4 } from 'uuid'
+import {Asset, OwnershipContract, Transfer, RawTransfer, DetectedEvents, RawOwnershipContract } from '../model'
+import { v4 as uuidv4 } from 'uuid';
+import { generateUUID } from './util';
+
+interface HashAndHeight {
+  height: number
+  hash: string
+}
 
 
-processor.run(new TypeormDatabase({supportHotBlocks: true, stateSchema: 'ownership_chain_processor'}), async (ctx) => {
+interface DatabaseState {
+  height: number
+  hash: string
+  top: HashAndHeight[]
+  nonce: number
+}
+
+export interface EntityClass<T> {
+  new (): T
+}
+
+
+export interface Entity {
+  id: string
+}
+
+class CustomStore extends Store {
+  save<E extends Entity>(entity: E): Promise<void>
+    save<E extends Entity>(entities: E[]): Promise<void>
+    save<E extends Entity>(e: E | E[]): Promise<void> {
+        if (Array.isArray(e)) { // please the compiler
+            return this.upsert(e)
+        } else {
+            return this.upsert(e)
+        }
+    }
+}
+class CustomDatabase extends TypeormDatabase {
+  private dataSource?: DataSource;
+
+  constructor(options?: TypeormDatabaseOptions) {
+      super(options);
+  }
+
+  async connect(): Promise<DatabaseState> {
+      const state = await super.connect();
+      this.dataSource = (this as any).con; // Access the protected member 'con'
+      return state;
+  }
+
+  getDataSource(): DataSource | undefined {
+      return this.dataSource;
+  }
+
+  async findWithCustomLogic<T extends Entity>(entityClass: EntityTarget<T>, options?: FindManyOptions<T>): Promise<T[]> {
+    if (!this.dataSource) {
+        throw new Error('DataSource is not connected');
+    }
+    // Add your custom implementation here
+    return this.dataSource.manager.find(entityClass, options);
+}
+
+}
+
+
+processor.run<CustomStore>(new CustomDatabase({supportHotBlocks: true, stateSchema: 'ownership_chain_processor'}), async (ctx) => {
     const ownerShipContracts = await ctx.store.find(OwnershipContract);
     let ownershipContractIds = new Set(ownerShipContracts.map(contract => contract.id));
+
     let detectedEvents: DetectedEvents = getDetectedEvents(ctx, ownershipContractIds)
     let rawOwnershipContracts: RawOwnershipContract[] = detectedEvents.ownershipContracts
     let rawTransfers: RawTransfer[] = detectedEvents.transfers
 
-    // TODO init tx ****************************
+
+    // TODO init tx
     if (rawOwnershipContracts.length > 0) {
         const ownershipContractsModelArray = createOwnershipContractsModel(rawOwnershipContracts)
         await ctx.store.insert(ownershipContractsModelArray)
     }
 
     if (rawTransfers.length > 0) {
-        // TODO improve in order to trigger only one query to DB
-        let assetsDbMap: Map<string, Asset> = new Map()        
-        for (let rawTransfer of rawTransfers) {
-            const assetDb = await ctx.store.findOneBy(Asset, 
-                {
-                    ownershipContract: new OwnershipContract({id: rawTransfer.ownershipContract}),
-                    tokenId: rawTransfer.tokenId
-                }
-            );
-            if (assetDb) {
-                const assetLogicalId: AssetLogicalId = {tokenId: rawTransfer.tokenId.toString().toLowerCase(), ownershipContract: rawTransfer.ownershipContract.toLowerCase()}
-                assetsDbMap.set(generateAssetLogicalIdKey(assetLogicalId), assetDb)
-            }
-        }
-        console.log(`assetsDbMap.size:`, assetsDbMap.size)
+       
 
         // Create assets
-        const assetsModelMap = createAssetsModelMap(rawTransfers, assetsDbMap)
+        const assetsModelMap = createAssetsModelMap(rawTransfers)
         console.log(`insert ${assetsModelMap.size} Assets:`, assetsModelMap)
         await ctx.store.upsert([...assetsModelMap.values()]) 
         
@@ -91,29 +142,17 @@ function createTransfersModel(rawTransfers: RawTransfer[], assetsModalMap: Map<s
 
 
 
-function createAssetsModelMap(rawTransfers: RawTransfer[], assetsDbMap: Map<string, Asset>): Map<string, Asset> {
-    let assetsModelMap: Map<string, Asset> = new Map()
-    let assetsToAddDbMap: Map<string, Asset> = new Map(assetsDbMap)
-    for (let rt of rawTransfers) {
-        // check if the asset already exists, or a new ID must be created
-        let newId: string | undefined = undefined
-        const assetLogicalId: AssetLogicalId = {tokenId: rt.tokenId.toString().toLowerCase(), ownershipContract: rt.ownershipContract.toLowerCase()}
-        const assetLogicalIdKey = generateAssetLogicalIdKey(assetLogicalId)
-        if (assetsToAddDbMap.has(assetLogicalIdKey)) {
-            newId = assetsToAddDbMap.get(assetLogicalIdKey)!.id
-        } else {
-            newId = uuidv4()
-        }
-        const newAsset = new Asset({
-            id: newId,
+function createAssetsModelMap(rawTransfers: RawTransfer[]): Asset[] {
+    let assetsModelMap = rawTransfers.map(rt => {
+        return new Asset({
+            id: generateUUID(rt.tokenId.toString(), rt.ownershipContract),
             ownershipContract: new OwnershipContract({id: rt.ownershipContract}),
             tokenId: rt.tokenId,
             owner: rt.to,
-            transfers: [], // TODO add new transfer to all its transfers
+            transfers: [], 
         })
-        assetsModelMap.set(rt.id, newAsset)        
-        assetsToAddDbMap.set(assetLogicalIdKey, newAsset) // add in oder to avoid duplicates in same batch of asset upserts
-    }
+    });
+    
     return assetsModelMap
 }
 
@@ -123,33 +162,18 @@ function getDetectedEvents(ctx: Context, ownershipContractsToCheck: Set<string> 
     
     for (let block of ctx.blocks) {
         for (let log of block.logs) {
-
           // New contract deployed?
           if (log.topics[0] === ERC721UniversalContract.events.NewERC721Universal.topic) {
-            console.log('********************************************************************')
             const logDecoded = ERC721UniversalContract.events.NewERC721Universal.decode(log)
-            console.log(logDecoded)
-                       
             ownershipContractsToCheck.add(logDecoded.newContractAddress.toLowerCase()) // addresses to check transfers
             const laosContractAddress = getAccountKey20FromBaseUri(logDecoded.baseURI)
             ownershipContractsToInsertInDb.push({
                 id: logDecoded.newContractAddress,
                 laosContract: laosContractAddress,
             })  
-
-            console.log('********************************************************************')
           }
 
-          // Transfer of an asset that belongs to a tracked contract?
-        //   ownershipContractsToCheck.forEach((value) => {
-        //     console.log('ownershipContractsToCheck:',value);
-        //     });
-
-        //   if(ownershipContractsToCheck.has(log.address.toLowerCase())){
-        //     console.log('********************************************************************')
-        //     console.log('log.topics[0]:', log.topics[0]);
-
-        //   }
+      
           if(ownershipContractsToCheck.has(log.address.toLowerCase()) && log.topics[0] === ERC721UniversalContract.events.Transfer.topic){
             console.log('********************************************************************')
             const logDecoded = ERC721UniversalContract.events.Transfer.decode(log)

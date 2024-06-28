@@ -15,7 +15,7 @@ export const CONTRACT_ADDRESS = '0xd4cf03ecf779e71cf30a4d3b1f85a03550de52e9' // 
 export const processor = new EvmBatchProcessor()
     .setGateway('https://v2.archive.subsquid.io/network/polygon-mainnet')
     .setDataSource({
-        chain: 'https://rpc.ankr.com/polygon'
+        chain: process.env.RPC_ENDPOINT!,
     })
     .setFinalityConfirmation(75)
     .setBlockRange({

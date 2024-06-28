@@ -1,13 +1,15 @@
 import {TypeormDatabase} from '@subsquid/typeorm-store'
-import {processor, CONTRACT_ADDRESS, Context} from './processor'
+import {processor, Context} from './processor'
 import * as ERC721UniversalContract from '../abi/UniversalContract'
 import {getAccountKey20FromBaseUri} from './util'
-import { Asset, OwnershipContract, Transfer } from '../model'
+import { Asset, OwnershipContract, Transfer, RawTransfer, DetectedEvents, RawOwnershipContract } from '../model'
 import { v4 as uuidv4 } from 'uuid'
 
 
 processor.run(new TypeormDatabase({supportHotBlocks: true, stateSchema: 'ownership_chain_processor'}), async (ctx) => {
-    let detectedEvents: DetectedEvents = getDetectedEvents(ctx)
+    const ownerShipContracts = await ctx.store.find(OwnershipContract);
+    let ownershipContractIds = new Set(ownerShipContracts.map(contract => contract.id));
+    let detectedEvents: DetectedEvents = getDetectedEvents(ctx, ownershipContractIds)
     let rawOwnershipContracts: RawOwnershipContract[] = detectedEvents.ownershipContracts
     let rawTransfers: RawTransfer[] = detectedEvents.transfers
 
@@ -58,27 +60,7 @@ function generateAssetLogicalIdKey(assetLogicalId: AssetLogicalId): string {
     return `${assetLogicalId.tokenId}:${assetLogicalId.ownershipContract}`;
 }
 
-interface DetectedEvents{
-    transfers: RawTransfer[]
-    ownershipContracts: RawOwnershipContract[]
-}
 
-interface RawTransfer {
-    id: string
-    tokenId: bigint
-    from: string
-    to: string
-    timestamp: Date
-    blockNumber: number
-    txHash: string
-    ownershipContract: string
-}
-
-interface RawOwnershipContract {
-    id: string
-    laosContract: string | null
-}
- 
 function createOwnershipContractsModel(rawOwnershipContracts: RawOwnershipContract[]): OwnershipContract[] {
     let ownershipContractModel: OwnershipContract[] = []
     for (let roc of rawOwnershipContracts) {
@@ -107,6 +89,8 @@ function createTransfersModel(rawTransfers: RawTransfer[], assetsModalMap: Map<s
     return transfersModel  
 }
 
+
+
 function createAssetsModelMap(rawTransfers: RawTransfer[], assetsDbMap: Map<string, Asset>): Map<string, Asset> {
     let assetsModelMap: Map<string, Asset> = new Map()
     let assetsToAddDbMap: Map<string, Asset> = new Map(assetsDbMap)
@@ -133,13 +117,9 @@ function createAssetsModelMap(rawTransfers: RawTransfer[], assetsDbMap: Map<stri
     return assetsModelMap
 }
 
-function getDetectedEvents(ctx: Context ): DetectedEvents {    
+function getDetectedEvents(ctx: Context, ownershipContractsToCheck: Set<string> ): DetectedEvents {  
     let transfers: RawTransfer[] = []
     let ownershipContractsToInsertInDb: RawOwnershipContract[] = []
-
-    /* get contractListFromDB **/    
-    let ownershipContractsToCheck: Set<string> = new Set();
-    ownershipContractsToCheck.add('0x52f5de321c9595e7b11f0d91d8c3e816c7d715bb') // TODO remove
     
     for (let block of ctx.blocks) {
         for (let log of block.logs) {

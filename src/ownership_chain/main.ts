@@ -66,7 +66,6 @@ function createTransferModels(rawTransfers: RawTransfer[]): Transfer[] {
 }
 
 
-
 function createAssetModels(rawTransfers: RawTransfer[]): Asset[] {
     let assetsModelMap = rawTransfers.map(rt => {
         const asset = new Asset({

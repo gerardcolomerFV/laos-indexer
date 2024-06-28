@@ -65,8 +65,8 @@ function createOwnershipContractsModel(rawOwnershipContracts: RawOwnershipContra
     let ownershipContractModel: OwnershipContract[] = []
     for (let roc of rawOwnershipContracts) {
         ownershipContractModel.push(new OwnershipContract({
-            id: roc.id,
-            laosContract: roc.laosContract,
+            id: roc.id.toLowerCase(),
+            laosContract: roc.laosContract?.toLowerCase(),
             assets: [],
         }))
     }
@@ -127,29 +127,17 @@ function getDetectedEvents(ctx: Context, ownershipContractsToCheck: Set<string> 
           // New contract deployed?
           if (log.topics[0] === ERC721UniversalContract.events.NewERC721Universal.topic) {
             console.log('********************************************************************')
-            const logDecoded = ERC721UniversalContract.events.NewERC721Universal.decode(log)
-            console.log(logDecoded)
-                       
+            const logDecoded = ERC721UniversalContract.events.NewERC721Universal.decode(log)                
             ownershipContractsToCheck.add(logDecoded.newContractAddress.toLowerCase()) // addresses to check transfers
             const laosContractAddress = getAccountKey20FromBaseUri(logDecoded.baseURI)
             ownershipContractsToInsertInDb.push({
-                id: logDecoded.newContractAddress,
-                laosContract: laosContractAddress,
+                id: logDecoded.newContractAddress.toLowerCase(),
+                laosContract: laosContractAddress ? laosContractAddress?.toLowerCase() : null,
             })  
 
             console.log('********************************************************************')
           }
 
-          // Transfer of an asset that belongs to a tracked contract?
-        //   ownershipContractsToCheck.forEach((value) => {
-        //     console.log('ownershipContractsToCheck:',value);
-        //     });
-
-        //   if(ownershipContractsToCheck.has(log.address.toLowerCase())){
-        //     console.log('********************************************************************')
-        //     console.log('log.topics[0]:', log.topics[0]);
-
-        //   }
           if(ownershipContractsToCheck.has(log.address.toLowerCase()) && log.topics[0] === ERC721UniversalContract.events.Transfer.topic){
             console.log('********************************************************************')
             const logDecoded = ERC721UniversalContract.events.Transfer.decode(log)

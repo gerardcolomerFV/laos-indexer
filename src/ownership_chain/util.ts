@@ -1,17 +1,15 @@
 import { createHash } from 'crypto';
 import { v5 as uuidv5, v4 } from 'uuid';
 
-export function generateUUID(tokenId: string, contractAddress: string): string {
-    // Combine the tokenId and contractAddress into a single string
+export function generateAssetUUID(tokenId: bigint, contractAddress: string): string {
     const combinedString = tokenId + contractAddress;
-    // Create a SHA-256 hash of the combined string
     const hash = createHash('sha256').update(combinedString).digest('hex');
     // Use the hash as the name for a namespace-based UUID (UUID v5)
     const namespace = 'c80dfd13-4025-4b97-ac1b-cde3aca8cf31';
-    // Generate a UUID v5 using the hash and namespace
     const uuid = uuidv5(hash, namespace);
     return uuid;
 }
+
 
 export function asyncSleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms))

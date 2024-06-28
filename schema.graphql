@@ -9,7 +9,7 @@ type Asset @entity {
     ownershipContract: OwnershipContract!
     tokenId: BigInt!
     owner: String!
-    transfers: [Transfer!]! @derivedFrom(field: "asset")
+    transfers: [Transfer]! @derivedFrom(field: "asset")
 }
 
 type Transfer @entity {

@@ -11,9 +11,11 @@ import {Multicall} from '../abi/multicall'
 processor.run(new TypeormDatabase({supportHotBlocks: true, stateSchema: 'ownership_chain_processor'}), async (ctx) => {
     
     const ownerShipContracts = await ctx.store.find(OwnershipContract);
+    let ownershipContractIds = new Set(ownerShipContracts.map(contract => contract.id));
+
     
     console.log('ownerShipContracts:', ownerShipContracts); 
-    let detectedEvents: DetectedEvents = getDetectedEvents(ctx, ownerShipContracts)
+    let detectedEvents: DetectedEvents = getDetectedEvents(ctx, ownershipContractIds)
     let rawOwnershipContracts: RawOwnershipContract[] = detectedEvents.ownershipContracts
     let rawTransfers: RawTransfer[] = detectedEvents.transfers
 
@@ -59,13 +61,11 @@ function createTransfersModel(rawTransfers: RawTransfer[]): Transfer[] {
     return transfersModel  
 }
 
-function getDetectedEvents(ctx: Context, ownershipContracts: OwnershipContract[] ): DetectedEvents {    
+function getDetectedEvents(ctx: Context, ownershipContractsToCheck: Set<string> ): DetectedEvents {    
     let transfers: RawTransfer[] = []
     let ownershipContractsToInsertInDb: RawOwnershipContract[] = []
 
-    /* get contractListFromDB **/
-    let ownershipContractsToCheck: Set<string> = new Set();
-    
+
     for (let block of ctx.blocks) {
         for (let log of block.logs) {
 

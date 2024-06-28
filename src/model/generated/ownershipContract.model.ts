@@ -10,8 +10,8 @@ export class OwnershipContract {
     @PrimaryColumn_()
     id!: string
 
-    @StringColumn_({nullable: false})
-    laosContract!: string
+    @StringColumn_({nullable: true})
+    laosContract!: string | undefined | null
 
     @OneToMany_(() => Asset, e => e.ownershipContract)
     assets!: Asset[]

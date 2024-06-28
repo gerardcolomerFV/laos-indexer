@@ -1,5 +1,5 @@
-module.exports = class Data1719412522516 {
-    name = 'Data1719412522516'
+module.exports = class Data1719569447080 {
+    name = 'Data1719569447080'
 
     async up(db) {
         await db.query(`CREATE TABLE "transfer" ("id" character varying NOT NULL, "from" text NOT NULL, "to" text NOT NULL, "timestamp" TIMESTAMP WITH TIME ZONE NOT NULL, "block_number" integer NOT NULL, "tx_hash" text NOT NULL, "asset_id" character varying, CONSTRAINT "PK_fd9ddbdd49a17afcbe014401295" PRIMARY KEY ("id"))`)
@@ -7,7 +7,7 @@ module.exports = class Data1719412522516 {
         await db.query(`CREATE INDEX "IDX_f605a03972b4f28db27a0ee70d" ON "transfer" ("tx_hash") `)
         await db.query(`CREATE TABLE "asset" ("id" character varying NOT NULL, "token_id" numeric NOT NULL, "owner" text NOT NULL, "ownership_contract_id" character varying, CONSTRAINT "PK_1209d107fe21482beaea51b745e" PRIMARY KEY ("id"))`)
         await db.query(`CREATE INDEX "IDX_dc1699251752ca3b19442d8800" ON "asset" ("ownership_contract_id") `)
-        await db.query(`CREATE TABLE "ownership_contract" ("id" character varying NOT NULL, "laos_contract" text NOT NULL, CONSTRAINT "PK_6ef3226ceefbd82ad30b9075bdf" PRIMARY KEY ("id"))`)
+        await db.query(`CREATE TABLE "ownership_contract" ("id" character varying NOT NULL, "laos_contract" text, CONSTRAINT "PK_6ef3226ceefbd82ad30b9075bdf" PRIMARY KEY ("id"))`)
         await db.query(`CREATE TABLE "token_uri" ("id" character varying NOT NULL, "fetch_state" text NOT NULL, "name" text, "description" text, "image" text, "attributes" jsonb, "fetched_at" TIMESTAMP WITH TIME ZONE NOT NULL, CONSTRAINT "PK_1f5797cb07d9a79407a00292363" PRIMARY KEY ("id"))`)
         await db.query(`CREATE TABLE "metadata" ("id" character varying NOT NULL, "block_number" integer NOT NULL, "timestamp" TIMESTAMP WITH TIME ZONE NOT NULL, "tx_hash" text NOT NULL, "laos_asset_id" character varying, "token_uri_id" character varying, CONSTRAINT "PK_56b22355e89941b9792c04ab176" PRIMARY KEY ("id"))`)
         await db.query(`CREATE INDEX "IDX_90484e3241344e9b970c82ea67" ON "metadata" ("laos_asset_id") `)

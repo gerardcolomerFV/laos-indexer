@@ -6,6 +6,7 @@ export interface RawTransfer {
   timestamp: Date
   blockNumber: number
   txHash: string
+  ownershipContract: string
 }
 
 

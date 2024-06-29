@@ -11,10 +11,6 @@ export function generateAssetUUID(tokenId: bigint, contractAddress: string): str
 }
 
 
-export function asyncSleep(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms))
-}
-
 export function* splitIntoBatches<T>(
     list: T[],
     maxBatchSize: number

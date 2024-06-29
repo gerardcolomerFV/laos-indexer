@@ -1,0 +1,1 @@
+export const getAccountKey20FromBaseUri = jest.fn().mockReturnValue('0xLaosContractAddress');

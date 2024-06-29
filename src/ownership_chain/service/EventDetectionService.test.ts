@@ -1,6 +1,4 @@
 
-import * as ERC721UniversalContract from '../../abi/UniversalContract';
-import { getAccountKey20FromBaseUri } from '../util';
 import { EventDetectionService } from './EventDetectionService';
 import { RawTransfer, RawOwnershipContract } from '../../model';
 import { Context } from '../../__mocks__/Context'

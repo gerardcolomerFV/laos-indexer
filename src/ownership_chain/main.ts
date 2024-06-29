@@ -1,10 +1,7 @@
 import { TypeormDatabase, TypeormDatabaseOptions, Store } from '@subsquid/typeorm-store';
 import { processor, Context } from './processor';
-import * as ERC721UniversalContract from '../abi/UniversalContract';
-import { getAccountKey20FromBaseUri } from './util';
-import {  OwnershipContract, RawTransfer, DetectedEvents, RawOwnershipContract } from '../model';
-import { v4 as uuidv4 } from 'uuid';
-import { EventDetectionService } from './services/EventDetectionService';
+import {  OwnershipContract } from '../model';
+import { EventDetectionService } from './service/EventDetectionService';
 import { createOwnershipContractsModel } from './mapper/ownershipContractMapper';
 import { createTransferModels } from './mapper/transferMapper';
 import { createAssetModels } from './mapper/assetMapper';

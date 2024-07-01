@@ -62,7 +62,7 @@ export class GetNftById {
       LEFT JOIN asset a ON la.token_id = a.token_id AND cd.laos_contract = a.ownership_contract_id
       WHERE la.token_id = $2 AND cd.laos_contract IS NOT NULL
       `,
-      [ownershipContractId, tokenId]
+      [ownershipContractId.toLocaleLowerCase(), tokenId]
     );
 
     if (result.length === 0) {

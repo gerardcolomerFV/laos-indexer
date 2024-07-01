@@ -1,0 +1,1 @@
+export { GetNftById } from './GetNftById'

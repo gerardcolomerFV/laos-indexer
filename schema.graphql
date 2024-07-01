@@ -29,7 +29,7 @@ type LaosAsset @entity {
     laosContract: String!
     tokenId: BigInt!
     initialOwner: String!
-    metadata: Metadata # pending update on each new metadata insert
+    metadata: String 
 }
 
 type Metadata @entity {

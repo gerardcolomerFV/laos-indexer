@@ -40,6 +40,6 @@ spec:
               value: {{ .Values.rpcOwnership }}
             - name: RPC_LAOS_ENDPOINT
               value: {{ .Values.rpcLaos }}
-          command: ["sqd", "process:prod:all"]
+          command: ["sqd", "process:prod"]
           ports:
             - containerPort: 3000

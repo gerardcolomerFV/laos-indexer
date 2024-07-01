@@ -66,7 +66,7 @@
         "cmd": ["node", "lib/laos/main.js"],
         "hidden": true
       },
-      "process:prod:all": {
+      "process:prod": {
         "description": "Start all processors",
         "deps": ["process:prod:ownership_chain", "process:prod:laos"],
         "hidden": true

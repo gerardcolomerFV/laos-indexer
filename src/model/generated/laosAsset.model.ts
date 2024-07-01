@@ -1,5 +1,4 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, StringColumn as StringColumn_, BigIntColumn as BigIntColumn_, ManyToOne as ManyToOne_, Index as Index_} from "@subsquid/typeorm-store"
-import {Metadata} from "./metadata.model"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, StringColumn as StringColumn_, BigIntColumn as BigIntColumn_} from "@subsquid/typeorm-store"
 
 @Entity_()
 export class LaosAsset {
@@ -19,7 +18,6 @@ export class LaosAsset {
     @StringColumn_({nullable: false})
     initialOwner!: string
 
-    @Index_()
-    @ManyToOne_(() => Metadata, {nullable: true})
-    metadata!: Metadata | undefined | null
+    @StringColumn_({nullable: true})
+    metadata!: string | undefined | null
 }

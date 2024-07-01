@@ -1,7 +1,6 @@
-import { Arg, Field, ObjectType, Query, Resolver } from 'type-graphql'
-import type { EntityManager } from 'typeorm'
-import { LaosAsset } from '../../model'
-
+import { Arg, Field, ObjectType, Query, Resolver } from 'type-graphql';
+import type { EntityManager } from 'typeorm';
+import { LaosAsset } from '../../model';
 
 @ObjectType()
 export class LaosAssetQueryResult {
@@ -25,15 +24,14 @@ export class LaosAssetQueryResult {
   }
 }
 
-
 @Resolver()
 export class GetNftById {
   constructor(private tx: () => Promise<EntityManager>) {}
 
   @Query(() => Number)
   async totalLaosAssets(): Promise<number> {
-    const manager = await this.tx()
-    return await manager.getRepository(LaosAsset).count()
+    const manager = await this.tx();
+    return await manager.getRepository(LaosAsset).count();
   }
 
   @Query(() => LaosAssetQueryResult, { nullable: true })
@@ -42,13 +40,14 @@ export class GetNftById {
     @Arg('tokenId', () => String) tokenId: string
   ): Promise<LaosAssetQueryResult | null> {
     const manager = await this.tx();
+    const normalizedOwnershipContractId = ownershipContractId.toLowerCase(); // Convert to lowercase
 
     const result = await manager.query(
       `
       WITH contract_data AS (
-        SELECT laos_contract
+        SELECT LOWER(laos_contract) AS laos_contract
         FROM ownership_contract
-        WHERE id = $1
+        WHERE LOWER(id) = $1
       )
       SELECT 
         la.id,
@@ -57,12 +56,12 @@ export class GetNftById {
         COALESCE(a.owner, la.initial_owner) AS owner,
         m.token_uri_id AS "tokenUri"
       FROM laos_asset la
-      LEFT JOIN contract_data cd ON la.laos_contract = cd.laos_contract
-      LEFT JOIN metadata m ON la.metadata = m.id
-      LEFT JOIN asset a ON la.token_id = a.token_id AND cd.laos_contract = a.ownership_contract_id
+      LEFT JOIN contract_data cd ON LOWER(la.laos_contract) = cd.laos_contract
+      LEFT JOIN metadata m ON la.metadata_id = m.id
+      LEFT JOIN asset a ON la.token_id = a.token_id AND LOWER(cd.laos_contract) = LOWER(a.ownership_contract_id)
       WHERE la.token_id = $2 AND cd.laos_contract IS NOT NULL
       `,
-      [ownershipContractId.toLocaleLowerCase(), tokenId]
+      [normalizedOwnershipContractId, tokenId]
     );
 
     if (result.length === 0) {

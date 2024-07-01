@@ -1,6 +1,6 @@
 import e from "cors";
 import { RawMintedWithExternalURI, TokenUri, TokenUirFetchState } from "../../model";
-import { generateLaosUUID } from "../util";
+import { generateLaosAssetUUID } from "../util";
 
 export function mapMintedWithExternalURIToTokenUri(raw: RawMintedWithExternalURI): TokenUri {
   const tokenUri = new TokenUri({

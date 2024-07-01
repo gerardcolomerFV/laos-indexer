@@ -1,9 +1,9 @@
 import { RawMintedWithExternalURI, LaosAsset } from "../../model";
-import { generateLaosUUID } from "../util";
+import { generateLaosAssetUUID } from "../util";
 
 export function mapMintedWithExternalURI(raw: RawMintedWithExternalURI): LaosAsset {
   const asset = new LaosAsset({
-    id: generateLaosUUID(raw._tokenId, raw.contract),
+    id: generateLaosAssetUUID(raw._tokenId, raw.contract),
     tokenId: raw._tokenId,
     initialOwner: raw._to,
     laosContract: raw.contract ,

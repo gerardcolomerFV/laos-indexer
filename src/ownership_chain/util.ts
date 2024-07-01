@@ -1,6 +1,15 @@
-export function asyncSleep(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms))
+import { createHash } from 'crypto';
+import { v5 as uuidv5, v4 } from 'uuid';
+
+export function generateAssetUUID(tokenId: bigint, contractAddress: string): string {
+    const combinedString = tokenId + contractAddress;
+    const hash = createHash('sha256').update(combinedString).digest('hex');
+    // Use the hash as the name for a namespace-based UUID (UUID v5)
+    const namespace = 'c80dfd13-4025-4b97-ac1b-cde3aca8cf31';
+    const uuid = uuidv5(hash, namespace);
+    return uuid;
 }
+
 
 export function* splitIntoBatches<T>(
     list: T[],

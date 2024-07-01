@@ -1,5 +1,4 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_, BigIntColumn as BigIntColumn_, StringColumn as StringColumn_} from "@subsquid/typeorm-store"
-import {LaosContract} from "./laosContract.model"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, StringColumn as StringColumn_, BigIntColumn as BigIntColumn_, ManyToOne as ManyToOne_, Index as Index_} from "@subsquid/typeorm-store"
 import {Metadata} from "./metadata.model"
 
 @Entity_()
@@ -11,9 +10,8 @@ export class LaosAsset {
     @PrimaryColumn_()
     id!: string
 
-    @Index_()
-    @ManyToOne_(() => LaosContract, {nullable: true})
-    laosContract!: LaosContract
+    @StringColumn_({nullable: false})
+    laosContract!: string
 
     @BigIntColumn_({nullable: false})
     tokenId!: bigint

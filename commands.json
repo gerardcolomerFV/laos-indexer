@@ -55,6 +55,22 @@
         "cmd": ["node", "lib/ownership_chain/main.js"],
         "hidden": true
       },
+      "process:laos": {
+        "description": "Load .env and start the squid processor",
+        "deps": ["build", "migration:apply"],
+        "cmd": ["node", "--require=dotenv/config", "lib/laos/main.js"]
+      },
+      "process:prod:laos": {
+        "description": "Start the squid processor",
+        "deps": ["migration:apply"],
+        "cmd": ["node", "lib/laos/main.js"],
+        "hidden": true
+      },
+      "process:prod:all": {
+        "description": "Start all processors",
+        "deps": ["process:prod:ownership_chain", "process:prod:laos"],
+        "hidden": true
+      },
       "serve": {
         "description": "Start the GraphQL API server",
         "cmd": ["squid-graphql-server"]

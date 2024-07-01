@@ -36,6 +36,10 @@ spec:
               value: {{ .Values.ipfsGateway }}   
             - name: DB_PASS
               value: {{ .Values.postgresPassword }}
-          command: ["sqd", "process:prod:ownership_chain"]
+            - name: RPC_ENDPOINT
+              value: {{ .Values.rpcOwnership }}
+            - name: RPC_LAOS_ENDPOINT
+              value: {{ .Values.rpcLaos }}
+          command: ["sqd", "process:prod:all"]
           ports:
             - containerPort: 3000

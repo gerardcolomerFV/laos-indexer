@@ -93,25 +93,20 @@ jobs:
 workflows:
   ci-workflow:
     jobs:
-      - approval:
-          type: approval
-          name: approve-build
-
       - build-indexer:
           context: dockerhub
-          requires:
-            - approve-build
-
-      - deployment-test:
           filters:
             branches:
               only:
                 - main
 
+      - deployment-test
+
       - approval:
           type: approval
           name: approve-deploy-indexer
           requires:
+            - deployment-test
             - build-indexer
           filters:
             branches:

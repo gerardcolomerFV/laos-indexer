@@ -23,6 +23,8 @@ helmfiles:
       - postgresDb: {{ .Values.postgresDb }}
       - postgresPassword: {{ .Values.postgresPassword }}
       - ipfsGateway: {{ .Values.ipfsGateway }}
+      - rpcOwnership: {{ .Values.rpcOwnership }}
+      - rpcLaos: {{ .Values.rpcLaos }}
   - path: 'charts/api/helmfile.yaml'
     values:
       - namespace: {{ .Values.namespace }}

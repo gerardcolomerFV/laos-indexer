@@ -3,3 +3,5 @@ postgresDb: squid
 postgresPassword: postgres
 ipfsGateway: https://subsquid-laos.mypinata.cloud/ipfs/
 host: indexer.gorengine.com
+rpcOwnership: https://rpc.ankr.com/polygon
+rpcLaos: https://rpc.klaosnova.laosfoundation.io

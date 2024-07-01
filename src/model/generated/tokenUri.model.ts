@@ -27,8 +27,8 @@ export class TokenUri {
     @Column_("jsonb", {transformer: {to: obj => obj == null ? undefined : obj.map((val: any) => val.toJSON()), from: obj => obj == null ? undefined : marshal.fromList(obj, val => new Attribute(undefined, marshal.nonNull(val)))}, nullable: true})
     attributes!: (Attribute)[] | undefined | null
 
-    @DateTimeColumn_({nullable: false})
-    fetchedAt!: Date
+    @DateTimeColumn_({nullable: true})
+    fetchedAt!: Date | undefined | null
 
     @OneToMany_(() => Metadata, e => e.tokenUri)
     metadata!: Metadata[]

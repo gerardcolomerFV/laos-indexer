@@ -23,14 +23,14 @@ processor.run<Store>(new TypeormDatabase(options), async (ctx) => {
   const rawTransfers = detectedEvents.transfers;
 
   if (rawOwnershipContracts.length > 0) {
-    const ownershipContractsModelArray = createOwnershipContractsModel(rawOwnershipContracts);
+    const ownershipContractsModelArray = createOwnershipContractsModel(detectedEvents.ownershipContracts);
     await ctx.store.insert(ownershipContractsModelArray);
   }
 
   if (rawTransfers.length > 0) {
     // Create assets
     const assetsModels = createAssetModels(rawTransfers);
-    await ctx.store.upsert([...assetsModels]);
+    await ctx.store.upsert(assetsModels);
 
     console.log(`Inserted ${rawTransfers.length} transfers:`, rawTransfers);
     const transfersModelArray = createTransferModels(rawTransfers);

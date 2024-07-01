@@ -57,7 +57,7 @@ export class GetNftById {
         m.token_uri_id AS "tokenUri"
       FROM laos_asset la
       LEFT JOIN contract_data cd ON LOWER(la.laos_contract) = cd.laos_contract
-      LEFT JOIN metadata m ON la.metadata_id = m.id
+      LEFT JOIN metadata m ON la.metadata = m.id
       LEFT JOIN asset a ON la.token_id = a.token_id AND LOWER(cd.laos_contract) = LOWER(a.ownership_contract_id)
       WHERE la.token_id = $2 AND cd.laos_contract IS NOT NULL
       `,

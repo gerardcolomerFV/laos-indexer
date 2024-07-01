@@ -66,11 +66,6 @@
         "cmd": ["node", "lib/laos/main.js"],
         "hidden": true
       },
-      "process:prod": {
-        "description": "Start all processors",
-        "deps": ["process:prod:ownership_chain", "process:prod:laos"],
-        "hidden": true
-      },
       "serve": {
         "description": "Start the GraphQL API server",
         "cmd": ["squid-graphql-server"]

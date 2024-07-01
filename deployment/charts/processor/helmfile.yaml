@@ -1,12 +1,14 @@
 releases:
-  - name: laos-indexer-processor-release
+  - name: {{ .Values.name }}-release
     namespace: '{{ .Values.namespace }}'
     createNamespace: false
     chart: .
     values:
+      - name: {{ .Values.name }}
       - ipfsGateway: {{ .Values.ipfsGateway }}
       - imageTag: {{ .Values.imageTag }}
       - postgresDb: {{ .Values.postgresDb }}
       - postgresPassword: {{ .Values.postgresPassword }}
       - rpcOwnership: {{ .Values.rpcOwnership }}
       - rpcLaos: {{ .Values.rpcLaos }}
+      - command: {{ .Values.command }}

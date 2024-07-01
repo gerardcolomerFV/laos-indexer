@@ -18,7 +18,7 @@ export const processor = new EvmBatchProcessor()
     })
     .setFinalityConfirmation(75)
     .setBlockRange({
-        from: 58673132 //58347100
+        from: 58673132
     })
     .addLog({
        topic0: [ ERC721UniversalContract.events.NewERC721Universal.topic, ERC721UniversalContract.events.Transfer.topic]

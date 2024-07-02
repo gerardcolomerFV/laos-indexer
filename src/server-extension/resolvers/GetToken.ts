@@ -55,8 +55,8 @@ export class GetToken {
       )
       SELECT 
         la.id,
-        la.laos_contract,
-        la.token_id,
+        la.laos_contract AS "laosContract",
+        la.token_id AS "tokenId",
         COALESCE(a.owner, la.initial_owner) AS owner,
         cd.ownership_contract as "ownershipContract",
         m.token_uri_id AS "tokenUri"

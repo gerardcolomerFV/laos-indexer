@@ -5,12 +5,6 @@ import { LaosAsset } from '../../model';
 @ObjectType()
 export class LaosAssetQueryResult {
   @Field(() => String, { nullable: false })
-  id!: string;
-
-  @Field(() => String, { nullable: false })
-  laosContract!: string;
-
-  @Field(() => String, { nullable: false })
   tokenId!: string;
 
   @Field(() => String, { nullable: false })
@@ -20,7 +14,13 @@ export class LaosAssetQueryResult {
   tokenUri!: string | null;
 
   @Field(() => String, { nullable: true })
-  ownershipContract!: string | null;
+  contractAddress!: string | null;
+
+  @Field(() => Date, { nullable: false })
+  createdAt!: Date;
+
+  @Field(() => String, { nullable: false })
+  initialOwner!: string;
 
   constructor(props: Partial<LaosAssetQueryResult>) {
     Object.assign(this, props);
@@ -51,21 +51,21 @@ export class GetToken {
         SELECT LOWER(laos_contract) AS laos_contract,
         LOWER(id) as ownership_contract
         FROM ownership_contract
-        WHERE LOWER(id) =  $1
+        WHERE LOWER(id) = $1
       )
       SELECT 
-        la.id,
-        la.laos_contract AS "laosContract",
         la.token_id AS "tokenId",
         COALESCE(a.owner, la.initial_owner) AS owner,
-        cd.ownership_contract as "ownershipContract",
-        m.token_uri_id AS "tokenUri"
+        la.initial_owner as "initialOwner",
+        m."timestamp" as "createdAt",
+        m.token_uri_id AS "tokenUri",
+        cd.ownership_contract as "contractAddress"
+        
       FROM laos_asset la
       LEFT JOIN contract_data cd ON LOWER(la.laos_contract) = cd.laos_contract
       LEFT JOIN metadata m ON la.metadata = m.id
       LEFT JOIN asset a ON la.token_id = a.token_id AND LOWER(cd.ownership_contract) = LOWER(a.ownership_contract_id)
       WHERE la.token_id = $2  AND cd.laos_contract IS NOT null
-
       `,
       [normalizedOwnershipContractId, tokenId]
     );
@@ -74,6 +74,12 @@ export class GetToken {
       return null;
     }
 
-    return new LaosAssetQueryResult(result[0]);
+    // Convert createdAt from string to Date
+    const transformedResult = {
+      ...result[0],
+      createdAt: new Date(result[0].createdAt)
+    };
+
+    return new LaosAssetQueryResult(transformedResult);
   }
 }

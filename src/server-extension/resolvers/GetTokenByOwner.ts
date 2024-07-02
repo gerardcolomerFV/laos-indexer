@@ -1,6 +1,5 @@
-import { Arg, Field, ObjectType, Query, Resolver } from 'type-graphql';
+import { Arg, Query, Resolver } from 'type-graphql';
 import type { EntityManager } from 'typeorm';
-import { LaosAsset } from '../../model';
 import { LaosAssetQueryResult } from './GetToken';
 
 @Resolver()
@@ -17,12 +16,12 @@ export class GetTokenByOwner {
     const results = await manager.query(
       `
       SELECT 
-        la.id,
         la.token_id AS "tokenId", 
         COALESCE(a.owner, la.initial_owner) AS owner,
+        la.initial_owner as "initialOwner",
+        m."timestamp" as "createdAt",
         m.token_uri_id AS "tokenUri",
-        la.laos_contract AS "laosContract",
-        oc.id as "ownershipContract"
+        oc.id as "contractAddress"
       FROM laos_asset la
       INNER JOIN ownership_contract oc ON LOWER(la.laos_contract) = LOWER(oc.laos_contract)
       LEFT JOIN metadata m ON la.metadata = m.id
@@ -32,6 +31,11 @@ export class GetTokenByOwner {
       [normalizedOwner]
     );
 
-    return results.map((result: any) => new LaosAssetQueryResult(result));
+    return results.map((result: any) => {
+      return new LaosAssetQueryResult({
+        ...result,
+        createdAt: new Date(result.createdAt),
+      });
+    });
   }
 }

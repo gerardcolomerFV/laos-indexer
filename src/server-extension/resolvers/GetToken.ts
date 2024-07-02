@@ -19,13 +19,16 @@ export class LaosAssetQueryResult {
   @Field(() => String, { nullable: true })
   tokenUri!: string | null;
 
+  @Field(() => String, { nullable: true })
+  ownershipContract!: string | null;
+
   constructor(props: Partial<LaosAssetQueryResult>) {
     Object.assign(this, props);
   }
 }
 
 @Resolver()
-export class GetNftById {
+export class GetToken {
   constructor(private tx: () => Promise<EntityManager>) {}
 
   @Query(() => Number)
@@ -52,9 +55,10 @@ export class GetNftById {
       )
       SELECT 
         la.id,
-        la.laos_contract AS "laosContract",
-        la.token_id AS "tokenId",
+        la.laos_contract,
+        la.token_id,
         COALESCE(a.owner, la.initial_owner) AS owner,
+        cd.ownership_contract as "ownershipContract",
         m.token_uri_id AS "tokenUri"
       FROM laos_asset la
       LEFT JOIN contract_data cd ON LOWER(la.laos_contract) = cd.laos_contract

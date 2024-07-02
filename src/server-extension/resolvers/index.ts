@@ -1,1 +1,2 @@
-export { GetNftById } from './GetNftById'
+export { GetToken } from './GetToken'
+export { GetTokenByOwner } from './GetTokenByOwner'

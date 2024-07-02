@@ -34,11 +34,10 @@ describe('GetNftById Resolver', () => {
     const manager = await mockTx();
     const mockData = [
       {
-        id: '1',
-        laosContract: 'contract',
         tokenId: 'token1',
         owner: 'owner1',
         tokenUri: 'uri1',
+        createdAt: new Date('2021-01-01'),
       },
     ];
 
@@ -48,7 +47,7 @@ describe('GetNftById Resolver', () => {
 
     expect(result).toEqual(
       new LaosAssetQueryResult({
-        laosContract: 'contract',
+        createdAt: new Date('2021-01-01'),
         tokenId: 'token1',
         owner: 'owner1',
         tokenUri: 'uri1',

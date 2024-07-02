@@ -1,5 +1,5 @@
 import { EntityManager } from 'typeorm';
-import { GetNftById, LaosAssetQueryResult } from './GetNftById';
+import { GetToken, LaosAssetQueryResult } from './GetToken';
 
 
 export const mockEntityManager = () => {
@@ -11,13 +11,13 @@ export const mockEntityManager = () => {
 }
 
 describe('GetNftById Resolver', () => {
-  let resolver: GetNftById;
+  let resolver: GetToken;
   let mockTx: jest.Mock;
 
   beforeEach(() => {
     const manager = mockEntityManager();
     mockTx = jest.fn().mockResolvedValue(manager);
-    resolver = new GetNftById(mockTx);
+    resolver = new GetToken(mockTx);
   });
 
   it('should return the total number of Laos assets', async () => {

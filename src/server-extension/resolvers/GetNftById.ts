@@ -49,6 +49,7 @@ export class GetNftById {
         LOWER(id) as ownership_contract
         FROM ownership_contract
         WHERE LOWER(id) =  $1
+      )
       SELECT 
         la.id,
         la.laos_contract AS "laosContract",

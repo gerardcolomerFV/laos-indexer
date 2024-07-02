@@ -44,7 +44,7 @@ describe('GetNftById Resolver', () => {
 
     manager.query.mockResolvedValue(mockData);
 
-    const result = await resolver.getNftDetails('contractId', 'token1');
+    const result = await resolver.getToken('contractId', 'token1');
 
     expect(result).toEqual(
       new LaosAssetQueryResult({
@@ -65,7 +65,7 @@ describe('GetNftById Resolver', () => {
     const manager = await mockTx();
     manager.query.mockResolvedValue([]);
 
-    const result = await resolver.getNftDetails('contractId', 'token1');
+    const result = await resolver.getToken('contractId', 'token1');
 
     expect(result).toBeNull();
     expect(manager.query).toHaveBeenCalledWith(

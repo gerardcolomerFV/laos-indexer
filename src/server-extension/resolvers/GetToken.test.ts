@@ -48,7 +48,6 @@ describe('GetNftById Resolver', () => {
 
     expect(result).toEqual(
       new LaosAssetQueryResult({
-        id: '1',
         laosContract: 'contract',
         tokenId: 'token1',
         owner: 'owner1',

@@ -4,8 +4,7 @@ import { LaosAsset } from '../../model';
 
 @ObjectType()
 export class LaosAssetQueryResult {
-  @Field(() => String, { nullable: false })
-  id!: string;
+
 
   @Field(() => String, { nullable: false })
   laosContract!: string;
@@ -54,7 +53,6 @@ export class GetToken {
         WHERE LOWER(id) =  $1
       )
       SELECT 
-        la.id,
         la.laos_contract AS "laosContract",
         la.token_id AS "tokenId",
         COALESCE(a.owner, la.initial_owner) AS owner,

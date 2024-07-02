@@ -17,7 +17,6 @@ export class GetTokenByOwner {
     const results = await manager.query(
       `
       SELECT 
-        la.id,
         la.token_id AS "tokenId", 
         COALESCE(a.owner, la.initial_owner) AS owner,
         m.token_uri_id AS "tokenUri",

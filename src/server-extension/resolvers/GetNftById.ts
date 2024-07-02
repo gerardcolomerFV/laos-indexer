@@ -35,7 +35,7 @@ export class GetNftById {
   }
 
   @Query(() => LaosAssetQueryResult, { nullable: true })
-  async getNftDetails(
+  async getToken(
     @Arg('ownershipContractId', () => String) ownershipContractId: string,
     @Arg('tokenId', () => String) tokenId: string
   ): Promise<LaosAssetQueryResult | null> {
@@ -44,10 +44,11 @@ export class GetNftById {
 
     const result = await manager.query(
       `
-      WITH contract_data AS (
-        SELECT LOWER(laos_contract) AS laos_contract
+       WITH contract_data AS (
+        SELECT LOWER(laos_contract) AS laos_contract,
+        LOWER(id) as ownership_contract
         FROM ownership_contract
-        WHERE LOWER(id) = $1
+        WHERE LOWER(id) =  $1
       )
       SELECT 
         la.id,
@@ -58,8 +59,9 @@ export class GetNftById {
       FROM laos_asset la
       LEFT JOIN contract_data cd ON LOWER(la.laos_contract) = cd.laos_contract
       LEFT JOIN metadata m ON la.metadata = m.id
-      LEFT JOIN asset a ON la.token_id = a.token_id AND LOWER(cd.laos_contract) = LOWER(a.ownership_contract_id)
-      WHERE la.token_id = $2 AND cd.laos_contract IS NOT NULL
+      LEFT JOIN asset a ON la.token_id = a.token_id AND LOWER(cd.ownership_contract) = LOWER(a.ownership_contract_id)
+      WHERE la.token_id = $2  AND cd.laos_contract IS NOT null
+
       `,
       [normalizedOwnershipContractId, tokenId]
     );

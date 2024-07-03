@@ -2,20 +2,18 @@ import { Arg, Query, Resolver } from 'type-graphql';
 import type { EntityManager } from 'typeorm';
 import {  LaosAssetQueryResult, OrderByOptions } from '../../model';
 
-
 @Resolver()
-export class GetTokenByOwner {
+export class GetTokensByCollection {
   constructor(private tx: () => Promise<EntityManager>) {}
 
   @Query(() => [LaosAssetQueryResult], { nullable: true })
-  async getTokensByOwner(
-    @Arg('owner', () => String) owner: string,
+  async getTokensByCollection(
+    @Arg('collectionId', () => String) collectionId: string,
     @Arg('limit', () => Number, { nullable: true }) limit: number,
     @Arg('offset', () => Number, { nullable: true }) offset: number,
     @Arg('orderBy', () => OrderByOptions, { nullable: true }) orderBy: OrderByOptions,
   ): Promise<LaosAssetQueryResult[]> {
     const manager = await this.tx();
-    const normalizedOwner = owner.toLowerCase();
     
     const effectiveLimit = limit || 10;
     const effectiveOffset = offset || 0;
@@ -34,11 +32,11 @@ export class GetTokenByOwner {
       INNER JOIN ownership_contract oc ON LOWER(la.laos_contract) = LOWER(oc.laos_contract)
       LEFT JOIN metadata m ON la.metadata = m.id
       LEFT JOIN asset a ON la.token_id = a.token_id AND a.ownership_contract_id = oc.id
-      WHERE LOWER(COALESCE(a.owner, la.initial_owner)) = LOWER($1)
+      WHERE LOWER(oc.id) = LOWER($1)
       ORDER BY ${effectiveOrderBy}
       LIMIT $2 OFFSET $3
       `,
-      [normalizedOwner, effectiveLimit, effectiveOffset]
+      [collectionId, effectiveLimit, effectiveOffset]
     );
 
     return results.map((result: any) => {

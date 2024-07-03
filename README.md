@@ -44,10 +44,7 @@ sqd clean:all
 # 3. Build and start the processor
 sqd run .
 
-# 4. The command above will block the terminal,
-#    fetching the chain data, transforming, and storing it in the target database.
-#    To start the GraphQL server, open a separate terminal and run:
-sqd serve
+
 ```
 
 A GraphiQL playground will be available at http://localhost:4350/graphql.

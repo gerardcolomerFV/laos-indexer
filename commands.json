@@ -91,10 +91,18 @@
         "description": "Open a local browser window",
         "cmd": ["npx", "--yes", "opener"]
       },
+      "copy-graphql:generation": {
+        "description": "Copy the schema_for_generation GraphQL to schema.graphql",
+        "cmd": ["node", "copySchemas.js", "generation"]
+      },
+      "copy-graphql:public": {
+        "description": "Copy the schema_for_public_queries GraphQL to schema.graphql",
+        "cmd": ["node", "copySchemas.js", "public"]
+      },
       "clean:all": {
         "description": "Restart",
-        "deps": ["down", "clean", "migration:clean", "up", "codegen","migration:generate"],
-        "cmd": ["squid-typeorm-migration", "apply"]
+        "deps": ["down", "clean", "copy-graphql:generation", "migration:clean", "up", "codegen","migration:generate", "migration:apply"],
+        "cmd": ["node", "copySchemas.js", "public"]
       }
     }
   }

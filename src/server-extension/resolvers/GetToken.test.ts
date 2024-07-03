@@ -1,6 +1,6 @@
 import { EntityManager } from 'typeorm';
-import { GetToken, LaosAssetQueryResult } from './GetToken';
-
+import { GetToken } from './GetToken';
+import {  LaosAssetQueryResult } from '../../model';
 
 export const mockEntityManager = () => {
   return {

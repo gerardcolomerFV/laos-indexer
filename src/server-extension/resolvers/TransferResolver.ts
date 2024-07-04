@@ -15,8 +15,8 @@ export class TransferResolver {
 
     // Build the query with pagination
     let query = manager.createQueryBuilder(Transfer, 'transfer')
-                      .leftJoinAndSelect('transfer.asset', 'asset')
-                      .leftJoinAndSelect('asset.ownershipContract', 'ownershipContract');
+                      .innerJoinAndSelect('transfer.asset', 'asset')
+                      .innerJoinAndSelect('asset.ownershipContract', 'ownershipContract');
 
     if (pagination) {
       if (pagination.orderBy) {

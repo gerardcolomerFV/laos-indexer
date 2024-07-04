@@ -87,3 +87,25 @@ export const mockLogsMintedEvents: LogData[] = [
     }),
   }
 ]
+
+export const mockLogsEvolvedEvents: LogData[] = [
+  {
+    id: 'mock-log-id-evolved-1',
+    logIndex: 0,
+    transactionIndex: 0,
+    address: "0xffffFfffFFfFFffFffFFFFfe000000000000036E",
+    transactionHash: "0xevolvedTransactionHash",
+    data: '0x00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000035697066733a2f2f516d61343452634576656d68454362657244654b6661337538344d7a4d44663375313548385245315a78777672570000000000000000000000',
+    topics: ['0xdde18ad2fe10c12a694de65b920c02b851c382cf63115967ea6f7098902fa1c8', '0x13e18245e8f0f600000000001b0b4a597c764400ea157ab84358c8788a89cd28'],
+    block: {
+      id: 'mock-block-id-evolved',
+      height: 12346,
+      hash: 'mock-block-hash-evolved',
+      parentHash: 'mock-parent-hash-evolved',
+      timestamp: 1620000001,
+    },
+    getTransaction: () => ({
+      // Define mock transaction data if needed
+    }),
+  }
+]

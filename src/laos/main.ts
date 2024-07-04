@@ -33,9 +33,7 @@ processor.run<Store>(new TypeormDatabase(options) as any, async (ctx) => {
     const mints = createMintedWithExternalURIModels(mintEvents);
     const tokenUris = createTokenUriModels(mintEvents);
 
-    // Insert or update token URIs first
     await ctx.store.upsert(tokenUris);
-    // Insert or update assets and metadata
     await ctx.store.upsert(mints.map(mint => mint.asset));
     await ctx.store.insert(mints.map(mint => mint.metadata));
   }
@@ -43,10 +41,7 @@ processor.run<Store>(new TypeormDatabase(options) as any, async (ctx) => {
   if (evolveEvents.length > 0) {
     const evolves = createEvolveModels(evolveEvents);
     const tokenUris = createTokenUriModels(evolveEvents);
-
-    // Insert or update evolve token URIs first
     await ctx.store.upsert(tokenUris);
-
     const customStore = new CustomStore(ctx.store['em']());
     await customStore.evolve(evolves.map(evolve => evolve.asset));
     await ctx.store.insert(evolves.map(evolve => evolve.metadata));

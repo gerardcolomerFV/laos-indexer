@@ -1,3 +1,2 @@
-export { GetToken } from './GetToken'
-export { GetTokenByOwner } from './GetTokenByOwner'
-export { GetTokensByCollection } from './GetTokensByCollection'
+export { TokenResolver } from './TokenResolver'
+export { TransferResolver } from './TransferResolver';

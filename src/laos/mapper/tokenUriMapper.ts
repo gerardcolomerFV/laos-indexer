@@ -1,8 +1,10 @@
 import e from "cors";
-import { RawMintedWithExternalURI, TokenUri, TokenUirFetchState } from "../../model";
+import { RawEvent, TokenUri, TokenUirFetchState } from "../../model";
 import { generateLaosAssetUUID } from "../util";
 
-export function mapMintedWithExternalURIToTokenUri(raw: RawMintedWithExternalURI): TokenUri {
+
+
+export function mapEventWithExternalURIToTokenUri(raw: RawEvent): TokenUri {
   const tokenUri = new TokenUri({
     id: raw._tokenURI,
     fetchState: TokenUirFetchState.Pending,
@@ -10,6 +12,10 @@ export function mapMintedWithExternalURIToTokenUri(raw: RawMintedWithExternalURI
   return tokenUri;
 }
 
-export function createTokenUriModels(rawMintedWithExternalURI: RawMintedWithExternalURI[]): TokenUri[] {
-  return rawMintedWithExternalURI.map((raw) => mapMintedWithExternalURIToTokenUri(raw));
+export function createTokenUriModels(rawEvents: RawEvent[]): TokenUri[] {
+  const tokenUris = rawEvents.map((raw) => mapEventWithExternalURIToTokenUri(raw));
+  // remove duplicated ids
+  return tokenUris.filter((tokenUri, index, self) =>
+    index === self.findIndex(t => t.id === tokenUri.id)
+  );
 }

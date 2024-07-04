@@ -1,0 +1,123 @@
+import { describe, it, expect } from '@jest/globals';
+import { mapEventWithExternalURIToTokenUri, createTokenUriModels } from './tokenUriMapper';
+import { RawEvent, TokenUri, TokenUirFetchState } from '../../model';
+
+describe('tokenUriMapper', () => {
+  describe('mapEventWithExternalURIToTokenUri', () => {
+    it('should map a RawEvent to a TokenUri with Pending fetchState', () => {
+      const rawEvent: RawEvent = {
+        id: 'test-id',
+        contract: 'test-contract',
+        _tokenId: BigInt(1),
+        _tokenURI: 'test-tokenURI',
+        _to: 'test-to',
+        timestamp: new Date(),
+        blockNumber: 1,
+        txHash: 'test-txHash',
+      };
+      const expectedTokenUri = new TokenUri({
+        id: 'test-tokenURI',
+        fetchState: TokenUirFetchState.Pending,
+      });
+      expect(mapEventWithExternalURIToTokenUri(rawEvent)).toEqual(expectedTokenUri);
+    });
+  });
+
+  describe('createTokenUriModels', () => {
+    it('should create an array of TokenUri models from an array of RawEvents', () => {
+      const rawEvents: RawEvent[] = [
+        {
+          id: 'test-id-1',
+          contract: 'test-contract',
+          _tokenId: BigInt(1),
+          _tokenURI: 'test-tokenURI-1',
+          _to: 'test-to-1',
+          timestamp: new Date(),
+          blockNumber: 1,
+          txHash: 'test-txHash-1',
+        },
+        {
+          id: 'test-id-2',
+          contract: 'test-contract',
+          _tokenId: BigInt(2),
+          _tokenURI: 'test-tokenURI-2',
+          _to: 'test-to-2',
+          timestamp: new Date(),
+          blockNumber: 2,
+          txHash: 'test-txHash-2',
+        },
+        {
+          id: 'test-id-3',
+          contract: 'test-contract',
+          _tokenId: BigInt(3),
+          _tokenURI: 'test-tokenURI-3',
+          _to: 'test-to-3',
+          timestamp: new Date(),
+          blockNumber: 3,
+          txHash: 'test-txHash-3',
+        },
+      ];
+      const expectedTokenUris: TokenUri[] = [
+        new TokenUri({
+          id: 'test-tokenURI-1',
+          fetchState: TokenUirFetchState.Pending,
+        }),
+        new TokenUri({
+          id: 'test-tokenURI-2',
+          fetchState: TokenUirFetchState.Pending,
+        }),
+        new TokenUri({
+          id: 'test-tokenURI-3',
+          fetchState: TokenUirFetchState.Pending,
+        }),
+      ];
+      expect(createTokenUriModels(rawEvents)).toEqual(expectedTokenUris);
+    });
+
+    it('should remove duplicated TokenUri models based on id', () => {
+      const rawEvents: RawEvent[] = [
+        {
+          id: 'test-id-1',
+          contract: 'test-contract',
+          _tokenId: BigInt(1),
+          _tokenURI: 'test-tokenURI-1',
+          _to: 'test-to-1',
+          timestamp: new Date(),
+          blockNumber: 1,
+          txHash: 'test-txHash-1',
+        },
+        {
+          id: 'test-id-2',
+          contract: 'test-contract',
+          _tokenId: BigInt(2),
+          _tokenURI: 'test-tokenURI-2',
+          _to: 'test-to-2',
+          timestamp: new Date(),
+          blockNumber: 2,
+          txHash: 'test-txHash-2',
+        },
+        {
+          id: 'test-id-3',
+          contract: 'test-contract',
+          _tokenId: BigInt(3),
+          _tokenURI: 'test-tokenURI-1', // Duplicate
+          _to: 'test-to-3',
+          timestamp: new Date(),
+          blockNumber: 3,
+          txHash: 'test-txHash-3',
+        },
+      ];
+      const expectedTokenUris: TokenUri[] = [
+        new TokenUri({
+          id: 'test-tokenURI-1',
+          fetchState: TokenUirFetchState.Pending,
+        }),
+        new TokenUri({
+          id: 'test-tokenURI-2',
+          fetchState: TokenUirFetchState.Pending,
+        }),
+      ];
+      expect(createTokenUriModels(rawEvents)).toEqual(expectedTokenUris);
+    });
+  });
+});

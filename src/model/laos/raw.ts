@@ -1,3 +1,5 @@
+export type RawEvent = RawMintedWithExternalURI | RawEvolvedWithExternalURI
+
 export interface RawMintedWithExternalURI {
   id: string
   contract: string

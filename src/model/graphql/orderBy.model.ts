@@ -8,11 +8,13 @@ export interface IOrderByOptions {
 export enum TransferOrderByOptions {
   TIMESTAMP_ASC = 'timestamp ASC',
   TIMESTAMP_DESC = 'timestamp DESC',
+  BLOCKNUMBER_ASC = 'block_number ASC',
+  BLOCKNUMBER_DESC = 'block_number DESC',
 }
 
 export enum TokenOrderByOptions {
-  CREATED_AT_ASC = 'timestamp ASC',
-  CREATED_AT_DESC = 'timestamp DESC',
+  CREATED_AT_ASC = 'created_at ASC',
+  CREATED_AT_DESC = 'created_at DESC',
 }
 
 

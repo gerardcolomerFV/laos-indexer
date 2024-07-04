@@ -48,7 +48,7 @@ export class TokenResolver {
         la.token_id AS "tokenId",
         COALESCE(a.owner, la.initial_owner) AS owner,
         la.initial_owner as "initialOwner",
-        m."timestamp" as "createdAt",
+        la.created_at as "createdAt",
         m.token_uri_id AS "tokenUri",
         cd.ownership_contract as "contractAddress"
         
@@ -91,7 +91,7 @@ export class TokenResolver {
         la.token_id AS "tokenId", 
         COALESCE(a.owner, la.initial_owner) AS "owner",
         la.initial_owner AS "initialOwner",
-        m.timestamp AS "createdAt",
+        la.created_at as "createdAt",
         m.token_uri_id AS "tokenUri",
         oc.id AS "contractAddress"
       FROM laos_asset la
@@ -122,7 +122,7 @@ export class TokenResolver {
         la.token_id AS "tokenId", 
         COALESCE(a.owner, la.initial_owner) AS "owner",
         la.initial_owner AS "initialOwner",
-        m.timestamp AS "createdAt",
+        la.created_at as "createdAt",
         m.token_uri_id AS "tokenUri",
         oc.id AS "contractAddress"
       FROM laos_asset la

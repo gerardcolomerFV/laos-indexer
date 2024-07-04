@@ -12,7 +12,7 @@ export class EventDetectionService {
 
   public detectEvents(): DetectedLaosEvents {
     const mintEvents: RawMintedWithExternalURI[] = [];
-    const evolveEvents: RawEvolvedWithExternalURI[] = [];
+    let evolveEvents: RawEvolvedWithExternalURI[] = [];
 
     for (const block of this.ctx.blocks) {
       for (const log of block.logs) {
@@ -20,7 +20,6 @@ export class EventDetectionService {
         this.detectEvolvedWithExternalURI(log, evolveEvents, block.header.timestamp, block.header.height);
       }
     }
-
     return {
       mintEvents,
       evolveEvents
@@ -62,4 +61,5 @@ export class EventDetectionService {
       });
     }
   }
+
 }

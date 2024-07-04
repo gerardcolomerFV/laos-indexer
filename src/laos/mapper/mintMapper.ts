@@ -8,7 +8,8 @@ export function mapMintedWithExternalURI(raw: RawMintedWithExternalURI): MintedM
     id: generateLaosAssetUUID(raw._tokenId, raw.contract),
     tokenId: raw._tokenId,
     initialOwner: raw._to,
-    laosContract: raw.contract ,
+    laosContract: raw.contract,
+    createdAt: raw.timestamp,
     metadata: metadata.id,
   });
   console.log('Mapped minted with external URI:', asset);

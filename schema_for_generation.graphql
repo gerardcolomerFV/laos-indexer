@@ -1,6 +1,6 @@
 type OwnershipContract @entity {
   id: ID! # ownership_contract
-  laosContract: String
+  laosContract: String  @index
   assets: [Asset]! @derivedFrom(field: "ownershipContract")
 }
 
@@ -27,7 +27,8 @@ type LaosAsset @entity {
   laosContract: String!
   tokenId: BigInt!
   initialOwner: String!
-  metadata: String 
+  createdAt: DateTime!
+  metadata: String  @index
 }
 
 type Metadata @entity {

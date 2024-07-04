@@ -32,7 +32,6 @@ processor.run<Store>(new TypeormDatabase(options) as any, async (ctx) => {
   if (mintEvents.length > 0) {
     const mints = createMintedWithExternalURIModels(mintEvents);
     const tokenUris = createTokenUriModels(mintEvents);
-
     await ctx.store.upsert(tokenUris);
     await ctx.store.upsert(mints.map(mint => mint.asset));
     await ctx.store.insert(mints.map(mint => mint.metadata));

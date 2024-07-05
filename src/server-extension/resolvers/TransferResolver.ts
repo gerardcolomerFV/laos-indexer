@@ -1,6 +1,6 @@
-import { Arg, Field, ObjectType, Query, Resolver } from 'type-graphql';
+import { Arg, Query, Resolver } from 'type-graphql';
 import type { EntityManager } from 'typeorm';
-import { Transfer, TransferQueryResult, TransferOrderByOptions, TransferPaginationInput , TokenQueryResult } from '../../model';
+import { Transfer, LaosAsset, TransferQueryResult, TransferWhereInput, TransferPaginationInput } from '../../model';
 
 
 @Resolver()
@@ -9,15 +9,29 @@ export class TransferResolver {
 
   @Query(() => [TransferQueryResult], { nullable: true })
   async transfers(
+    @Arg('where', () => TransferWhereInput, { nullable: true }) where?: TransferWhereInput,
     @Arg('pagination', () => TransferPaginationInput, { nullable: true }) pagination?: TransferPaginationInput
   ): Promise<TransferQueryResult[]> {
     const manager = await this.tx();
 
-    // Build the query with pagination
+    // Build the query with pagination and filters
     let query = manager.createQueryBuilder(Transfer, 'transfer')
-                      .innerJoinAndSelect('transfer.asset', 'asset')
-                      .innerJoinAndSelect('asset.ownershipContract', 'ownershipContract');
+    .innerJoinAndSelect('transfer.asset', 'asset')
+    .innerJoinAndSelect('asset.ownershipContract', 'ownershipContract')
+    .innerJoin(LaosAsset, 'laosAsset', 'laosAsset.tokenId = asset.tokenId AND laosAsset.laosContract = ownershipContract.laosContract');
 
+
+    // Add filters based on where input
+    if (where) {
+      if (where.tokenId) {
+        query = query.andWhere('asset.tokenId = :tokenId', { tokenId: where.tokenId });
+      }
+      if (where.contractAddress) {
+        query = query.andWhere('ownershipContract.id = :contractAddress', { contractAddress: where.contractAddress });
+      }
+    }
+
+    // Add pagination options
     if (pagination) {
       if (pagination.orderBy) {
         const orderBy = pagination.orderBy.split(' ');

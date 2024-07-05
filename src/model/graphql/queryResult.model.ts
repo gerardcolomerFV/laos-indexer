@@ -53,3 +53,42 @@ export class TransferQueryResult {
     Object.assign(this, props);
   }
 }
+
+
+@ObjectType()
+export class TokenHistoryQueryResult {
+
+  @Field(() => String, { nullable: true })
+  contractAddress!: string | null;
+
+  @Field(() => String, { nullable: false })
+  laosCollection!: string;
+
+  @Field(() => String, { nullable: true })
+  tokenUri!: string;
+
+  @Field(() => String, { nullable: true })
+  name!: string;
+
+  @Field(() => String, { nullable: true })
+  description!: string;
+
+  @Field(() => String, { nullable: true })
+  image!: string | null;
+
+  @Field(() => String, { nullable: true })
+  attributes!: string | null;
+
+  @Field(() => Number, { nullable: false })
+  block_number!: number;
+
+  @Field(() => String, { nullable: false })
+  tx_hash!: string;
+
+  @Field(() => Date, { nullable: false })
+  updatedAt!: Date;
+
+  constructor(init: Partial<TokenHistoryQueryResult>) {
+    Object.assign(this, init);
+  }
+}

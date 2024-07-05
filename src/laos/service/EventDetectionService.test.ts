@@ -1,6 +1,5 @@
 
 import { EventDetectionService } from './EventDetectionService';
-import { RawTransfer, RawOwnershipContract } from '../../model';
 import { Context } from '../../__mocks__/Context'
 import { mockLogsMintedEvents, mockLogsEvolvedEvents } from '../../__mocks__/mockdata'
 

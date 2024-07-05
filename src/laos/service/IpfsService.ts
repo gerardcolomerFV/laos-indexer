@@ -18,7 +18,7 @@ export class IpfsService {
       const jsonData = await response.json();
       return jsonData;
     } catch (error) {
-      console.warn('Error fetching data from URL:', url);
+      console.warn('Error fetching data from URL:', url, error);
       return null;
     }
   }

@@ -17,6 +17,11 @@ export enum TokenOrderByOptions {
   CREATED_AT_DESC = 'created_at DESC',
 }
 
+export enum TokenHistoryOrderByOptions {
+  UPDATED_AT_ASC = 'timestamp ASC',
+  UPDATED_AT_DESC = 'timestamp DESC',
+}
+
 
 
 // Register TransferOrderByOptions
@@ -31,4 +36,9 @@ registerEnumType(TokenOrderByOptions, {
   description: 'Possible options for ordering tokens',
 });
 
-export type OrderByOptions = TransferOrderByOptions | TokenOrderByOptions;
+registerEnumType(TokenHistoryOrderByOptions, {
+  name: 'TokenHistoryOrderByOptions',
+  description: 'Possible options for ordering token histories',
+});
+
+export type OrderByOptions = TransferOrderByOptions | TokenOrderByOptions | TokenHistoryOrderByOptions;

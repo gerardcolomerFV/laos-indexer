@@ -32,8 +32,8 @@ export class EventDetectionService {
       this.ownershipContractsToCheck.add(logDecoded.newContractAddress.toLowerCase());
       const laosContractAddress = getAccountKey20FromBaseUri(logDecoded.baseURI);
       ownershipContractsToInsertInDb.push({
-        id: logDecoded.newContractAddress,
-        laosContract: laosContractAddress,
+        id: logDecoded.newContractAddress.toLowerCase(),
+        laosContract: laosContractAddress!.toLowerCase(),
       });
     }
   }
@@ -46,12 +46,12 @@ export class EventDetectionService {
       transfers.push({
         id: uuidv4(),
         tokenId,
-        from,
-        to,
+        from: from.toLowerCase(),
+        to: to.toLowerCase(),
         timestamp: new Date(timestamp),
         blockNumber: blockNumber,
         txHash: log.transactionHash,
-        ownershipContract: log.address,
+        ownershipContract: log.address.toLowerCase(),
       });
     }
   }

@@ -1,39 +1,29 @@
 import { InputType, Field } from 'type-graphql';
-import { TransferOrderByOptions, TokenOrderByOptions } from '../../model';
-
-
-// @InputType()
-// export class PaginationInput {
-//   @Field(() => Number, { nullable: true })
-//   limit?: number;
-
-//   @Field(() => Number, { nullable: true })
-//   offset?: number;
-
-//   @Field(() => OrderByOptions, { nullable: true })
-//   orderBy?: OrderByOptions;
-// }
+import { TransferOrderByOptions, TokenOrderByOptions, TokenHistoryOrderByOptions } from '../../model';
 
 @InputType()
-export class TransferPaginationInput {
+ class PaginationInput {
   @Field(() => Number, { nullable: true })
   limit?: number;
 
   @Field(() => Number, { nullable: true })
   offset?: number;
+}
 
+@InputType()
+export class TransferPaginationInput extends PaginationInput {
   @Field(() => TransferOrderByOptions, { nullable: true })
   orderBy?: TransferOrderByOptions;
 }
 
 @InputType()
-export class TokenPaginationInput {
-  @Field(() => Number, { nullable: true })
-  limit?: number;
-
-  @Field(() => Number, { nullable: true })
-  offset?: number;
-
+export class TokenPaginationInput extends PaginationInput {
   @Field(() => TokenOrderByOptions, { nullable: true })
   orderBy?: TokenOrderByOptions;
+}
+
+@InputType()
+export class TokenHistoryPaginationInput extends PaginationInput {
+  @Field(() => TokenHistoryOrderByOptions, { nullable: true })
+  orderBy?: TokenHistoryOrderByOptions;
 }

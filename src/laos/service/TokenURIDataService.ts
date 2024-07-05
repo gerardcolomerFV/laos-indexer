@@ -31,9 +31,9 @@ export class TokenURIDataService {
     }
 
     this.lastUpdate = now;
-
+    console.log('updatePendingTokenUris ******************************************************');
     const tokenUris = await this.entityManager.find(TokenUri, { where: { fetchState: TokenUriFetchState.Pending } });
-
+    console.log('tokenUris', tokenUris.length);
     const updatePromises = tokenUris.map(async (tokenUri) => {
       try {
         const updatedTokenUri = await this.ipfsService.getTokenURIData(tokenUri.id);

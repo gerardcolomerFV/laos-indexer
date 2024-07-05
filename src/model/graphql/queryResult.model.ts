@@ -21,6 +21,24 @@ export class TokenQueryResult {
   @Field(() => String, { nullable: false })
   initialOwner!: string;
 
+  @Field(() => String, { nullable: true })
+  name!: string;
+
+  @Field(() => String, { nullable: true })
+  description!: string;
+
+  @Field(() => String, { nullable: true })
+  image!: string | null;
+
+  @Field(() => GraphQLJSON, { nullable: true })
+  attributes!: Record<string, any> | null;
+
+  @Field(() => Number, { nullable: false })
+  block_number!: number;
+
+  @Field(() => String, { nullable: false })
+  tx_hash!: string;
+
   constructor(props: Partial<TokenQueryResult>) {
     Object.assign(this, props);
   }

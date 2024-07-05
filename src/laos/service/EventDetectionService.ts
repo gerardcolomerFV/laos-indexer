@@ -1,6 +1,5 @@
 import { Context } from '../processor';
 import * as EvolutionCollection from '../../abi/EvolutionCollection'
-import { v4 as uuidv4 } from 'uuid';
 import {  DetectedLaosEvents,  RawMintedWithExternalURI, RawEvolvedWithExternalURI } from '../../model';
 
 export class EventDetectionService {
@@ -33,8 +32,8 @@ export class EventDetectionService {
       const { _to, _slot, _tokenId, _tokenURI } = logDecoded;
       mintedEvents.push({
         id: log.id,
-        contract: log.address,
-        _to,
+        contract: log.address.toLowerCase(),
+        _to: _to.toLowerCase(),
         _slot,
         _tokenId,
         _tokenURI,
@@ -52,7 +51,7 @@ export class EventDetectionService {
       const { _tokenId, _tokenURI } = logDecoded;
       evolvedEvents.push({
         id: log.id,
-        contract: log.address,
+        contract: log.address.toLowerCase(),
         _tokenId,
         _tokenURI,
         timestamp: new Date(timestamp),

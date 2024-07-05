@@ -24,14 +24,14 @@ describe('EventDetectionService', () => {
     // Validate ownershipContracts
     expect(detectedEvents.ownershipContracts).toHaveLength(1);
     expect(detectedEvents.ownershipContracts[0]).toEqual<RawOwnershipContract>({
-      id: '0x52f5de321c9595e7b11f0d91d8c3e816c7d715bb',
-      laosContract: '0xFFfFfffFFFffFfFfFffFFFfE000000000000036a',
+      id: '0x52f5de321c9595e7b11f0d91d8c3e816c7d715bb'.toLowerCase(),
+      laosContract: '0xFFfFfffFFFffFfFfFffFFFfE000000000000036a'.toLowerCase(),
     });
 
     // Validate transfers
     expect(detectedEvents.transfers).toHaveLength(1);
     expect(detectedEvents.transfers[0].txHash).toEqual('0x537c05ceff5c3940af2002d2178e5fff09ad0d2f1416ab18d3033dc092775b47');
-    expect(detectedEvents.transfers[0].to).toEqual('0x637b4840c99925d9d9698b4a552c447f1cd155dd');
+    expect(detectedEvents.transfers[0].to).toEqual('0x637b4840c99925d9d9698b4a552c447f1cd155dd'.toLowerCase());
   });
 
   it('should detect new ERC721 universal contracts and transfers for the same contract', () => {
@@ -44,13 +44,13 @@ describe('EventDetectionService', () => {
     // Validate ownershipContracts
     expect(detectedEvents.ownershipContracts).toHaveLength(1);
     expect(detectedEvents.ownershipContracts[0]).toEqual<RawOwnershipContract>({
-      id: '0x52f5de321c9595e7b11f0d91d8c3e816c7d715bb',
-      laosContract: '0xFFfFfffFFFffFfFfFffFFFfE000000000000036a',
+      id: '0x52f5de321c9595e7b11f0d91d8c3e816c7d715bb'.toLowerCase(),
+      laosContract: '0xFFfFfffFFFffFfFfFffFFFfE000000000000036a'.toLowerCase(),
     });
 
     // Validate transfers
     expect(detectedEvents.transfers).toHaveLength(1);
     expect(detectedEvents.transfers[0].txHash).toEqual('0x537c05ceff5c3940af2002d2178e5fff09ad0d2f1416ab18d3033dc092775b47');
-    expect(detectedEvents.transfers[0].to).toEqual('0x637b4840c99925d9d9698b4a552c447f1cd155dd');
+    expect(detectedEvents.transfers[0].to).toEqual('0x637b4840c99925d9d9698b4a552c447f1cd155dd'.toLowerCase());
   });
 });

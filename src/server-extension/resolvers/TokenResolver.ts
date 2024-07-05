@@ -54,8 +54,8 @@ export class TokenResolver {
         
       FROM laos_asset la
       INNER JOIN contract_data cd ON LOWER(la.laos_contract) = cd.laos_contract
-      INNER JOIN asset a ON la.token_id = a.token_id AND LOWER(cd.ownership_contract) = LOWER(a.ownership_contract_id)
       LEFT JOIN metadata m ON la.metadata = m.id
+      LEFT JOIN asset a ON la.token_id = a.token_id AND LOWER(cd.ownership_contract) = LOWER(a.ownership_contract_id)
       WHERE la.token_id = $2  AND cd.laos_contract IS NOT null
       `,
       [normalizedOwnershipContractId, tokenId]
@@ -96,8 +96,8 @@ export class TokenResolver {
         oc.id AS "contractAddress"
       FROM laos_asset la
       INNER JOIN ownership_contract oc ON LOWER(la.laos_contract) = LOWER(oc.laos_contract)
-      INNER JOIN asset a ON la.token_id = a.token_id AND a.ownership_contract_id = oc.id
       LEFT JOIN metadata m ON la.metadata = m.id
+      LEFT JOIN asset a ON la.token_id = a.token_id AND a.ownership_contract_id = oc.id
       WHERE LOWER(COALESCE(a.owner, la.initial_owner)) = LOWER($1)
       ORDER BY ${effectiveOrderBy}
       LIMIT $2 OFFSET $3

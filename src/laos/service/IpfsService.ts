@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { TokenUri, Attribute } from '../../model';
 
 export class IpfsService {
@@ -11,12 +12,8 @@ export class IpfsService {
 
   private async fetchData(url: string): Promise<any> {
     try {
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const jsonData = await response.json();
-      return jsonData;
+      const response = await axios.get(url);
+      return response.data;
     } catch (error) {
       console.warn('Error fetching data from URL:', url, error);
       return null;

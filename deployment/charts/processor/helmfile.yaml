@@ -9,6 +9,7 @@ releases:
       - imageTag: {{ .Values.imageTag }}
       - postgresDb: {{ .Values.postgresDb }}
       - postgresPassword: {{ .Values.postgresPassword }}
+      - postgresUser: {{ .Values.postgresUser }}
       - rpcOwnership: {{ .Values.rpcOwnership }}
       - rpcLaos: {{ .Values.rpcLaos }}
       - command: {{ .Values.command }}

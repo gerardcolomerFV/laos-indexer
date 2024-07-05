@@ -14,6 +14,9 @@ export class TokenHistoryResolver {
     const results = await manager.query(query, parameters);
 
     return results.map((result: any) => {
+      if (typeof result.attributes === 'string') {
+        result.attributes = JSON.parse(result.attributes);
+      }
       return new TokenHistoryQueryResult({
         ...result,
         updatedAt: new Date(result.updatedAt),

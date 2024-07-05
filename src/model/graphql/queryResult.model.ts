@@ -1,4 +1,5 @@
-import { Arg, Field, ObjectType, Query, Resolver } from 'type-graphql';
+import { Field, ObjectType } from 'type-graphql';
+import GraphQLJSON from 'graphql-type-json';
 
 @ObjectType()
 export class TokenQueryResult {
@@ -55,6 +56,8 @@ export class TransferQueryResult {
 }
 
 
+
+
 @ObjectType()
 export class TokenHistoryQueryResult {
 
@@ -76,8 +79,8 @@ export class TokenHistoryQueryResult {
   @Field(() => String, { nullable: true })
   image!: string | null;
 
-  @Field(() => String, { nullable: true })
-  attributes!: string | null;
+  @Field(() => GraphQLJSON, { nullable: true })
+  attributes!: Record<string, any> | null;
 
   @Field(() => Number, { nullable: false })
   block_number!: number;

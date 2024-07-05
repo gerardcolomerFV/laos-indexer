@@ -1,6 +1,6 @@
 import { describe, it, expect } from '@jest/globals';
 import { mapEventWithExternalURIToTokenUri, createTokenUriModels } from './tokenUriMapper';
-import { RawEvent, TokenUri, TokenUirFetchState } from '../../model';
+import { RawEvent, TokenUri, TokenUriFetchState } from '../../model';
 
 describe('tokenUriMapper', () => {
   describe('mapEventWithExternalURIToTokenUri', () => {
@@ -17,7 +17,7 @@ describe('tokenUriMapper', () => {
       };
       const expectedTokenUri = new TokenUri({
         id: 'test-tokenURI',
-        fetchState: TokenUirFetchState.Pending,
+        fetchState: TokenUriFetchState.Pending,
       });
       expect(mapEventWithExternalURIToTokenUri(rawEvent)).toEqual(expectedTokenUri);
     });
@@ -60,15 +60,15 @@ describe('tokenUriMapper', () => {
       const expectedTokenUris: TokenUri[] = [
         new TokenUri({
           id: 'test-tokenURI-1',
-          fetchState: TokenUirFetchState.Pending,
+          fetchState: TokenUriFetchState.Pending,
         }),
         new TokenUri({
           id: 'test-tokenURI-2',
-          fetchState: TokenUirFetchState.Pending,
+          fetchState: TokenUriFetchState.Pending,
         }),
         new TokenUri({
           id: 'test-tokenURI-3',
-          fetchState: TokenUirFetchState.Pending,
+          fetchState: TokenUriFetchState.Pending,
         }),
       ];
       expect(createTokenUriModels(rawEvents)).toEqual(expectedTokenUris);
@@ -110,11 +110,11 @@ describe('tokenUriMapper', () => {
       const expectedTokenUris: TokenUri[] = [
         new TokenUri({
           id: 'test-tokenURI-1',
-          fetchState: TokenUirFetchState.Pending,
+          fetchState: TokenUriFetchState.Pending,
         }),
         new TokenUri({
           id: 'test-tokenURI-2',
-          fetchState: TokenUirFetchState.Pending,
+          fetchState: TokenUriFetchState.Pending,
         }),
       ];
       expect(createTokenUriModels(rawEvents)).toEqual(expectedTokenUris);

@@ -1,10 +1,10 @@
-import { RawMintedWithExternalURI, LaosAsset, Metadata, TokenUri, RawEvolvedWithExternalURI, TokenUirFetchState} from "../../model";
+import { RawMintedWithExternalURI, LaosAsset, Metadata, TokenUri, RawEvolvedWithExternalURI, TokenUriFetchState} from "../../model";
 import { generateLaosAssetUUID, generateLaosAssetMetadataUUID } from "../util";
 
 export function mapMintedWithExternalURItoMetadata(raw: RawMintedWithExternalURI): Metadata {
   const metadata = new Metadata({
     id: generateLaosAssetMetadataUUID(raw._tokenId, raw.contract),
-    tokenUri: new TokenUri({id: raw._tokenURI, fetchState: TokenUirFetchState.Pending}),
+    tokenUri: new TokenUri({id: raw._tokenURI, fetchState: TokenUriFetchState.Pending}),
     blockNumber: raw.blockNumber,
     timestamp: raw.timestamp,
     txHash: raw.txHash,
@@ -22,7 +22,7 @@ export function mapMintedWithExternalURItoMetadata(raw: RawMintedWithExternalURI
 export function mapEvolvedWithExternalURItoMetadata(raw: RawEvolvedWithExternalURI): Metadata {
   const metadata = new Metadata({
     id: generateLaosAssetMetadataUUID(raw._tokenId, raw.contract),
-    tokenUri: new TokenUri({id: raw._tokenURI, fetchState: TokenUirFetchState.Pending}),
+    tokenUri: new TokenUri({id: raw._tokenURI, fetchState: TokenUriFetchState.Pending}),
     blockNumber: raw.blockNumber,
     timestamp: raw.timestamp,
     txHash: raw.txHash,

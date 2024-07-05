@@ -1,6 +1,7 @@
 namespace: protostar
 postgresDb: squid
 postgresPassword: postgres
+postgresUser: postgres
 ipfsGateway: https://subsquid-laos.mypinata.cloud/ipfs/
 host: indexer.gorengine.com
 rpcOwnership: https://rpc.ankr.com/polygon

@@ -2,6 +2,7 @@ import { TypeormDatabase, TypeormDatabaseOptions, Store } from '@subsquid/typeor
 import { EntityManager } from 'typeorm'
 import { processor } from './processor'
 import { EventDetectionService } from './service/EventDetectionService';
+import { TokenURIDataService } from './service/TokenURIDataService';
 import { CustomStore } from './service/CustomStore';
 import { createMintedWithExternalURIModels } from './mapper/mintMapper';
 import { createTokenUriModels } from './mapper/tokenUriMapper';

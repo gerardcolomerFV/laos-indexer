@@ -1,4 +1,4 @@
-export enum TokenUirFetchState {
+export enum TokenUriFetchState {
   Pending = "pending",
   Fail = "fail",
   Done = "done"

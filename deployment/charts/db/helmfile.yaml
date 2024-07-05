@@ -6,3 +6,4 @@ releases:
     values:
       - postgresDb: {{ .Values.postgresDb }}
       - postgresPassword: {{ .Values.postgresPassword }}
+      - postgresUser: {{ .Values.postgresUser }}

@@ -66,6 +66,11 @@
         "cmd": ["node", "lib/laos/main.js"],
         "hidden": true
       },
+      "process:cron": {
+        "description": "Start the tokenUriProcessor",
+        "cmd": ["node", "lib/laos/tokenUriProcessor.js"],
+        "hidden": true
+      },
       "serve": {
         "description": "Start the GraphQL API server",
         "cmd": ["squid-graphql-server"]

@@ -18,6 +18,7 @@
     "@subsquid/typeorm-store": "^1.5.1",
     "@types/node": "^20.14.9",
     "dotenv": "^16.4.5",
+    "graphql-type-json": "^0.3.2",
     "reflect-metadata": "^0.2.2",
     "type-graphql": "^1.2.0-rc.1",
     "typeorm": "^0.3.20",

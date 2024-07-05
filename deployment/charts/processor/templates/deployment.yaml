@@ -36,6 +36,8 @@ spec:
               value: {{ .Values.ipfsGateway }}   
             - name: DB_PASS
               value: {{ .Values.postgresPassword }}
+            - name: DB_USER
+              value: {{ .Values.postgresUser }}
             - name: RPC_ENDPOINT
               value: {{ .Values.rpcOwnership }}
             - name: RPC_LAOS_ENDPOINT

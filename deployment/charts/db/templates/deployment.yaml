@@ -19,9 +19,11 @@ spec:
           image: postgres:15
           env:
             - name: POSTGRES_PASSWORD
-              value: postgres
+              value: {{ .Values.postgresPassword }}
             - name: POSTGRES_DB
               value: squid
+            - name: POSTGRES_USER
+              value: {{ .Values.postgresUser }}
           ports:
             - containerPort: 5432
           volumeMounts:

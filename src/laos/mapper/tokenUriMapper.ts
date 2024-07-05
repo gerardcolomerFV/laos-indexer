@@ -1,5 +1,5 @@
 import e from "cors";
-import { RawEvent, TokenUri, TokenUirFetchState } from "../../model";
+import { RawEvent, TokenUri, TokenUriFetchState } from "../../model";
 import { generateLaosAssetUUID } from "../util";
 
 
@@ -7,7 +7,7 @@ import { generateLaosAssetUUID } from "../util";
 export function mapEventWithExternalURIToTokenUri(raw: RawEvent): TokenUri {
   const tokenUri = new TokenUri({
     id: raw._tokenURI,
-    fetchState: TokenUirFetchState.Pending,
+    fetchState: TokenUriFetchState.Pending,
   });
   return tokenUri;
 }

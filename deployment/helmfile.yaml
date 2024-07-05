@@ -16,6 +16,7 @@ helmfiles:
       - namespace: {{ .Values.namespace }}
       - postgresDb: {{ .Values.postgresDb }}
       - postgresPassword: {{ .Values.postgresPassword }}
+      - postgresUser: {{ .Values.postgresUser }}
   - path: 'charts/processor/helmfile.yaml'
     values:
       - name: "laos-indexer-ownership-processor"
@@ -23,6 +24,7 @@ helmfiles:
       - imageTag: {{ requiredEnv "CIRCLE_SHA1" }}
       - postgresDb: {{ .Values.postgresDb }}
       - postgresPassword: {{ .Values.postgresPassword }}
+      - postgresUser: {{ .Values.postgresUser }}
       - ipfsGateway: {{ .Values.ipfsGateway }}
       - rpcOwnership: {{ .Values.rpcOwnership }}
       - rpcLaos: {{ .Values.rpcLaos }}
@@ -34,16 +36,30 @@ helmfiles:
       - imageTag: {{ requiredEnv "CIRCLE_SHA1" }}
       - postgresDb: {{ .Values.postgresDb }}
       - postgresPassword: {{ .Values.postgresPassword }}
+      - postgresUser: {{ .Values.postgresUser }}
       - ipfsGateway: {{ .Values.ipfsGateway }}
       - rpcOwnership: {{ .Values.rpcOwnership }}
       - rpcLaos: {{ .Values.rpcLaos }}
       - command: "process:prod:laos"
+  - path: 'charts/processor/helmfile.yaml'
+    values:
+      - name: "laos-indexer-laos-tokenuri-processor"
+      - namespace: {{ .Values.namespace }}
+      - imageTag: {{ requiredEnv "CIRCLE_SHA1" }}
+      - postgresDb: {{ .Values.postgresDb }}
+      - postgresPassword: {{ .Values.postgresPassword }}
+      - postgresUser: {{ .Values.postgresUser }}
+      - ipfsGateway: {{ .Values.ipfsGateway }}
+      - rpcOwnership: {{ .Values.rpcOwnership }}
+      - rpcLaos: {{ .Values.rpcLaos }}
+      - command: "process:cron"
   - path: 'charts/api/helmfile.yaml'
     values:
       - namespace: {{ .Values.namespace }}
       - imageTag: {{ requiredEnv "CIRCLE_SHA1" }}
       - postgresDb: {{ .Values.postgresDb }}
       - postgresPassword: {{ .Values.postgresPassword }}
+      - postgresUser: {{ .Values.postgresUser }}
       - ipfsGateway: {{ .Values.ipfsGateway }}
       - host: {{ .Values.host }}
 

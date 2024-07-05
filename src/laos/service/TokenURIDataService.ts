@@ -45,7 +45,7 @@ export class TokenURIDataService {
           tokenUri.fetchState = TokenUriFetchState.Fail;
         }
       } catch (error) {
-        console.error('Error updating token URI:', tokenUri.id);
+        console.error('Error updating token URI:', tokenUri.id, error);
         tokenUri.fetchState = TokenUriFetchState.Fail;
       }
       await this.entityManager.save(TokenUri, tokenUri);

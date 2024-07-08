@@ -13,6 +13,9 @@ export class TokenQueryResult {
   tokenUri!: string | null;
 
   @Field(() => String, { nullable: true })
+  tokenUriFetchState!: string;
+
+  @Field(() => String, { nullable: true })
   contractAddress!: string | null;
 
   @Field(() => Date, { nullable: false })
@@ -87,6 +90,9 @@ export class TokenHistoryQueryResult {
 
   @Field(() => String, { nullable: true })
   tokenUri!: string;
+
+  @Field(() => String, { nullable: true })
+  tokenUriFetchState!: string;
 
   @Field(() => String, { nullable: true })
   name!: string;

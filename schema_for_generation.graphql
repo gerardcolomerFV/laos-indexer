@@ -24,7 +24,7 @@ type Transfer @entity {
 
 type LaosAsset @entity {
   id: ID!
-  laosContract: String!
+  laosContract: String! @index
   tokenId: BigInt!
   initialOwner: String!
   createdAt: DateTime!

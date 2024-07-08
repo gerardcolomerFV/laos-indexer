@@ -45,18 +45,19 @@ export class TokenHistoryResolver {
         tu.description AS description,
         tu.image AS image,
         tu.attributes AS attributes,
+        tu.fetch_state AS "tokenUriFetchState",
         m.block_number,
         m.tx_hash,
         m."timestamp" as "updatedAt",
         oc.id AS "contractAddress"
       FROM 
-        public.metadata m
+        metadata m
       INNER JOIN 
-        public.laos_asset la ON m.laos_asset_id = la.id
+        laos_asset la ON m.laos_asset_id = la.id
       INNER JOIN 
-        public.ownership_contract oc ON LOWER(la.laos_contract) = LOWER(oc.laos_contract)
-      LEFT JOIN 
-        public.token_uri tu ON m.token_uri_id = tu.id
+        ownership_contract oc ON LOWER(la.laos_contract) = LOWER(oc.laos_contract)
+      INNER JOIN 
+        token_uri tu ON m.token_uri_id = tu.id
       WHERE 
         la.token_id = $1
         AND LOWER(oc.id) = $2

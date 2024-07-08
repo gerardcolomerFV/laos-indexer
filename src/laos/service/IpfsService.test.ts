@@ -67,8 +67,8 @@ describe('IpfsService', () => {
     xit('should fetch and map token URI data correctly', async () => {
       const service = new IpfsService();
       const mockData = {
-        name:"Hello World3 ",
-        description:"kk",
+        name:"Hello World",
+        description:"description",
         image:"https://ipfs.io/ipfs/QmS326uhnQp5PsnznQvHhkzqKLfB7ieWz3onmFXsRvERig",
         attributes:[{"trait_type":"health","value":"10"},{"trait_type":"speed","value":"2"}]
       };
@@ -78,8 +78,8 @@ describe('IpfsService', () => {
       expect(result).toEqual({
         id: 'ipfs://test-url',
         fetchState: 'done',
-        name: 'Hello World3 ',
-        description: 'kk',
+        name: 'Hello World',
+        description: 'description',
         image: 'https://ipfs.io/ipfs/QmS326uhnQp5PsnznQvHhkzqKLfB7ieWz3onmFXsRvERig',
         attributes: [{ trait_type: 'health', value: '10' }, { trait_type: 'speed', value: '2' }],
         fetchedAt: expect.any(Date),
@@ -99,7 +99,7 @@ describe('IpfsService', () => {
         name: 'Test Token',
         description: 'Test Description',
         image: 'https://test.image',
-        attributes: ["kk", "tt"],
+        attributes: ["wrong", "xxx"],
       };
       // global spy on console warn
       const consoleWarnSpy = jest.spyOn(console, 'warn');

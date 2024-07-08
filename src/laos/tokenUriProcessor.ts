@@ -23,7 +23,6 @@ export async function processTokenURIs() {
     }
     const entityManager = AppDataSource.manager;
     const tokenURIDataService = TokenURIDataService.getInstance(entityManager);
-    console.log('Updating pending token URIs ****************************************');
     await tokenURIDataService.updatePendingTokenUris();
   } catch (error) {
     console.error('Error processing token URIs:', error);

@@ -15,7 +15,6 @@ const options: TypeormDatabaseOptions = {
 };
 
 processor.run<Store>(new TypeormDatabase(options) as any, async (ctx) => {
-
   const service = new EventDetectionService(ctx);
   const detectedEvents = service.detectEvents();
   const mintEvents = detectedEvents.mintEvents;
@@ -41,7 +40,6 @@ processor.run<Store>(new TypeormDatabase(options) as any, async (ctx) => {
     await ctx.store.insert(evolves.map(evolve => evolve.metadata));
   }
   if (processTokenUris) {
-    console.log('Processing token URIs ****************************************');
     processTokenURIs();
   }
 

@@ -37,7 +37,6 @@ export class TokenURIDataService {
     }
 
     this.isUpdating = true;
-    console.log('updatePendingTokenUris ******************************************************');
 
     try {
       const tokenUris = await this.entityManager.find(TokenUri, { where: { fetchState: TokenUriFetchState.Pending } });

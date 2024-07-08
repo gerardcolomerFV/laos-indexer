@@ -33,7 +33,10 @@ export class IpfsService {
     if (attributes && Array.isArray(attributes)) {
       attributes = attributes.map((attr: any) => {
         if (attr.trait_type && attr.value) {
-          return new Attribute(undefined, { traitType: attr.trait_type, value: attr.value });
+          const attribute = new Attribute();
+          (attribute as any).trait_type = attr.trait_type;
+          (attribute as any).value = attr.value;
+          return attribute;
         } else {
           console.warn('Invalid attribute format:', attr);
           return null;

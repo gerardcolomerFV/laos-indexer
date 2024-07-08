@@ -1,5 +1,5 @@
 import { EntityManager, Connection } from 'typeorm';
-import { Attribute, TokenUri, TokenUriFetchState } from '../../model';
+import { TokenUri, TokenUriFetchState } from '../../model';
 import { IpfsService } from './IpfsService';
 import { TokenURIDataService } from './TokenURIDataService';
 
@@ -46,5 +46,72 @@ describe('TokenURIDataService', () => {
     expect(instance1).toBe(instance2);
   });
 
-  
+  it('should not run updatePendingTokenUris if it is already running', async () => {
+    entityManager.find.mockResolvedValue([]);
+    ipfsService.getTokenURIData.mockResolvedValue({});
+
+    // Simulate the function being in progress
+    tokenURIDataService['isUpdating'] = true;
+    tokenURIDataService['updateQueue'] = () => Promise.resolve();
+
+    await tokenURIDataService.updatePendingTokenUris();
+
+    expect(entityManager.find).not.toHaveBeenCalled();
+  });
+
+ 
+  it('should process the queued update after the current one finishes', async () => {
+    const pendingTokenUris = [{ id: 1, fetchState: TokenUriFetchState.Pending }];
+    entityManager.find.mockResolvedValue(pendingTokenUris);
+    ipfsService.getTokenURIData.mockResolvedValue({});
+
+    // Simulate the function being in progress
+    tokenURIDataService['isUpdating'] = true;
+
+    const updatePromise1 = tokenURIDataService.updatePendingTokenUris();
+    const updatePromise2 = tokenURIDataService.updatePendingTokenUris();
+
+    expect(tokenURIDataService['updateQueue']).toBeDefined();
+
+    // Simulate the function finishing
+    tokenURIDataService['isUpdating'] = false;
+    if (tokenURIDataService['updateQueue']) {
+      tokenURIDataService['updateQueue']();
+    }
+
+    await updatePromise1;
+    await updatePromise2;
+
+    expect(entityManager.find).toHaveBeenCalledTimes(2);
+  });
+
+  it('should update pending token URIs', async () => {
+    const pendingTokenUris = [
+      { id: 1, fetchState: TokenUriFetchState.Pending },
+      { id: 2, fetchState: TokenUriFetchState.Pending }
+    ];
+    entityManager.find.mockResolvedValue(pendingTokenUris);
+    ipfsService.getTokenURIData.mockResolvedValue({});
+
+    await tokenURIDataService.updatePendingTokenUris();
+
+    expect(entityManager.find).toHaveBeenCalledWith(TokenUri, { where: { fetchState: TokenUriFetchState.Pending } });
+    expect(entityManager.save).toHaveBeenCalledTimes(pendingTokenUris.length);
+  });
+
+  it('should handle errors during token URI update', async () => {
+    const pendingTokenUris = [
+      { id: 1, fetchState: TokenUriFetchState.Pending },
+      { id: 2, fetchState: TokenUriFetchState.Pending }
+    ];
+    entityManager.find.mockResolvedValue(pendingTokenUris);
+    ipfsService.getTokenURIData.mockRejectedValue(new Error('IPFS Error'));
+
+    await tokenURIDataService.updatePendingTokenUris();
+
+    expect(entityManager.find).toHaveBeenCalledWith(TokenUri, { where: { fetchState: TokenUriFetchState.Pending } });
+    expect(entityManager.save).toHaveBeenCalledTimes(pendingTokenUris.length);
+    expect(pendingTokenUris[0].fetchState).toBe(TokenUriFetchState.Fail);
+    expect(pendingTokenUris[1].fetchState).toBe(TokenUriFetchState.Fail);
+  });
 });

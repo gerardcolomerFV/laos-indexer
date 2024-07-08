@@ -16,25 +16,19 @@ const AppDataSource = new DataSource({
   entities: [TokenUri, Metadata, LaosAsset], 
 });
 
-async function main() {
+export async function processTokenURIs() {
   try {
-    await AppDataSource.initialize();
+    if (!AppDataSource.isInitialized) {
+      await AppDataSource.initialize();
+    }
     const entityManager = AppDataSource.manager;
     const tokenURIDataService = TokenURIDataService.getInstance(entityManager);
-
-    async function updateService() {
-      console.log('Updating pending token URIs ****************************************');
-      await tokenURIDataService.updatePendingTokenUris();
-    }
-
-    updateService(); // Initial call
-    setInterval(updateService, 15 * 60 * 1000); // Every 15 minutes
-
-    console.log('TokenURIDataService will run every 15 minutes.');
+    console.log('Updating pending token URIs ****************************************');
+    await tokenURIDataService.updatePendingTokenUris();
   } catch (error) {
-    console.error('Error establishing database connection:', error);
+    console.error('Error processing token URIs:', error);
   }
 }
 
 
-main();
+

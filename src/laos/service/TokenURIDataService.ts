@@ -6,51 +6,67 @@ export class TokenURIDataService {
   private static instance: TokenURIDataService;
   private entityManager: EntityManager;
   private ipfsService: IpfsService;
-  private lastUpdate: Date | null = null;
-  private updateIntervalMs: number;
+  private isUpdating: boolean = false;
+  private updateQueue: (() => void) | null = null;
 
-  private constructor(em: EntityManager,  updateIntervalMs: number = 15 * 60 * 1000) {
+  private constructor(em: EntityManager) {
     this.entityManager = em;
-    this.updateIntervalMs = updateIntervalMs;
     this.ipfsService = new IpfsService();
+    console.log('TokenURIDataService created');
   }
 
-  public static getInstance(em: EntityManager, updateIntervalMs: number = 15 * 60 * 1000): TokenURIDataService {
+  public static getInstance(em: EntityManager): TokenURIDataService {
     if (!TokenURIDataService.instance) {
-      TokenURIDataService.instance = new TokenURIDataService(em, updateIntervalMs);
+      TokenURIDataService.instance = new TokenURIDataService(em);
     }
     return TokenURIDataService.instance;
   }
 
   public async updatePendingTokenUris(): Promise<void> {
-    const now = new Date();
-
-    if (this.lastUpdate && now.getTime() - this.lastUpdate.getTime() < this.updateIntervalMs) {
-      console.log('updatePendingTokenUris can only be called every 15 minutes.');
-      return;
+    if (this.isUpdating) {
+      if (!this.updateQueue) {
+        return new Promise<void>((resolve) => {
+          this.updateQueue = () => {
+            this.updatePendingTokenUris().then(resolve);
+          };
+        });
+      } else {
+        console.log('An update is already queued.');
+        return Promise.resolve();
+      }
     }
 
-    this.lastUpdate = now;
+    this.isUpdating = true;
     console.log('updatePendingTokenUris ******************************************************');
-    const tokenUris = await this.entityManager.find(TokenUri, { where: { fetchState: TokenUriFetchState.Pending } });
-    console.log('tokenUris', tokenUris.length);
-    const updatePromises = tokenUris.map(async (tokenUri) => {
-      try {
-        const updatedTokenUri = await this.ipfsService.getTokenURIData(tokenUri.id);
-        if (updatedTokenUri) {
-          Object.assign(tokenUri, updatedTokenUri);
-          tokenUri.fetchState = TokenUriFetchState.Done;
-        } else {
-          console.error('Error updating token URI:', tokenUri.id);
+
+    try {
+      const tokenUris = await this.entityManager.find(TokenUri, { where: { fetchState: TokenUriFetchState.Pending } });
+      console.log('tokenUris', tokenUris.length);
+      const updatePromises = tokenUris.map(async (tokenUri) => {
+        try {
+          const updatedTokenUri = await this.ipfsService.getTokenURIData(tokenUri.id);
+          if (updatedTokenUri) {
+            Object.assign(tokenUri, updatedTokenUri);
+            tokenUri.fetchState = TokenUriFetchState.Done;
+          } else {
+            console.error('Error updating token URI:', tokenUri.id);
+            tokenUri.fetchState = TokenUriFetchState.Fail;
+          }
+        } catch (error) {
+          console.error('Error updating token URI:', tokenUri.id, error);
           tokenUri.fetchState = TokenUriFetchState.Fail;
         }
-      } catch (error) {
-        console.error('Error updating token URI:', tokenUri.id, error);
-        tokenUri.fetchState = TokenUriFetchState.Fail;
-      }
-      await this.entityManager.save(TokenUri, tokenUri);
-    });
+        await this.entityManager.save(TokenUri, tokenUri);
+      });
 
-    await Promise.all(updatePromises);
+      await Promise.all(updatePromises);
+    } finally {
+      this.isUpdating = false;
+      if (this.updateQueue) {
+        const nextUpdate = this.updateQueue;
+        this.updateQueue = null;
+        nextUpdate();
+      }
+    }
   }
 }

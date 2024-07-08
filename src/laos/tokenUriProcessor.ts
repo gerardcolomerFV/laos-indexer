@@ -1,6 +1,5 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
-import { TypeormDatabase, TypeormDatabaseOptions, Store } from '@subsquid/typeorm-store'
 import { TokenURIDataService } from './service/TokenURIDataService';
 import * as dotenv from 'dotenv';
 import { TokenUri, Metadata, LaosAsset } from '../model';

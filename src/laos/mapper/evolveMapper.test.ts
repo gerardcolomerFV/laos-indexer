@@ -2,7 +2,7 @@ import { RawEvolvedWithExternalURI } from "../../model";
 import { createEvolveModels } from "./evolveMapper";
 
 describe('Evolve Mapper', () => {
-  fit('should map evolve events correctly', () => {
+  it('should map evolve events correctly', () => {
     const rawEvolveEvents: RawEvolvedWithExternalURI[] = [
       {
         id: '1',

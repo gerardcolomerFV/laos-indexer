@@ -28,11 +28,8 @@ processor.run<Store>(new TypeormDatabase(options), async (ctx) => {
   }
 
   if (rawTransfers.length > 0) {
-    // Create assets
     const assetsModels = createAssetModels(rawTransfers);
     await ctx.store.upsert(assetsModels);
-
-    console.log(`Inserted ${rawTransfers.length} transfers:`, rawTransfers);
     const transfersModelArray = createTransferModels(rawTransfers);
     await ctx.store.insert(transfersModelArray);
   }

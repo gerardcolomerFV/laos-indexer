@@ -8,20 +8,10 @@ import { createMintedWithExternalURIModels } from './mapper/mintMapper';
 import { createTokenUriModels } from './mapper/tokenUriMapper';
 import { createEvolveModels } from './mapper/evolveMapper';
 
-
-
 const options: TypeormDatabaseOptions = {
   supportHotBlocks: true,
   stateSchema: 'laos_processor',
 };
-
-class CustomDB<T> extends TypeormDatabase {
-  constructor(options: TypeormDatabaseOptions) {
-    super(options);
-  }
-}
-
-
 
 processor.run<Store>(new TypeormDatabase(options) as any, async (ctx) => {
 

@@ -1,5 +1,3 @@
-import e from "cors"
-
 export * from "./generated"
 export * from "./ownership/raw"
 export * from "./laos/raw"

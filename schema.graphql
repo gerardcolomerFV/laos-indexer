@@ -2,8 +2,3 @@ type Attribute {
     traitType: String!
     value: String!
 }
-type OwnershipContract @entity {
-  id: ID! # ownership_contract
-  laosContract: String  @index
-}
-

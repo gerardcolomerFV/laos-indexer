@@ -15,8 +15,14 @@ export class TransferPaginationInput extends PaginationInput {
 }
 
 @InputType()
-export class TokenPaginationInput extends PaginationInput {
+export class TokenPaginationInput  {
+  @Field(() => Number, { nullable: true })
+  first?: number;
+
+  @Field(() => String, { nullable: true })
+  after?: string;
 }
+
 
 @InputType()
 export class TokenHistoryPaginationInput extends PaginationInput {

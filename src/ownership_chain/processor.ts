@@ -9,8 +9,6 @@ import {
 import { Store } from '@subsquid/typeorm-store';
 import * as ERC721UniversalContract from '../abi/UniversalContract'
 
-export const CONTRACT_ADDRESS = '0xd4cf03ecf779e71cf30a4d3b1f85a03550de52e9' // Open collection Ownership chain '0x167ef072f21d5ec07139810b32970921d15a3de5'; - private collection ownership chain 0xd4cf03ecf779e71cf30a4d3b1f85a03550de52e9 (57829530)
-
 export const processor = new EvmBatchProcessor()
     .setGateway('https://v2.archive.subsquid.io/network/polygon-mainnet')
     .setDataSource({
@@ -18,7 +16,7 @@ export const processor = new EvmBatchProcessor()
     })
     .setFinalityConfirmation(75)
     .setBlockRange({
-        from: 58673132
+        from: 55830815,
     })
     .addLog({
        topic0: [ ERC721UniversalContract.events.NewERC721Universal.topic, ERC721UniversalContract.events.Transfer.topic]

@@ -32,12 +32,12 @@ spec:
               value: "5432"
             - name: DB_HOST
               value: "laos-indexer-db"
-            - name: PRIVATE_IPFS_GATEWAY
-              value: {{ .Values.ipfsGateway }}   
             - name: DB_PASS
               value: {{ .Values.postgresPassword }}
             - name: DB_USER
               value: {{ .Values.postgresUser }}
+            - name: PRIVATE_IPFS_GATEWAY
+              value: {{ .Values.ipfsGateway }}   
             - name: RPC_ENDPOINT
               value: {{ .Values.rpcOwnership }}
             - name: RPC_LAOS_ENDPOINT

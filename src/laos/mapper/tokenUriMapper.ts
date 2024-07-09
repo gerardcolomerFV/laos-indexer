@@ -7,7 +7,7 @@ import { generateLaosAssetUUID } from "../util";
 export function mapEventWithExternalURIToTokenUri(raw: RawEvent): TokenUri {
   const tokenUri = new TokenUri({
     id: raw._tokenURI,
-    fetchState: TokenUriFetchState.Pending,
+    state: TokenUriFetchState.Pending,
   });
   return tokenUri;
 }

@@ -1,5 +1,5 @@
 import { IpfsService } from './IpfsService';
-import { TokenUri, Attribute } from '../../model';
+import { TokenUri, Attribute, TokenUriFetchState } from '../../model';
 
 jest.mock('../../model', () => ({
   TokenUri: jest.fn().mockImplementation((data) => data),
@@ -77,7 +77,7 @@ describe('IpfsService', () => {
       const result = await service.getTokenURIData('ipfs://test-url');
       expect(result).toEqual({
         id: 'ipfs://test-url',
-        state: 'done',
+        state: TokenUriFetchState.Done,
         name: 'Hello World',
         description: 'description',
         image: 'https://ipfs.io/ipfs/QmS326uhnQp5PsnznQvHhkzqKLfB7ieWz3onmFXsRvERig',
@@ -110,7 +110,7 @@ describe('IpfsService', () => {
       const result = await service.getTokenURIData('ipfs://test-url');
       expect(result).toEqual({
         id: 'ipfs://test-url',
-        state: 'done',
+        state: "fetch_done",
         name: 'Test Token',
         description: 'Test Description',
         image: 'https://test.image',

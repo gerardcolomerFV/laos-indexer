@@ -60,7 +60,7 @@ export class IpfsService {
 
     const tokenUri = new TokenUri({
       id: url,
-      state: "fetch_done",
+      state:  TokenUriFetchState.Done,
       name: data.name || null,
       description: data.description || null,
       image: data.image || null,

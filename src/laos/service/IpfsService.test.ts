@@ -1,10 +1,7 @@
 import { IpfsService } from './IpfsService';
 import { TokenUri, Attribute, TokenUriFetchState } from '../../model';
 
-jest.mock('../../model', () => ({
-  TokenUri: jest.fn().mockImplementation((data) => data),
-  Attribute: jest.fn().mockImplementation((trait_type, value) => ({ trait_type, value })),
-}));
+
 
 describe('IpfsService', () => {
   const mockFetch = jest.fn();

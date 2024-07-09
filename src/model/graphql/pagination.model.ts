@@ -12,14 +12,10 @@ import { TransferOrderByOptions, TokenOrderByOptions, TokenHistoryOrderByOptions
 
 @InputType()
 export class TransferPaginationInput extends PaginationInput {
-  @Field(() => TransferOrderByOptions, { nullable: true })
-  orderBy?: TransferOrderByOptions;
 }
 
 @InputType()
 export class TokenPaginationInput extends PaginationInput {
-  @Field(() => TokenOrderByOptions, { nullable: true })
-  orderBy?: TokenOrderByOptions;
 }
 
 @InputType()

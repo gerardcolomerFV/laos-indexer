@@ -8,9 +8,9 @@ export const mockEntityManager = () => {
     count: jest.fn(),
     query: jest.fn(),
   } as unknown as EntityManager;
-}
+};
 
-describe('GetNftById Resolver', () => {
+describe('TokenResolver', () => {
   let resolver: TokenResolver;
   let mockTx: jest.Mock;
 
@@ -20,15 +20,7 @@ describe('GetNftById Resolver', () => {
     resolver = new TokenResolver(mockTx);
   });
 
-  it('should return the total number of Laos assets', async () => {
-    const manager = await mockTx();
-    manager.count.mockResolvedValue(5);
 
-    const result = await resolver.totalLaosAssets();
-
-    expect(result).toBe(5);
-    expect(manager.count).toHaveBeenCalledWith();
-  });
 
   it('should return NFT details by ID', async () => {
     const manager = await mockTx();
@@ -72,65 +64,91 @@ describe('GetNftById Resolver', () => {
     );
   });
 
-  describe('GetTokensByCollection Resolver', () => {
-    let resolver: TokenResolver;
-    let mockTx: jest.Mock;
-  
-    beforeEach(() => {
-      const manager = mockEntityManager();
-      mockTx = jest.fn().mockResolvedValue(manager);
-      resolver = new TokenResolver(mockTx);
-    });
-  
-    it('should return tokens by collection ID', async () => {
-      const manager = await mockTx();
-      const mockData = [
-        {
-          tokenId: 'token1',
-          owner: 'owner1',
-          tokenUri: 'uri1',
-          createdAt: new Date('2021-01-01'),
-          contractAddress: 'contract1',
-          initialOwner: 'initialOwner1'
-        },
-      ];
-  
-      manager.query.mockResolvedValue(mockData);
-  
-      const result = await resolver.tokensByCollection('collectionId', {
+  it('should return tokens by owner', async () => {
+    const manager = await mockTx();
+    const mockData = [
+      {
+        tokenId: 'token1',
+        owner: 'owner1',
+        tokenUri: 'uri1',
+        createdAt: new Date('2021-01-01'),
+      },
+    ];
+
+    manager.query.mockResolvedValue(mockData);
+
+    const result = await resolver.tokens(
+      {
+        owner: 'owner1',
+      },
+      {
         limit: 10,
         offset: 0,
-        orderBy: TokenOrderByOptions.CREATED_AT_ASC,
-      });
-  
-      expect(result).toEqual(
-        mockData.map(data => new TokenQueryResult({
-          ...data,
-          createdAt: new Date(data.createdAt),
-        }))
-      );
-      expect(manager.query).toHaveBeenCalledWith(
-        expect.any(String),
-        ['collectionId', 10, 0]
-      );
-    });
-  
-    it('should return an empty array if no tokens are found', async () => {
-      const manager = await mockTx();
-      manager.query.mockResolvedValue([]);
-  
-      const result = await resolver.tokensByCollection('collectionId', {
+      },
+      TokenOrderByOptions.CREATED_AT_ASC
+    );
+
+    expect(result).toEqual(
+      mockData.map(data => new TokenQueryResult({ ...data, createdAt: new Date(data.createdAt) }))
+    );
+    expect(manager.query).toHaveBeenCalledWith(
+      expect.any(String),
+      ['owner1', 10, 0]
+    );
+  });
+
+  it('should return tokens by collection', async () => {
+    const manager = await mockTx();
+    const mockData = [
+      {
+        tokenId: 'token1',
+        owner: 'owner1',
+        tokenUri: 'uri1',
+        createdAt: new Date('2021-01-01'),
+      },
+    ];
+
+    manager.query.mockResolvedValue(mockData);
+
+    const result = await resolver.tokens(
+      {
+        contractAddress: 'collectionId',
+      },
+      {
         limit: 10,
         offset: 0,
-        orderBy: TokenOrderByOptions.CREATED_AT_ASC,
-      });
-  
-      expect(result).toEqual([]);
-      expect(manager.query).toHaveBeenCalledWith(
-        expect.any(String),
-        ['collectionId', 10, 0]
-      );
-    });
-  
+      },
+      TokenOrderByOptions.CREATED_AT_ASC
+    );
+
+    expect(result).toEqual(
+      mockData.map(data => new TokenQueryResult({ ...data, createdAt: new Date(data.createdAt) }))
+    );
+    expect(manager.query).toHaveBeenCalledWith(
+      expect.any(String),
+      ['collectionid', 10, 0]
+    );
+  });
+
+  it('should return an empty array if no tokens are found', async () => {
+    const manager = await mockTx();
+    manager.query.mockResolvedValue([]);
+
+    const result = await resolver.tokens(
+      {
+        contractAddress: 'collectionId',
+      },
+      {
+        limit: 10,
+        offset: 0,
+      },
+      TokenOrderByOptions.CREATED_AT_ASC
+    );
+
+    expect(result).toEqual([]);
+    expect(manager.query).toHaveBeenCalledWith(
+      expect.any(String),
+      ['collectionid', 10, 0]
+    );
   });
 });

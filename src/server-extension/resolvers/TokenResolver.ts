@@ -1,10 +1,21 @@
-import { Arg, Field, ObjectType, Query, Resolver } from 'type-graphql';
+import { Arg, Field, InputType, ObjectType, Query, Resolver } from 'type-graphql';
 import type { EntityManager } from 'typeorm';
-import { LaosAsset, TokenQueryResult, TokenOrderByOptions, TokenPaginationInput } from '../../model';
+import { TokenOrderByOptions, TokenConnection, TokenEdge, PageInfo, TokenQueryResult, LaosAsset, TokenWhereInput } from '../../model';
 
+@InputType()
+class TokenWhereInput {
+  @Field({ nullable: true })
+  tokenId?: string;
+
+  @Field({ nullable: true })
+  contractAddress?: string;
+
+  @Field({ nullable: true })
+  owner?: string;
+}
 
 @Resolver()
-export class TokenResolver {
+class TokenResolver {
   constructor(private tx: () => Promise<EntityManager>) {}
 
   private async fetchTokens(
@@ -81,17 +92,34 @@ export class TokenResolver {
     return new TokenQueryResult(transformedResult);
   }
 
-  @Query(() => [TokenQueryResult], { nullable: true })
-  async tokensByOwner(
-    @Arg('owner', () => String) owner: string,
-    @Arg('pagination', () => TokenPaginationInput, { nullable: true }) pagination: TokenPaginationInput
-  ): Promise<TokenQueryResult[]> {
+  @Query(() => TokenConnection, { nullable: true })
+  async tokens(
+    @Arg('where', () => TokenWhereInput, { nullable: true }) where: TokenWhereInput,
+    @Arg('limit', () => Number, { nullable: true }) limit: number,
+    @Arg('offset', () => Number, { nullable: true }) offset: number,
+    @Arg('orderBy', () => TokenOrderByOptions, { nullable: true }) orderBy: TokenOrderByOptions
+  ): Promise<TokenConnection> {
     const manager = await this.tx();
-    const normalizedOwner = owner.toLowerCase();
 
-    const effectiveLimit = pagination?.limit || 10;
-    const effectiveOffset = pagination?.offset || 0;
-    const effectiveOrderBy = pagination?.orderBy || TokenOrderByOptions.CREATED_AT_ASC;
+    const effectiveLimit = limit || 10;
+    const effectiveOffset = offset || 0;
+    const effectiveOrderBy = orderBy || TokenOrderByOptions.CREATED_AT_ASC;
+
+    let conditions = [];
+    let parameters = [];
+
+    if (where?.owner) {
+      conditions.push('LOWER(COALESCE(a.owner, la.initial_owner)) = LOWER($' + (conditions.length + 1) + ')');
+      parameters.push(where.owner.toLowerCase());
+    }
+    if (where?.contractAddress) {
+      conditions.push('LOWER(oc.id) = LOWER($' + (conditions.length + 1) + ')');
+      parameters.push(where.contractAddress.toLowerCase());
+    }
+    if (where?.tokenId) {
+      conditions.push('la.token_id = $' + (conditions.length + 1));
+      parameters.push(where.tokenId);
+    }
 
     const query = `
       SELECT 
@@ -114,52 +142,24 @@ export class TokenResolver {
       INNER JOIN metadata m ON la.metadata = m.id
       INNER JOIN token_uri tu ON m.token_uri_id = tu.id
       LEFT JOIN asset a ON la.token_id = a.token_id AND a.ownership_contract_id = oc.id
-      WHERE LOWER(COALESCE(a.owner, la.initial_owner)) = LOWER($1)
+      ${conditions.length ? 'WHERE ' + conditions.join(' AND ') : ''}
       ORDER BY ${effectiveOrderBy}
-      LIMIT $2 OFFSET $3
+      LIMIT $${conditions.length + 1} OFFSET $${conditions.length + 2}
     `;
 
-    return this.fetchTokens(manager, query, [normalizedOwner, effectiveLimit, effectiveOffset]);
-  }
+    parameters.push(effectiveLimit, effectiveOffset);
 
-  @Query(() => [TokenQueryResult], { nullable: true })
-  async tokensByCollection(
-    @Arg('collectionId', () => String) collectionId: string,
-    @Arg('pagination', () => TokenPaginationInput, { nullable: true }) pagination: TokenPaginationInput
-  ): Promise<TokenQueryResult[]> {
-    const manager = await this.tx();
+    const tokens = await this.fetchTokens(manager, query, parameters);
 
-    const effectiveLimit = pagination?.limit || 10;
-    const effectiveOffset = pagination?.offset || 0;
-    const effectiveOrderBy = pagination?.orderBy || TokenOrderByOptions.CREATED_AT_ASC;
+    const edges = tokens.map(token => new TokenEdge(token.tokenId, token));
 
-    const query = `
-      SELECT 
-        la.token_id AS "tokenId", 
-        COALESCE(a.owner, la.initial_owner) AS "owner",
-        la.initial_owner AS "initialOwner",
-        la.created_at as "createdAt",
-        m.token_uri_id AS "tokenUri",
-        m.block_number,
-        m.tx_hash,
-        m."timestamp" as "updatedAt",
-        tu.fetch_state AS "tokenUriFetchState",
-        tu.name AS name,
-        tu.description AS description,
-        tu.image AS image,
-        tu.attributes AS attributes,
-        oc.id AS "contractAddress"
-      FROM laos_asset la
-      INNER JOIN ownership_contract oc ON LOWER(la.laos_contract) = LOWER(oc.laos_contract)
-      INNER JOIN metadata m ON la.metadata = m.id
-      INNER JOIN token_uri tu ON m.token_uri_id = tu.id
-      LEFT JOIN asset a ON la.token_id = a.token_id AND a.ownership_contract_id = oc.id
-      WHERE LOWER(oc.id) = LOWER($1)
-      ORDER BY ${effectiveOrderBy}
-      LIMIT $2 OFFSET $3
-    `;
+    const pageInfo = new PageInfo({
+      endCursor: tokens.length > 0 ? tokens[tokens.length - 1].tokenId : null,
+      hasNextPage: tokens.length === effectiveLimit,
+      hasPreviousPage: effectiveOffset > 0,
+      startCursor: tokens.length > 0 ? tokens[0].tokenId : null,
+    });
 
-    return this.fetchTokens(manager, query, [collectionId, effectiveLimit, effectiveOffset]);
+    return new TokenConnection(edges, pageInfo);
   }
 }
-

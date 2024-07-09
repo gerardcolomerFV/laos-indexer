@@ -3,7 +3,7 @@ import * as marshal from "./marshal"
 import {Attribute} from "./_attribute"
 import {Metadata} from "./metadata.model"
 
-@Entity_({ name: 'token_uri' })
+@Entity_()
 export class TokenUri {
     constructor(props?: Partial<TokenUri>) {
         Object.assign(this, props)
@@ -12,8 +12,8 @@ export class TokenUri {
     @PrimaryColumn_()
     id!: string
 
-    @StringColumn_({nullable: false, name: 'fetch_state' })
-    fetchState!: string
+    @StringColumn_({nullable: false})
+    state!: string
 
     @StringColumn_({nullable: true})
     name!: string | undefined | null
@@ -27,8 +27,8 @@ export class TokenUri {
     @Column_("jsonb", {transformer: {to: obj => obj == null ? undefined : obj.map((val: any) => val.toJSON()), from: obj => obj == null ? undefined : marshal.fromList(obj, val => new Attribute(undefined, marshal.nonNull(val)))}, nullable: true})
     attributes!: (Attribute)[] | undefined | null
 
-    @DateTimeColumn_({nullable: true, name: 'fetched_at'})
-    fetchedAt!: Date | undefined | null
+    @DateTimeColumn_({nullable: true})
+    fetched!: Date | undefined | null
 
     @OneToMany_(() => Metadata, e => e.tokenUri)
     metadata!: Metadata[]

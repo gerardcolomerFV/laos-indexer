@@ -1,6 +1,6 @@
 import { TypeormDatabase, TypeormDatabaseOptions, Store } from '@subsquid/typeorm-store';
 import { processor, Context } from './processor';
-import {  OwnershipContract } from '../model';
+import { OwnershipContract } from '../model';
 import { EventDetectionService } from './service/EventDetectionService';
 import { createOwnershipContractsModel } from './mapper/ownershipContractMapper';
 import { createTransferModels } from './mapper/transferMapper';
@@ -29,7 +29,9 @@ processor.run<Store>(new TypeormDatabase(options), async (ctx) => {
 
   if (rawTransfers.length > 0) {
     const assetsModels = createAssetModels(rawTransfers);
-    await ctx.store.upsert(assetsModels);
+    for (const assetModel of assetsModels) {
+      await ctx.store.upsert(assetModel);
+    }
     const transfersModelArray = createTransferModels(rawTransfers);
     await ctx.store.insert(transfersModelArray);
   }

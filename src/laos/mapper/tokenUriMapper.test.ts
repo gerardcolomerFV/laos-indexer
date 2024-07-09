@@ -4,7 +4,7 @@ import { RawEvent, TokenUri, TokenUriFetchState } from '../../model';
 
 describe('tokenUriMapper', () => {
   describe('mapEventWithExternalURIToTokenUri', () => {
-    it('should map a RawEvent to a TokenUri with Pending fetchState', () => {
+    it('should map a RawEvent to a TokenUri with Pending state', () => {
       const rawEvent: RawEvent = {
         id: 'test-id',
         contract: 'test-contract',
@@ -17,7 +17,7 @@ describe('tokenUriMapper', () => {
       };
       const expectedTokenUri = new TokenUri({
         id: 'test-tokenURI',
-        fetchState: TokenUriFetchState.Pending,
+        state: TokenUriFetchState.Pending,
       });
       expect(mapEventWithExternalURIToTokenUri(rawEvent)).toEqual(expectedTokenUri);
     });
@@ -60,15 +60,15 @@ describe('tokenUriMapper', () => {
       const expectedTokenUris: TokenUri[] = [
         new TokenUri({
           id: 'test-tokenURI-1',
-          fetchState: TokenUriFetchState.Pending,
+          state: TokenUriFetchState.Pending,
         }),
         new TokenUri({
           id: 'test-tokenURI-2',
-          fetchState: TokenUriFetchState.Pending,
+          state: TokenUriFetchState.Pending,
         }),
         new TokenUri({
           id: 'test-tokenURI-3',
-          fetchState: TokenUriFetchState.Pending,
+          state: TokenUriFetchState.Pending,
         }),
       ];
       expect(createTokenUriModels(rawEvents)).toEqual(expectedTokenUris);
@@ -110,11 +110,11 @@ describe('tokenUriMapper', () => {
       const expectedTokenUris: TokenUri[] = [
         new TokenUri({
           id: 'test-tokenURI-1',
-          fetchState: TokenUriFetchState.Pending,
+          state: TokenUriFetchState.Pending,
         }),
         new TokenUri({
           id: 'test-tokenURI-2',
-          fetchState: TokenUriFetchState.Pending,
+          state: TokenUriFetchState.Pending,
         }),
       ];
       expect(createTokenUriModels(rawEvents)).toEqual(expectedTokenUris);

@@ -39,21 +39,21 @@ export class TokenURIDataService {
     this.isUpdating = true;
 
     try {
-      const tokenUris = await this.entityManager.find(TokenUri, { where: { fetchState: TokenUriFetchState.Pending } });
+      const tokenUris = await this.entityManager.find(TokenUri, { where: { state: TokenUriFetchState.Pending } });
       console.log('tokenUris', tokenUris.length);
       const updatePromises = tokenUris.map(async (tokenUri) => {
         try {
           const updatedTokenUri = await this.ipfsService.getTokenURIData(tokenUri.id);
           if (updatedTokenUri) {
             Object.assign(tokenUri, updatedTokenUri);
-            tokenUri.fetchState = TokenUriFetchState.Done;
+            tokenUri.state = TokenUriFetchState.Done;
           } else {
             console.error('Error updating token URI:', tokenUri.id);
-            tokenUri.fetchState = TokenUriFetchState.Fail;
+            tokenUri.state = TokenUriFetchState.Fail;
           }
         } catch (error) {
           console.error('Error updating token URI:', tokenUri.id, error);
-          tokenUri.fetchState = TokenUriFetchState.Fail;
+          tokenUri.state = TokenUriFetchState.Fail;
         }
         await this.entityManager.save(TokenUri, tokenUri);
       });

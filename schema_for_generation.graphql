@@ -42,12 +42,12 @@ type Metadata @entity {
 
 type TokenUri @entity {
   id: ID! # token_uri
-  fetchState: String! # pending, fail, done
+  state: String!
   name: String
   description: String
   image: String
   attributes: [Attribute!]
-  fetchedAt: DateTime
+  fetched: DateTime
   metadata: [Metadata!]! @derivedFrom(field: "tokenUri")
 }
 

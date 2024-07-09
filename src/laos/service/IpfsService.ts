@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { TokenUri, Attribute } from '../../model';
+import { TokenUri, Attribute, TokenUriFetchState } from '../../model';
 
 export class IpfsService {
   private ipfsUrlToHttpUrl(url: string): string {
@@ -44,7 +44,6 @@ export class IpfsService {
     return attributes;
   }
 
-
   public async getTokenURIData(url: string): Promise<Partial<TokenUri>> {
     let data: any;
     if (url.startsWith('ipfs://')) {
@@ -61,12 +60,12 @@ export class IpfsService {
 
     const tokenUri = new TokenUri({
       id: url,
-      fetchState: 'done',
+      state:  TokenUriFetchState.Done,
       name: data.name || null,
       description: data.description || null,
       image: data.image || null,
       attributes,
-      fetchedAt: new Date(),
+      fetched: new Date(),
     });
 
     return tokenUri;

@@ -1,5 +1,5 @@
 export enum TokenUriFetchState {
-  Pending = "pending",
-  Fail = "fail",
-  Done = "done"
+  Pending = "fetch_pending",
+  Fail = "fetch_fail",
+  Done = "fetch_done"
 }

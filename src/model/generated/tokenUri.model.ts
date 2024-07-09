@@ -13,7 +13,7 @@ export class TokenUri {
     id!: string
 
     @StringColumn_({nullable: false})
-    fetchState!: string
+    state!: string
 
     @StringColumn_({nullable: true})
     name!: string | undefined | null
@@ -28,7 +28,7 @@ export class TokenUri {
     attributes!: (Attribute)[] | undefined | null
 
     @DateTimeColumn_({nullable: true})
-    fetchedAt!: Date | undefined | null
+    fetched!: Date | undefined | null
 
     @OneToMany_(() => Metadata, e => e.tokenUri)
     metadata!: Metadata[]

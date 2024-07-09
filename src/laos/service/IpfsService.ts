@@ -61,12 +61,12 @@ export class IpfsService {
 
     const tokenUri = new TokenUri({
       id: url,
-      fetchState: 'done',
+      state: 'done',
       name: data.name || null,
       description: data.description || null,
       image: data.image || null,
       attributes,
-      fetchedAt: new Date(),
+      fetched: new Date(),
     });
 
     return tokenUri;

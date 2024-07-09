@@ -61,7 +61,7 @@ describe('TokenURIDataService', () => {
 
  
   it('should process the queued update after the current one finishes', async () => {
-    const pendingTokenUris = [{ id: 1, fetchState: TokenUriFetchState.Pending }];
+    const pendingTokenUris = [{ id: 1, state: TokenUriFetchState.Pending }];
     entityManager.find.mockResolvedValue(pendingTokenUris);
     ipfsService.getTokenURIData.mockResolvedValue({});
 
@@ -87,31 +87,31 @@ describe('TokenURIDataService', () => {
 
   it('should update pending token URIs', async () => {
     const pendingTokenUris = [
-      { id: 1, fetchState: TokenUriFetchState.Pending },
-      { id: 2, fetchState: TokenUriFetchState.Pending }
+      { id: 1, state: TokenUriFetchState.Pending },
+      { id: 2, state: TokenUriFetchState.Pending }
     ];
     entityManager.find.mockResolvedValue(pendingTokenUris);
     ipfsService.getTokenURIData.mockResolvedValue({});
 
     await tokenURIDataService.updatePendingTokenUris();
 
-    expect(entityManager.find).toHaveBeenCalledWith(TokenUri, { where: { fetchState: TokenUriFetchState.Pending } });
+    expect(entityManager.find).toHaveBeenCalledWith(TokenUri, { where: { state: TokenUriFetchState.Pending } });
     expect(entityManager.save).toHaveBeenCalledTimes(pendingTokenUris.length);
   });
 
   it('should handle errors during token URI update', async () => {
     const pendingTokenUris = [
-      { id: 1, fetchState: TokenUriFetchState.Pending },
-      { id: 2, fetchState: TokenUriFetchState.Pending }
+      { id: 1, state: TokenUriFetchState.Pending },
+      { id: 2, state: TokenUriFetchState.Pending }
     ];
     entityManager.find.mockResolvedValue(pendingTokenUris);
     ipfsService.getTokenURIData.mockRejectedValue(new Error('IPFS Error'));
 
     await tokenURIDataService.updatePendingTokenUris();
 
-    expect(entityManager.find).toHaveBeenCalledWith(TokenUri, { where: { fetchState: TokenUriFetchState.Pending } });
+    expect(entityManager.find).toHaveBeenCalledWith(TokenUri, { where: { state: TokenUriFetchState.Pending } });
     expect(entityManager.save).toHaveBeenCalledTimes(pendingTokenUris.length);
-    expect(pendingTokenUris[0].fetchState).toBe(TokenUriFetchState.Fail);
-    expect(pendingTokenUris[1].fetchState).toBe(TokenUriFetchState.Fail);
+    expect(pendingTokenUris[0].state).toBe(TokenUriFetchState.Fail);
+    expect(pendingTokenUris[1].state).toBe(TokenUriFetchState.Fail);
   });
 });

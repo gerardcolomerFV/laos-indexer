@@ -1,5 +1,5 @@
-module.exports = class Data1720515946549 {
-    name = 'Data1720515946549'
+module.exports = class Data1720520762755 {
+    name = 'Data1720520762755'
 
     async up(db) {
         await db.query(`CREATE TABLE "transfer" ("id" character varying NOT NULL, "from" text NOT NULL, "to" text NOT NULL, "timestamp" TIMESTAMP WITH TIME ZONE NOT NULL, "block_number" integer NOT NULL, "tx_hash" text NOT NULL, "asset_id" character varying, CONSTRAINT "PK_fd9ddbdd49a17afcbe014401295" PRIMARY KEY ("id"))`)
@@ -12,7 +12,7 @@ module.exports = class Data1720515946549 {
         await db.query(`CREATE TABLE "laos_asset" ("id" character varying NOT NULL, "laos_contract" text NOT NULL, "token_id" numeric NOT NULL, "initial_owner" text NOT NULL, "created_at" TIMESTAMP WITH TIME ZONE NOT NULL, "metadata" text, CONSTRAINT "PK_b922ae1a317644c470a64c7174f" PRIMARY KEY ("id"))`)
         await db.query(`CREATE INDEX "IDX_ff8a3b3470ab42f6d7d20f9d84" ON "laos_asset" ("laos_contract") `)
         await db.query(`CREATE INDEX "IDX_e4e4978a0c9d154a00e1ad3830" ON "laos_asset" ("metadata") `)
-        await db.query(`CREATE TABLE "token_uri" ("id" character varying NOT NULL, "fetch_state" text NOT NULL, "name" text, "description" text, "image" text, "attributes" jsonb, "fetched_at" TIMESTAMP WITH TIME ZONE, CONSTRAINT "PK_1f5797cb07d9a79407a00292363" PRIMARY KEY ("id"))`)
+        await db.query(`CREATE TABLE "token_uri" ("id" character varying NOT NULL, "state" text NOT NULL, "name" text, "description" text, "image" text, "attributes" jsonb, "fetched" TIMESTAMP WITH TIME ZONE, CONSTRAINT "PK_1f5797cb07d9a79407a00292363" PRIMARY KEY ("id"))`)
         await db.query(`CREATE TABLE "metadata" ("id" character varying NOT NULL, "block_number" integer NOT NULL, "timestamp" TIMESTAMP WITH TIME ZONE NOT NULL, "tx_hash" text NOT NULL, "laos_asset_id" character varying, "token_uri_id" character varying, CONSTRAINT "PK_56b22355e89941b9792c04ab176" PRIMARY KEY ("id"))`)
         await db.query(`CREATE INDEX "IDX_90484e3241344e9b970c82ea67" ON "metadata" ("laos_asset_id") `)
         await db.query(`CREATE INDEX "IDX_d14ff181d0e754aba6f171d59b" ON "metadata" ("token_uri_id") `)

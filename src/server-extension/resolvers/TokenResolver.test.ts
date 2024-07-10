@@ -43,7 +43,6 @@ describe('TokenResolver', () => {
         tokenUri: 'uri1',
       })
     );
-   
   });
 
   it('should return null if no NFT details are found', async () => {
@@ -53,7 +52,6 @@ describe('TokenResolver', () => {
     const result = await resolver.token('contractId', 'token1');
 
     expect(result).toBeNull();
-   
   });
 
   it('should return tokens by owner', async () => {
@@ -64,6 +62,7 @@ describe('TokenResolver', () => {
         owner: 'owner1',
         tokenUri: 'uri1',
         createdAt: new Date('2021-01-01').getTime(), // Use numeric timestamp for createdAt
+        logIndex: 0,
       },
     ];
 
@@ -75,28 +74,26 @@ describe('TokenResolver', () => {
       },
       {
         first: 10,
-        after: Buffer.from('0').toString('base64'), // Use base64 encoded timestamp
+        after: Buffer.from('0:0').toString('base64'), // Use base64 encoded timestamp and logIndex
       },
       TokenOrderByOptions.CREATED_AT_ASC
     );
 
     expect(result).toEqual(new TokenConnection(
       [new TokenEdge(
-        Buffer.from(mockData[0].createdAt.toString()).toString('base64'),
+        Buffer.from(mockData[0].createdAt.toString() + ':' + mockData[0].logIndex.toString()).toString('base64'),
         new TokenQueryResult({
           ...mockData[0],
           createdAt: new Date(mockData[0].createdAt)
         })
       )],
       new PageInfo({
-        endCursor: Buffer.from(mockData[0].createdAt.toString()).toString('base64'),
+        endCursor: Buffer.from(mockData[0].createdAt.toString() + ':' + mockData[0].logIndex.toString()).toString('base64'),
         hasNextPage: false,
         hasPreviousPage: true,
-        startCursor: Buffer.from(mockData[0].createdAt.toString()).toString('base64')
+        startCursor: Buffer.from(mockData[0].createdAt.toString() + ':' + mockData[0].logIndex.toString()).toString('base64')
       })
     ));
-
-   
   });
 
   it('should return tokens by collection', async () => {
@@ -107,6 +104,7 @@ describe('TokenResolver', () => {
         owner: 'owner1',
         tokenUri: 'uri1',
         createdAt: new Date('2021-01-01').getTime(), // Use numeric timestamp for createdAt
+        logIndex: 0,
       },
     ];
 
@@ -118,28 +116,26 @@ describe('TokenResolver', () => {
       },
       {
         first: 10,
-        after: Buffer.from('0').toString('base64'), // Use base64 encoded timestamp
+        after: Buffer.from('0:0').toString('base64'), // Use base64 encoded timestamp and logIndex
       },
       TokenOrderByOptions.CREATED_AT_ASC
     );
 
     expect(result).toEqual(new TokenConnection(
       [new TokenEdge(
-        Buffer.from(mockData[0].createdAt.toString()).toString('base64'),
+        Buffer.from(mockData[0].createdAt.toString() + ':' + mockData[0].logIndex.toString()).toString('base64'),
         new TokenQueryResult({
           ...mockData[0],
           createdAt: new Date(mockData[0].createdAt)
         })
       )],
       new PageInfo({
-        endCursor: Buffer.from(mockData[0].createdAt.toString()).toString('base64'),
+        endCursor: Buffer.from(mockData[0].createdAt.toString() + ':' + mockData[0].logIndex.toString()).toString('base64'),
         hasNextPage: false,
         hasPreviousPage: true,
-        startCursor: Buffer.from(mockData[0].createdAt.toString()).toString('base64')
+        startCursor: Buffer.from(mockData[0].createdAt.toString() + ':' + mockData[0].logIndex.toString()).toString('base64')
       })
     ));
-
-  
   });
 
   it('should return an empty array if no tokens are found', async () => {
@@ -152,7 +148,7 @@ describe('TokenResolver', () => {
       },
       {
         first: 10,
-        after: Buffer.from('0').toString('base64'), // Use base64 encoded timestamp
+        after: Buffer.from('0:0').toString('base64'), // Use base64 encoded timestamp and logIndex
       },
       TokenOrderByOptions.CREATED_AT_ASC
     );
@@ -169,7 +165,7 @@ describe('TokenResolver', () => {
 
     expect(manager.query).toHaveBeenCalledWith(
       expect.any(String),
-      ['collectionid', 0, expect.any(Number)]
+      ['collectionid', 0, 0, expect.any(Number)]
     );
   });
 });

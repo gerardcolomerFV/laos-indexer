@@ -12,6 +12,7 @@ describe('Evolve Mapper', () => {
         timestamp: new Date(),
         txHash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890',
         contract: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890',
+        logIndex: 1,
       },
     ];
     const evolveModels = createEvolveModels(rawEvolveEvents);

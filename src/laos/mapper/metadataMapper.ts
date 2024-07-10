@@ -12,6 +12,7 @@ export function mapMintedWithExternalURItoMetadata(raw: RawMintedWithExternalURI
       id: generateLaosAssetUUID(raw._tokenId, raw.contract),
       tokenId: raw._tokenId,
       initialOwner: raw._to,
+      logIndex: raw.logIndex,
       laosContract: raw.contract,
     }),
 

@@ -28,6 +28,7 @@ type LaosAsset @entity {
   tokenId: BigInt!
   initialOwner: String!
   createdAt: DateTime!
+  logIndex: Int!
   metadata: String  @index
 }
 

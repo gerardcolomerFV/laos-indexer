@@ -10,6 +10,7 @@ export interface RawMintedWithExternalURI {
   timestamp: Date
   blockNumber: number
   txHash: string
+  logIndex: number
 }
 
 export interface RawEvolvedWithExternalURI {
@@ -20,6 +21,7 @@ export interface RawEvolvedWithExternalURI {
   timestamp: Date
   blockNumber: number
   txHash: string
+  logIndex: number
 }
 
 export interface DetectedLaosEvents{

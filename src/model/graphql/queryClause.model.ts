@@ -7,4 +7,21 @@ export class TransferWhereInput {
 
   @Field({ nullable: true })
   contractAddress?: string;
+
+  @Field({ nullable: true })
+  to?: string;
+
+  @Field({ nullable: true })
+  from?: string;
+}
+
+@InputType()
+export class TokenWhereInput {
+
+  @Field({ nullable: true })
+  contractAddress?: string;
+
+  @Field({ nullable: true })
+  owner?: string;
+
 }

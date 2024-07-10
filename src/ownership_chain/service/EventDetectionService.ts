@@ -1,6 +1,6 @@
 import { Context } from '../processor';
 import * as ERC721UniversalContract from '../../abi/UniversalContract';
-import { getAccountKey20FromBaseUri } from '../util';
+import { parseBaseURI } from '../util';
 import { v4 as uuidv4 } from 'uuid';
 import { RawTransfer, DetectedEvents, RawOwnershipContract } from '../../model';
 
@@ -30,10 +30,12 @@ export class EventDetectionService {
     if (log.topics[0] === ERC721UniversalContract.events.NewERC721Universal.topic) {
       const logDecoded = ERC721UniversalContract.events.NewERC721Universal.decode(log);
       this.ownershipContractsToCheck.add(logDecoded.newContractAddress.toLowerCase());
-      const laosContractAddress = getAccountKey20FromBaseUri(logDecoded.baseURI);
+      const baseURITokens = parseBaseURI(logDecoded.baseURI);     
+      if (baseURITokens === null) return // If the baseURI is not valid, skip the ERC721Universal contract
+      const laosContractAddress = baseURITokens?.accountKey20 ? baseURITokens.accountKey20.toLowerCase() : null;
       ownershipContractsToInsertInDb.push({
         id: logDecoded.newContractAddress.toLowerCase(),
-        laosContract: laosContractAddress!.toLowerCase(),
+        laosContract: laosContractAddress,
       });
     }
   }

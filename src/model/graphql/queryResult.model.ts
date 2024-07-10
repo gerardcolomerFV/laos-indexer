@@ -1,5 +1,24 @@
-import { Field, ObjectType } from 'type-graphql';
+import { ObjectType, Field } from 'type-graphql';
 import GraphQLJSON from 'graphql-type-json';
+
+@ObjectType()
+export class PageInfo {
+  @Field(() => String, { nullable: true })
+  endCursor?: string;
+
+  @Field(() => Boolean, { nullable: true })
+  hasNextPage?: boolean;
+
+  @Field(() => Boolean, { nullable: true })
+  hasPreviousPage?: boolean;
+
+  @Field(() => String, { nullable: true })
+  startCursor?: string;
+
+  constructor(props: Partial<PageInfo>) {
+    Object.assign(this, props);
+  }
+}
 
 @ObjectType()
 export class TokenQueryResult {
@@ -46,6 +65,35 @@ export class TokenQueryResult {
     Object.assign(this, props);
   }
 }
+
+@ObjectType()
+export class TokenEdge {
+  @Field(() => String)
+  cursor!: string;
+
+  @Field(() => TokenQueryResult)
+  node!: TokenQueryResult;
+
+  constructor(cursor: string, node: TokenQueryResult) {
+    this.cursor = cursor;
+    this.node = node;
+  }
+}
+
+@ObjectType()
+export class TokenConnection {
+  @Field(() => [TokenEdge])
+  edges!: TokenEdge[];
+
+  @Field(() => PageInfo)
+  pageInfo!: PageInfo;
+
+  constructor(edges: TokenEdge[], pageInfo: PageInfo) {
+    this.edges = edges;
+    this.pageInfo = pageInfo;
+  }
+}
+
 
 @ObjectType()
 export class TransferQueryResult {

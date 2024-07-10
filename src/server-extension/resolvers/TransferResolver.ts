@@ -1,6 +1,6 @@
 import { Arg, Query, Resolver } from 'type-graphql';
 import type { EntityManager } from 'typeorm';
-import { Transfer, LaosAsset, TransferQueryResult, TransferWhereInput, TransferPaginationInput } from '../../model';
+import { Transfer, LaosAsset, TransferQueryResult, TransferWhereInput, TransferPaginationInput, TransferOrderByOptions } from '../../model';
 
 
 @Resolver()
@@ -10,7 +10,8 @@ export class TransferResolver {
   @Query(() => [TransferQueryResult], { nullable: true })
   async transfers(
     @Arg('where', () => TransferWhereInput, { nullable: true }) where?: TransferWhereInput,
-    @Arg('pagination', () => TransferPaginationInput, { nullable: true }) pagination?: TransferPaginationInput
+    @Arg('pagination', () => TransferPaginationInput, { nullable: true }) pagination?: TransferPaginationInput,
+    @Arg('orderBy', () => TransferOrderByOptions, { nullable: true }) orderBy?: TransferOrderByOptions
   ): Promise<TransferQueryResult[]> {
     const manager = await this.tx();
 
@@ -20,7 +21,6 @@ export class TransferResolver {
     .innerJoinAndSelect('asset.ownershipContract', 'ownershipContract')
     .innerJoin(LaosAsset, 'laosAsset', 'laosAsset.tokenId = asset.tokenId AND laosAsset.laosContract = ownershipContract.laosContract');
 
-
     // Add filters based on where input
     if (where) {
       if (where.tokenId) {
@@ -29,16 +29,22 @@ export class TransferResolver {
       if (where.contractAddress) {
         query = query.andWhere('ownershipContract.id = :contractAddress', { contractAddress: where.contractAddress });
       }
+      if (where.to) {
+        query = query.andWhere('transfer.to = :to', { to: where.to });
+      }
+      if (where.from) {
+        query = query.andWhere('transfer.from = :from', { from: where.from });
+      }
     }
 
-    // Add pagination options
+    if (orderBy) {
+      const orderByOptions = orderBy.split(' ');
+      let order: "ASC" | "DESC";
+      order = orderByOptions[1] as "ASC" | "DESC";
+      query = query.orderBy(orderByOptions[0], order);
+    }
+
     if (pagination) {
-      if (pagination.orderBy) {
-        const orderBy = pagination.orderBy.split(' ');
-        let order: "ASC" | "DESC";
-        order = orderBy[1] as "ASC" | "DESC";
-        query = query.orderBy(orderBy[0], order);
-      }
       if (pagination.limit) {
         query = query.limit(pagination.limit);
       }

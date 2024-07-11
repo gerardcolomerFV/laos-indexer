@@ -31,10 +31,9 @@ export const parseBaseURI = (baseUri: string) => {
     }
 
     //TODO get from envVar
-    const laosGlobalConsensusValue = process.env.LAOS_GLOBAL_CONSENSUS
-    console.log('++++++++++++laosGlobalConsensusValue,',laosGlobalConsensusValue);
-    const laosParachainValue = process.env.LAOS_PARACHAIN
-    const laosPalletInstanceValue = process.env.LAOS_PALLET_INSTANCE
+    const laosGlobalConsensusValue: string = process.env.LAOS_GLOBAL_CONSENSUS!
+    const laosParachainValue: string  = process.env.LAOS_PARACHAIN!
+    const laosPalletInstanceValue: string = process.env.LAOS_PALLET_INSTANCE!
     const laosGlobalConsensus = `GlobalConsensus(${laosGlobalConsensusValue})`
     const laosParachain = `Parachain(${laosParachainValue})`
     const laosPalletInstance = `PalletInstance(${laosPalletInstanceValue})`

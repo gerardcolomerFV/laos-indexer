@@ -2,7 +2,17 @@ import { RawEvolvedWithExternalURI } from "../../model";
 import { createEvolveModels } from "./evolveMapper";
 
 describe('Evolve Mapper', () => {
-  it('should map evolve events correctly', () => {
+
+  beforeEach(() => {
+    const consoleSpy = jest.spyOn(console, 'log');
+    consoleSpy.mockImplementation(() => {});
+  });
+  afterEach(() => {
+    jest.clearAllMocks();
+    jest.resetModules();
+  });
+  
+  it('should map evolve events correctly', () => {    
     const rawEvolveEvents: RawEvolvedWithExternalURI[] = [
       {
         id: '1',

@@ -12,7 +12,6 @@ export class TokenURIDataService {
   private constructor(em: EntityManager) {
     this.entityManager = em;
     this.ipfsService = new IpfsService();
-    console.log('TokenURIDataService created');
   }
 
   public static getInstance(em: EntityManager): TokenURIDataService {
@@ -40,7 +39,6 @@ export class TokenURIDataService {
 
     try {
       const tokenUris = await this.entityManager.find(TokenUri, { where: { state: TokenUriFetchState.Pending } });
-      console.log('tokenUris', tokenUris.length);
       const updatePromises = tokenUris.map(async (tokenUri) => {
         try {
           const updatedTokenUri = await this.ipfsService.getTokenURIData(tokenUri.id);

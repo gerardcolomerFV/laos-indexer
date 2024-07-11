@@ -43,9 +43,6 @@ helmfiles:
       - ipfsGateway: {{ .Values.ipfsGateway }}
       - rpcOwnership: {{ .Values.rpcOwnership }}
       - rpcLaos: {{ .Values.rpcLaos }}
-      - laosGlobalConsensus: {{ .Values.laosGlobalConsensus }}
-      - laosParachain: {{ .Values.laosParachain }}
-      - laosPalletInstance: {{ .Values.laosPalletInstance }}
       - command: "process:prod:laos"
   - path: 'charts/api/helmfile.yaml'
     values:

@@ -37,6 +37,7 @@ describe('EventDetectionService', () => {
   it('should detect new ERC721 universal contracts and transfers for the same contract', () => {
     ctx = new Context(mockLogs);
     ownershipContractsToCheck.add('0xb176c21d6b66d2fe1b0e7c697610163d28000a65');
+    //0xB250abcc262d16c3da7Ef461fdA0B5398EB045eA
     
     const service = new EventDetectionService(ctx, ownershipContractsToCheck);
     const detectedEvents = service.detectEvents();

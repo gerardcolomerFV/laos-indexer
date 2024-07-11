@@ -14,6 +14,7 @@ describe('tokenUriMapper', () => {
         timestamp: new Date(),
         blockNumber: 1,
         txHash: 'test-txHash',
+        logIndex: 1,
       };
       const expectedTokenUri = new TokenUri({
         id: 'test-tokenURI',
@@ -35,6 +36,7 @@ describe('tokenUriMapper', () => {
           timestamp: new Date(),
           blockNumber: 1,
           txHash: 'test-txHash-1',
+          logIndex: 1,
         },
         {
           id: 'test-id-2',
@@ -45,6 +47,7 @@ describe('tokenUriMapper', () => {
           timestamp: new Date(),
           blockNumber: 2,
           txHash: 'test-txHash-2',
+          logIndex: 2,
         },
         {
           id: 'test-id-3',
@@ -55,6 +58,7 @@ describe('tokenUriMapper', () => {
           timestamp: new Date(),
           blockNumber: 3,
           txHash: 'test-txHash-3',
+          logIndex: 3,
         },
       ];
       const expectedTokenUris: TokenUri[] = [
@@ -85,6 +89,7 @@ describe('tokenUriMapper', () => {
           timestamp: new Date(),
           blockNumber: 1,
           txHash: 'test-txHash-1',
+          logIndex: 1,
         },
         {
           id: 'test-id-2',
@@ -95,6 +100,7 @@ describe('tokenUriMapper', () => {
           timestamp: new Date(),
           blockNumber: 2,
           txHash: 'test-txHash-2',
+          logIndex: 2,
         },
         {
           id: 'test-id-3',
@@ -105,6 +111,7 @@ describe('tokenUriMapper', () => {
           timestamp: new Date(),
           blockNumber: 3,
           txHash: 'test-txHash-3',
+          logIndex: 3,
         },
       ];
       const expectedTokenUris: TokenUri[] = [

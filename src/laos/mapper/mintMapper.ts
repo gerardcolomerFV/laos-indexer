@@ -10,6 +10,7 @@ export function mapMintedWithExternalURI(raw: RawMintedWithExternalURI): MintedM
     initialOwner: raw._to,
     laosContract: raw.contract,
     createdAt: raw.timestamp,
+    logIndex: raw.logIndex,
     metadata: metadata.id,
   });
   console.log('Mapped minted with external URI:', asset);

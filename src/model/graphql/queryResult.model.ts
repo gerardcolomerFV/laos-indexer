@@ -61,6 +61,9 @@ export class TokenQueryResult {
   @Field(() => String, { nullable: false })
   tx_hash!: string;
 
+  @Field(() => Number, { nullable: false })
+  logIndex!: number;
+
   constructor(props: Partial<TokenQueryResult>) {
     Object.assign(this, props);
   }

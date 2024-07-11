@@ -40,6 +40,7 @@ export class EventDetectionService {
         timestamp: new Date(timestamp),
         blockNumber: blockNumber,
         txHash: log.transactionHash,
+        logIndex: log.logIndex,
       });
     }
   }
@@ -57,6 +58,7 @@ export class EventDetectionService {
         timestamp: new Date(timestamp),
         blockNumber: blockNumber,
         txHash: log.transactionHash,
+        logIndex: log.logIndex,
       });
     }
   }

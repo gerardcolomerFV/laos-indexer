@@ -34,7 +34,7 @@ describe('EventDetectionService', () => {
     expect(detectedEvents.transfers[0].to).toEqual('0x637b4840c99925d9d9698b4a552c447f1cd155dd'.toLowerCase());
   });
 
-  it('should detect new ERC721 universal contracts and transfers for the same contract', () => {
+  fit('should detect new ERC721 universal contracts and transfers for the same contract', () => {
     ctx = new Context(mockLogs);
     ownershipContractsToCheck.add('0xb176c21d6b66d2fe1b0e7c697610163d28000a65');
     

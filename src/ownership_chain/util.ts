@@ -39,9 +39,11 @@ export const parseBaseURI = (baseUri: string) => {
         `Invalid baseURI: ${baseUri}`
       )
       console.log('laosGlobalConsensus;',laosGlobalConsensus)
-      console.log('tokens[0];',tokens[0])
-      console.log('tokens[1];',tokens[1])
-      console.log('tokens[2];',tokens[2])
+      console.log('laosParachain;',laosParachain)
+      console.log('laosPalletInstance;',laosPalletInstance)
+      console.log('tokens[0];',tokens[0], tokens[0] === laosGlobalConsensus)
+      console.log('tokens[1];',tokens[1], tokens[1] === laosParachain)
+      console.log('tokens[2];',tokens[2], tokens[2] === laosPalletInstance)
       return null
     }
   

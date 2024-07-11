@@ -30,10 +30,13 @@ export const parseBaseURI = (baseUri: string) => {
       return null
     }
 
-    //TODO get from envVar    
-    const laosGlobalConsensus = 'GlobalConsensus(0:0x4756c4042a431ad2bbe61d8c4b966c1328e7a8daa0110e9bbd3d4013138a0bd4)'    
-    const laosParachain = 'Parachain(2000)'
-    const laosPalletInstance = 'PalletInstance(51)'
+    //TODO get from envVar
+    const laosGlobalConsensusValue: string = process.env.LAOS_GLOBAL_CONSENSUS!
+    const laosParachainValue: string  = process.env.LAOS_PARACHAIN!
+    const laosPalletInstanceValue: string = process.env.LAOS_PALLET_INSTANCE!
+    const laosGlobalConsensus = `GlobalConsensus(${laosGlobalConsensusValue})`
+    const laosParachain = `Parachain(${laosParachainValue})`
+    const laosPalletInstance = `PalletInstance(${laosPalletInstanceValue})`
     if (tokens.length < 3 || tokens[0] !== laosGlobalConsensus || tokens[1] !== laosParachain || tokens[2] !== laosPalletInstance) {
       console.warn(
         `Invalid baseURI: ${baseUri}`

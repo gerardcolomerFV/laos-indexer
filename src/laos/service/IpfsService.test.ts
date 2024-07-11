@@ -1,5 +1,5 @@
 import { IpfsService } from './IpfsService';
-import { TokenUri, Attribute, TokenUriFetchState } from '../../model';
+import { TokenUriFetchState } from '../../model';
 
 
 

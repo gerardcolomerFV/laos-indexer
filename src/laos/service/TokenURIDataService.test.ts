@@ -31,6 +31,10 @@ describe('TokenURIDataService', () => {
     entityManager = new EntityManager(connection) as jest.Mocked<EntityManager>;
     ipfsService = new IpfsService() as jest.Mocked<IpfsService>;
     tokenURIDataService = TokenURIDataService.getInstance(entityManager);
+    const consoleSpy = jest.spyOn(console, 'log');
+    consoleSpy.mockImplementation(() => {});
+    const consoleSpyError = jest.spyOn(console, 'error');
+    consoleSpyError.mockImplementation(() => {});
   });
 
   afterEach(() => {

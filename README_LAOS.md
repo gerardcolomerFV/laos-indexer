@@ -1,7 +1,7 @@
 ## Ownershin chain starting block
 LAOS Sun
 Block 1: Apr 15 2024 13:02:36 PM (+02:00 UTC)
-Polygon: 55830815 (Block timestamp: Sun, 14 Apr 2024 23:59:57 GMT)
+Polygon: 55830815 (Block timestamp: Sun, 14 Apr 2024 23:59:57 GMT) (first contract deployed in 59191207)
 Ethereum: 19657200 (Block timestamp: Sun, 14 Apr 2024 23:59:59 GMT)
 
 

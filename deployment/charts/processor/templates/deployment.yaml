@@ -42,4 +42,10 @@ spec:
               value: {{ .Values.rpcOwnership }}
             - name: RPC_LAOS_ENDPOINT
               value: {{ .Values.rpcLaos }}
+            - name: LAOS_GLOBAL_CONSENSUS
+              value: {{ .Values.laosGlobalConsensus }}
+            - name: LAOS_PARACHAIN
+              value: {{ .Values.laosParachain }}
+            - name: LAOS_PALLET_INSTANCE
+              value: {{ .Values.laosPalletInstance }}
           command: ["sqd", {{ .Values.command }}]

@@ -45,7 +45,7 @@ export class TokenHistoryResolver {
         tu.description AS description,
         tu.image AS image,
         tu.attributes AS attributes,
-        tu.fetch_state AS "tokenUriFetchState",
+        tu.state AS "tokenUriFetchState",
         m.block_number,
         m.tx_hash,
         m."timestamp" as "updatedAt",

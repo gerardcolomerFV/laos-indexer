@@ -29,6 +29,7 @@ export class EventDetectionService {
   private detectNewERC721Universal(log: any, ownershipContractsToInsertInDb: RawOwnershipContract[]): void {
     if (log.topics[0] === ERC721UniversalContract.events.NewERC721Universal.topic) {
       const logDecoded = ERC721UniversalContract.events.NewERC721Universal.decode(log);
+      console.log('New ERC721 Universal contract detected:', logDecoded.newContractAddress);
       this.ownershipContractsToCheck.add(logDecoded.newContractAddress.toLowerCase());
       const baseURITokens = parseBaseURI(logDecoded.baseURI);     
       if (baseURITokens === null) return // If the baseURI is not valid, skip the ERC721Universal contract

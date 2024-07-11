@@ -35,13 +35,12 @@ export const parseBaseURI = (baseUri: string) => {
     const laosParachain = 'Parachain(2000)'
     const laosPalletInstance = 'PalletInstance(51)'
     if (tokens.length < 3 || tokens[0] !== laosGlobalConsensus || tokens[1] !== laosParachain || tokens[2] !== laosPalletInstance) {
-      console.error(
+      console.warn(
         `Invalid baseURI: ${baseUri}`
       )
-      console.log('laosGlobalConsensus;',laosGlobalConsensus)
-      console.log('tokens[0];',tokens[0])
-      console.log('tokens[1];',tokens[1])
-      console.log('tokens[2];',tokens[2])
+      console.log('GlobalConsensus: ',tokens[0], tokens[0] === laosGlobalConsensus)
+      console.log('Parachain: ',tokens[1], tokens[1] === laosParachain)
+      console.log('PalletInstance: ',tokens[2], tokens[2] === laosPalletInstance)
       return null
     }
   

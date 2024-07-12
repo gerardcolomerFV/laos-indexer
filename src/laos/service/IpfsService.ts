@@ -35,14 +35,16 @@ export class IpfsService {
     if (data === null || fallback) {
       if (ipfsUrl.startsWith('ipfs://')) {
         const httpUrlFallback = ipfsUrl.replace('ipfs://', 'https://ipfs.io/ipfs/');
+        console.log('Falling back to ipfs.io:', httpUrlFallback);
         data = await this.fetchData(httpUrlFallback);
+        console.log('Fetched data from ipfs.io done');
         return data;
 
       }else{
         return null;
       }
     }
-    
+
     return data;
   }
 

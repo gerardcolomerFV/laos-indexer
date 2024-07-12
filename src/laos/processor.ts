@@ -17,7 +17,7 @@ export const processor = new EvmBatchProcessor()
     })
     .setFinalityConfirmation(6)
     .setBlockRange({
-        from: 309100, //Starting latest to check easier 
+        from: 622000, //Starting latest to check faster 
     })
     .addLog({
         topic0: [EvolutionCollection.events.MintedWithExternalURI.topic, EvolutionCollection.events.EvolvedWithExternalURI.topic]

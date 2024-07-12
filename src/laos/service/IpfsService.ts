@@ -22,7 +22,28 @@ export class IpfsService {
 
   private async getDataFromIpfs(ipfsUrl: string): Promise<any> {
     const httpUrl = this.ipfsUrlToHttpUrl(ipfsUrl);
-    return await this.fetchData(httpUrl);
+    let data;
+    let fallback = false;
+    try {
+      data = await this.fetchData(httpUrl);  
+
+    } catch (error) {      
+      // fallback to different ipfs gateway
+      fallback = true;      
+    }
+
+    if (data === null || fallback) {
+      if (ipfsUrl.startsWith('ipfs://')) {
+        const httpUrlFallback = ipfsUrl.replace('ipfs://', 'https://ipfs.io/ipfs/');
+        data = await this.fetchData(httpUrlFallback);
+        return data;
+
+      }else{
+        return null;
+      }
+    }
+    
+    return data;
   }
 
   private async getDataFromHttp(httpUrl: string): Promise<any> {

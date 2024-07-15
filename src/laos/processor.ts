@@ -17,7 +17,7 @@ export const processor = new EvmBatchProcessor()
     })
     .setFinalityConfirmation(6)
     .setBlockRange({
-        from: 622000, //Starting latest to check faster 
+        from: Number(process.env.STARTING_BLOCK_LAOS),
     })
     .addLog({
         topic0: [EvolutionCollection.events.MintedWithExternalURI.topic, EvolutionCollection.events.EvolvedWithExternalURI.topic]

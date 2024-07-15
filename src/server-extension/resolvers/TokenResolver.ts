@@ -1,6 +1,6 @@
 import { Arg, Query, Resolver } from 'type-graphql';
 import { EntityManager } from 'typeorm';
-import { TokenOrderByOptions, TokenPaginationInput, TokenConnection, TokenQueryResult, LaosAsset, TokenWhereInput, PageInfo } from '../../model';
+import { TokenOrderByOptions, TokenPaginationInput, TokenConnection, TokenQueryResult, TokenQueryResultSelect, LaosAsset, TokenWhereInput, PageInfo } from '../../model';
 
 @Resolver()
 export class TokenResolver {
@@ -10,11 +10,11 @@ export class TokenResolver {
     manager: EntityManager,
     query: string,
     parameters: any[]
-  ): Promise<TokenQueryResult[]> {
+  ): Promise<TokenQueryResultSelect[]> {
     const results = await manager.query(query, parameters);
 
     return results.map((result: any) => {
-      return new TokenQueryResult({
+      return new TokenQueryResultSelect({
         ...result,
         createdAt: new Date(result.createdAt),
       });

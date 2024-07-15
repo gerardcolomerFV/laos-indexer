@@ -75,23 +75,23 @@ export class TokenResolver {
     return new TokenQueryResult(transformedResult);
   }
 
+
   @Query(() => TokenConnection, { nullable: true })
   async tokens(
     @Arg('where', () => TokenWhereInput, { nullable: true }) where: TokenWhereInput,
-    @Arg('pagination', () => TokenPaginationInput, { nullable: true }) pagination?: TokenPaginationInput,
+    @Arg('pagination', () => TokenPaginationInput, { nullable: false, defaultValue: { first: 20 } }) pagination: TokenPaginationInput,
     @Arg('orderBy', () => TokenOrderByOptions, { nullable: true }) orderBy?: TokenOrderByOptions
   ): Promise<TokenConnection> {
     const manager = await this.tx();
 
-    const effectiveFirst = pagination?.first || 10; // Default to 10 if first is not provided
-    const afterCursor = pagination?.after; // Cursor from the previous query
+    const effectiveFirst = pagination.first; // This will always be set to a default value or provided value
+    const afterCursor = pagination.after; // Cursor from the previous query
     const effectiveOrderBy = orderBy || TokenOrderByOptions.CREATED_AT_ASC;
     const orderDirection = effectiveOrderBy.split(' ')[1];
 
     let conditions = [];
     let parameters = [];
 
-    // Add conditions based on the `where` input
     if (where?.owner) {
       conditions.push('LOWER(COALESCE(a.owner, la.initial_owner)) = LOWER($' + (conditions.length + 1) + ')');
       parameters.push(where.owner.toLowerCase());
@@ -103,9 +103,7 @@ export class TokenResolver {
 
     let conditionLimit = conditions.length + 1;
 
-    // Handle the `after` cursor
     if (afterCursor) {
-      // Decode the cursor to get the actual value
       const decodedCursor = Buffer.from(afterCursor, 'base64').toString('ascii');
       const [afterCreatedAt, afterLogIndex] = decodedCursor.split(':').map(Number);
       if (effectiveOrderBy === TokenOrderByOptions.CREATED_AT_ASC) {
@@ -118,13 +116,12 @@ export class TokenResolver {
       parameters.push(afterLogIndex);
     }
 
-    // Assemble the SQL query with parameters for limit
     const query = `
       SELECT 
         la.token_id AS "tokenId", 
         COALESCE(a.owner, la.initial_owner) AS "owner",
         la.initial_owner AS "initialOwner",
-        la.created_at AS "createdAt", -- Return as a timestamp
+        la.created_at AS "createdAt", 
         la.log_index AS "logIndex",
         m.token_uri_id AS "tokenUri",
         m.block_number,
@@ -146,28 +143,28 @@ export class TokenResolver {
       LIMIT $${conditionLimit}
     `;
 
-    parameters.push(effectiveFirst + 1); // Fetch one extra record to check for the next page
+    parameters.push(effectiveFirst + 1);
+
+    console.log('SQL Query:', query);
+    console.log('Parameters:', parameters);
+
 
     const tokens = await this.fetchTokens(manager, query, parameters);
 
-    // Determine if there is a next page by checking if more than effectiveFirst records were fetched
     const hasNextPage = tokens.length > effectiveFirst;
 
-    // Trim the extra record if it exists
     if (hasNextPage) {
       tokens.pop();
     }
 
-    // Create edges with cursors
     const edges = tokens.map(token => ({
-      cursor: Buffer.from(new Date(token.createdAt).getTime().toString() + ":" + token.logIndex).toString('base64'), // Convert numeric timestamp and log index to base64
+      cursor: Buffer.from(new Date(token.createdAt).getTime().toString() + ":" + token.logIndex).toString('base64'),
       node: {
         ...token,
-        createdAt: new Date(token.createdAt) // Ensure createdAt is a Date object
+        createdAt: new Date(token.createdAt)
       }
     }));
 
-    // Create PageInfo
     const pageInfo = new PageInfo({
       endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : undefined,
       hasNextPage: hasNextPage,
@@ -178,3 +175,4 @@ export class TokenResolver {
     return new TokenConnection(edges, pageInfo);
   }
 }
+

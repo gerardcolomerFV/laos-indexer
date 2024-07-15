@@ -145,10 +145,6 @@ export class TokenResolver {
 
     parameters.push(effectiveFirst + 1);
 
-    console.log('SQL Query:', query);
-    console.log('Parameters:', parameters);
-
-
     const tokens = await this.fetchTokens(manager, query, parameters);
 
     const hasNextPage = tokens.length > effectiveFirst;

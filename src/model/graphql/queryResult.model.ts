@@ -58,9 +58,6 @@ export class TokenQueryResult {
   @Field(() => Number, { nullable: false })
   block_number!: number;
 
-  @Field(() => String, { nullable: false })
-  tx_hash!: string;
-
   constructor(props: Partial<TokenQueryResult>) {
     Object.assign(this, props);
   }
@@ -77,6 +74,7 @@ export class TokenQueryResultSelect extends TokenQueryResult {
     Object.assign(this, props);
   }
 }
+
 
 @ObjectType()
 export class TokenEdge {

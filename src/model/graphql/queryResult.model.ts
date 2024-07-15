@@ -66,16 +66,6 @@ export class TokenQueryResult {
   }
 }
 
-@ObjectType()
-export class TokenQuerySelectResult extends TokenQueryResult {
-  @Field(() => Number, { nullable: false })
-  logIndex!: number;
-
-  constructor(props: Partial<TokenQuerySelectResult>) {
-    super(props);
-    Object.assign(this, props);
-  }
-}
 
 @ObjectType()
 export class TokenEdge {

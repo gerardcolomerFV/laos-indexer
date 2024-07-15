@@ -79,7 +79,7 @@ export class TokenResolver {
   @Query(() => TokenConnection, { nullable: true })
   async tokens(
     @Arg('where', () => TokenWhereInput, { nullable: true }) where: TokenWhereInput,
-    @Arg('pagination', () => TokenPaginationInput, { nullable: false, defaultValue: { first: 20 } }) pagination: TokenPaginationInput,
+    @Arg('pagination', () => TokenPaginationInput, { nullable: false, defaultValue: { first: 10 } }) pagination: TokenPaginationInput,
     @Arg('orderBy', () => TokenOrderByOptions, { nullable: true }) orderBy?: TokenOrderByOptions
   ): Promise<TokenConnection> {
     const manager = await this.tx();

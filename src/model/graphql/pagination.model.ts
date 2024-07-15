@@ -10,8 +10,8 @@ import { TransferOrderByOptions, TokenOrderByOptions, TokenHistoryOrderByOptions
   @IsNotEmpty()
   limit!: number;
 
-  @Field(() => Number, { nullable: false })
-  offset!: number;
+  @Field(() => Int, { nullable: false, defaultValue: 0 })
+  offset: number = 0;
 }
 
 @InputType()

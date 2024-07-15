@@ -4,11 +4,11 @@ import { TransferOrderByOptions, TokenOrderByOptions, TokenHistoryOrderByOptions
 
 @InputType()
  class PaginationInput {
-  @Field(type => Number, { defaultValue: 50 })
+  @Field(() => Int, { nullable: false })
   @Min(0)
   @Max(100)
   @IsNotEmpty()
-  limit: number = 50;
+  limit!: number;
 
   @Field(() => Number, { defaultValue: 0 })
   offset: number = 0;

@@ -25,9 +25,6 @@ helmfiles:
       - postgresDb: {{ .Values.postgresDb }}
       - postgresPassword: {{ .Values.postgresPassword }}
       - postgresUser: {{ .Values.postgresUser }}
-      - ipfsGateway: {{ .Values.ipfsGateway }}
-      - rpcOwnership: {{ .Values.rpcOwnership }}
-      - rpcLaos: {{ .Values.rpcLaos }}
       - laosGlobalConsensus: {{ .Values.laosGlobalConsensus }}
       - laosParachain: {{ .Values.laosParachain }}
       - laosPalletInstance: {{ .Values.laosPalletInstance }}
@@ -40,9 +37,6 @@ helmfiles:
       - postgresDb: {{ .Values.postgresDb }}
       - postgresPassword: {{ .Values.postgresPassword }}
       - postgresUser: {{ .Values.postgresUser }}
-      - ipfsGateway: {{ .Values.ipfsGateway }}
-      - rpcOwnership: {{ .Values.rpcOwnership }}
-      - rpcLaos: {{ .Values.rpcLaos }}
       - laosGlobalConsensus: {{ .Values.laosGlobalConsensus }}
       - laosParachain: {{ .Values.laosParachain }}
       - laosPalletInstance: {{ .Values.laosPalletInstance }}
@@ -54,6 +48,5 @@ helmfiles:
       - postgresDb: {{ .Values.postgresDb }}
       - postgresPassword: {{ .Values.postgresPassword }}
       - postgresUser: {{ .Values.postgresUser }}
-      - ipfsGateway: {{ .Values.ipfsGateway }}
       - host: {{ .Values.host }}
 

@@ -5,13 +5,10 @@ releases:
     chart: .
     values:
       - name: {{ .Values.name }}
-      - ipfsGateway: {{ .Values.ipfsGateway }}
       - imageTag: {{ .Values.imageTag }}
       - postgresDb: {{ .Values.postgresDb }}
       - postgresPassword: {{ .Values.postgresPassword }}
       - postgresUser: {{ .Values.postgresUser }}
-      - rpcOwnership: {{ .Values.rpcOwnership }}
-      - rpcLaos: {{ .Values.rpcLaos }}
       - laosGlobalConsensus: {{ .Values.laosGlobalConsensus }}
       - laosParachain: {{ .Values.laosParachain }}
       - laosPalletInstance: {{ .Values.laosPalletInstance }}

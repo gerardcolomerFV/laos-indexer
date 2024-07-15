@@ -4,7 +4,6 @@ releases:
     createNamespace: false
     chart: .
     values:
-      - ipfsGateway: {{ .Values.ipfsGateway }}
       - imageTag: {{ .Values.imageTag }}
       - postgresDb: {{ .Values.postgresDb }}
       - postgresPassword: {{ .Values.postgresPassword }}

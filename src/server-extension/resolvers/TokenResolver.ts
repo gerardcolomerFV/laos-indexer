@@ -144,9 +144,7 @@ export class TokenResolver {
     `;
 
     parameters.push(effectiveFirst + 1);
-
     const tokens = await this.fetchTokens(manager, query, parameters);
-
     const hasNextPage = tokens.length > effectiveFirst;
 
     if (hasNextPage) {

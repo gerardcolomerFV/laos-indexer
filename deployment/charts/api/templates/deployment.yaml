@@ -33,7 +33,10 @@ spec:
             - name: DB_HOST
               value: "laos-indexer-db"
             - name: PRIVATE_IPFS_GATEWAY
-              value: {{ .Values.ipfsGateway }}   
+              valueFrom:
+                secretKeyRef:
+                  name: protostar-private-config
+                  key: indexerIpfsGateway
             - name: DB_PASS
               value: {{ .Values.postgresPassword }}
             - name: DB_USER

@@ -57,4 +57,8 @@ spec:
               value: {{ .Values.laosParachain | quote }}
             - name: LAOS_PALLET_INSTANCE
               value: {{ .Values.laosPalletInstance | quote }}
+            - name: STARTING_BLOCK_LAOS
+              value: {{ .Values.startingBlockLaos | quote }}
+            - name: STARTING_BLOCK_OWNERSHIP
+              value: {{ .Values.startingBlockOwnership | quote }}
           command: ["sqd", {{ .Values.command }}]

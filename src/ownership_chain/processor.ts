@@ -15,9 +15,8 @@ export const processor = new EvmBatchProcessor()
         chain: process.env.RPC_ENDPOINT!,
     })
     .setFinalityConfirmation(200)
-    .setBlockRange({
-        // from: 55830815, // Block in polygon when LAOS SUN was deployed
-        from: 59228000, // first valid contract deployed in polygon pointing to LAOS SUN (59228102)
+    .setBlockRange({        
+        from: Number(process.env.STARTING_BLOCK_OWNERSHIP),
     })
     .addLog({
        topic0: [ ERC721UniversalContract.events.NewERC721Universal.topic, ERC721UniversalContract.events.Transfer.topic]

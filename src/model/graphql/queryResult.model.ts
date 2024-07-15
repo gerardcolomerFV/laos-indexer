@@ -58,9 +58,6 @@ export class TokenQueryResult {
   @Field(() => Number, { nullable: false })
   block_number!: number;
 
-  @Field(() => String, { nullable: false })
-  tx_hash!: string;
-
   @Field(() => Number, { nullable: false })
   logIndex!: number;
 
@@ -68,6 +65,7 @@ export class TokenQueryResult {
     Object.assign(this, props);
   }
 }
+
 
 @ObjectType()
 export class TokenEdge {

@@ -150,7 +150,7 @@ export class TokenResolver {
     INNER JOIN token_uri tu ON m.token_uri_id = tu.id
     LEFT JOIN asset a ON la.token_id = a.token_id AND a.ownership_contract_id = oc.id
     ${conditions.length ? 'WHERE ' + conditions.join(' AND ') : ''}
-    ORDER BY ${effectiveOrderBy}, la.log_index ${orderDirection}
+    ORDER BY ${effectiveOrderBy}, la.log_index ${orderDirection}, oc.id ASC
     LIMIT $${conditionLimit}
   `;
 

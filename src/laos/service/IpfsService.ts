@@ -78,8 +78,14 @@ export class IpfsService {
     if (!data) {
       throw new Error('Failed to fetch token URI data');
     }
-
-    const attributes = this.mapAttributes(data.attributes);
+    let attributes;
+    if(data.attributes){
+      try{
+        attributes = this.mapAttributes(data.attributes);
+      } catch(error){
+        console.warn('Error mapping attributes:', error);
+      }
+    }
 
     const tokenUri = new TokenUri({
       id: url,

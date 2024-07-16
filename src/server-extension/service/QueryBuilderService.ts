@@ -1,4 +1,3 @@
-// src/service/QueryBuilderService.ts
 import { TokenOrderByOptions, TokenPaginationInput, TokenWhereInput } from '../../model';
 import { buildTokenQueryBase, buildTokenByIdQuery } from './queries';
 

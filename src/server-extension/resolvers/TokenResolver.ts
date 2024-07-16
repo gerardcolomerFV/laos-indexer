@@ -1,4 +1,3 @@
-// src/resolver/TokenResolver.ts
 import { Arg, Query, Resolver } from 'type-graphql';
 import { EntityManager } from 'typeorm';
 import { TokenOrderByOptions, TokenPaginationInput, TokenConnection, TokenQueryResult, TokenQueryResultSelect, TokenWhereInput, PageInfo } from '../../model';

@@ -33,7 +33,6 @@ export class TokenResolver {
   ): Promise<TokenQueryResult | null> {
     const manager = await this.tx();
     const { query, parameters } = await this.queryBuilderService.buildTokenByIdQuery(ownershipContractId, tokenId);
-
     const result = await manager.query(query, parameters);
 
     if (result.length === 0) {

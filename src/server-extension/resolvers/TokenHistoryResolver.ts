@@ -39,7 +39,6 @@ export class TokenHistoryResolver {
 
     const query = `
       SELECT 
-        la.laos_contract AS "laosCollection", 
         tu.id AS "tokenUri",
         tu.name AS name,
         tu.description AS description,

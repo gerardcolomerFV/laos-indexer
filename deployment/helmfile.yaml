@@ -9,6 +9,9 @@ environments:
   development:
     values:
       - ./environments/dev/values.yaml
+  staging:
+    values:
+      - ./environments/staging/values.yaml
 
 helmfiles:
   - path: 'charts/db/helmfile.yaml'

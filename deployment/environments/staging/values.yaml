@@ -1,0 +1,13 @@
+namespace: protostar
+postgresDb: squid
+postgresPassword: postgres
+postgresUser: postgres
+ipfsGateway: https://subsquid-laos.mypinata.cloud/ipfs/
+host: testnet.polygon-indexer.laosnetwork.io
+rpcOwnership: https://rpc.ankr.com/polygon
+rpcLaos: wss://rpc.laosomega.laosfoundation.io
+laosGlobalConsensus: "0:0x77afd6190f1554ad45fd0d31aee62aacc33c6db0ea801129acb813f913e0764f"
+laosParachain: "4006"
+laosPalletInstance: "51"
+startingBlockLaos: "638671"
+startingBlockOwnership: "55830815"

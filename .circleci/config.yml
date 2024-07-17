@@ -112,11 +112,35 @@ workflows:
             branches:
               only:
                 - main
+      
+      - approval:
+          type: approval
+          name: approve-deploy-indexer-staging
+          requires:
+            - deployment-test
+            - build-indexer
+          filters:
+            branches:
+              only:
+                - main
 
       - deploy_to_cluster:
+          name: deploy-to-dev
           requires:
             - deployment-test
             - approve-deploy-indexer
+          environment: development
+          filters:
+            branches:
+              only:
+                - main
+
+      - deploy_to_cluster:
+          name: deploy-to-staging
+          requires:
+            - deployment-test
+            - approve-deploy-indexer-staging
+          environment: staging
           filters:
             branches:
               only:

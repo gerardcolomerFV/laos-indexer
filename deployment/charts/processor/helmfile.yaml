@@ -12,4 +12,6 @@ releases:
       - laosGlobalConsensus: {{ .Values.laosGlobalConsensus }}
       - laosParachain: {{ .Values.laosParachain }}
       - laosPalletInstance: {{ .Values.laosPalletInstance }}
+      - startingBlockOwnership: {{ .Values.startingBlockOwnership }}
+      - startingBlockLaos: {{ .Values.startingBlockLaos }}      
       - command: {{ .Values.command }}

@@ -143,9 +143,6 @@ export class TokenHistoryQueryResult {
   @Field(() => String, { nullable: true })
   contractAddress!: string | null;
 
-  @Field(() => String, { nullable: false })
-  laosCollection!: string;
-
   @Field(() => String, { nullable: true })
   tokenUri!: string;
 

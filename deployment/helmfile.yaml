@@ -31,6 +31,8 @@ helmfiles:
       - laosGlobalConsensus: {{ .Values.laosGlobalConsensus }}
       - laosParachain: {{ .Values.laosParachain }}
       - laosPalletInstance: {{ .Values.laosPalletInstance }}
+      - startingBlockOwnership: {{ .Values.startingBlockOwnership }}
+      - startingBlockLaos: {{ .Values.startingBlockLaos }}
       - command: "process:prod:ownership_chain"
   - path: 'charts/processor/helmfile.yaml'
     values:
@@ -43,6 +45,8 @@ helmfiles:
       - laosGlobalConsensus: {{ .Values.laosGlobalConsensus }}
       - laosParachain: {{ .Values.laosParachain }}
       - laosPalletInstance: {{ .Values.laosPalletInstance }}
+      - startingBlockOwnership: {{ .Values.startingBlockOwnership }}
+      - startingBlockLaos: {{ .Values.startingBlockLaos }}
       - command: "process:prod:laos"
   - path: 'charts/api/helmfile.yaml'
     values:

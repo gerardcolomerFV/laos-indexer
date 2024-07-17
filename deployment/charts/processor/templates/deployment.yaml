@@ -47,7 +47,10 @@ spec:
                   name: protostar-private-config
                   key: indexerPolygonRpcEndpoint
             - name: RPC_LAOS_ENDPOINT
-              value: {{ .Values.rpcLaos }}              
+              valueFrom:
+                secretKeyRef:
+                  name: protostar-private-config
+                  key: indexerLaosRpcEndpoint
             - name: LAOS_GLOBAL_CONSENSUS
               value: {{ .Values.laosGlobalConsensus | quote }}
             - name: LAOS_PARACHAIN

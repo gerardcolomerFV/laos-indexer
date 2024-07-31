@@ -38,6 +38,7 @@ helmfiles:
       - postgresPassword: {{ .Values.postgresPassword }}
       - postgresUser: {{ .Values.postgresUser }}
       - postgresPort: {{ .Values.postgresPort }}
+      - rpcEndpointSecretKey: {{ .Values.rpcEndpointSecretKey }}
       - laosGlobalConsensus: {{ .Values.laosGlobalConsensus }}
       - laosParachain: {{ .Values.laosParachain }}
       - laosPalletInstance: {{ .Values.laosPalletInstance }}
@@ -51,9 +52,10 @@ helmfiles:
       - imageTag: {{ requiredEnv "CIRCLE_SHA1" }}
       - postgresDb: {{ .Values.postgresDb }}
       - postgresDbHost: {{ .Values.postgresDbHost }}
-      - postgresPort: {{ .Values.postgresPort }}
       - postgresPassword: {{ .Values.postgresPassword }}
       - postgresUser: {{ .Values.postgresUser }}
+      - postgresPort: {{ .Values.postgresPort }}
+      - rpcEndpointSecretKey: {{ .Values.rpcEndpointSecretKey }}
       - laosGlobalConsensus: {{ .Values.laosGlobalConsensus }}
       - laosParachain: {{ .Values.laosParachain }}
       - laosPalletInstance: {{ .Values.laosPalletInstance }}

@@ -26,12 +26,12 @@ export class TokenHistoryResolver {
 
   @Query(() => [TokenHistoryQueryResult], { nullable: true })
   async tokenHistory(
-    @Arg('ownershipContractId', () => String) ownershipContractId: string,
+    @Arg('contractAddress', () => String) contractAddress: string,
     @Arg('tokenId', () => String) tokenId: string,
     @Arg('pagination', () => TokenHistoryPaginationInput, { nullable: true }) pagination: TokenHistoryPaginationInput
   ): Promise<TokenHistoryQueryResult[] | null> {
     const manager = await this.tx();
-    const normalizedOwnershipContractId = ownershipContractId.toLowerCase(); // Convert to lowercase
+    const normalizedContractAddress = contractAddress.toLowerCase(); // Convert to lowercase
 
     const effectiveLimit = pagination?.limit || 10;
     const effectiveOffset = pagination?.offset || 0;
@@ -64,7 +64,7 @@ export class TokenHistoryResolver {
       LIMIT $3 OFFSET $4;
     `;
 
-    const results = await this.fetchTokenHistory(manager, query, [tokenId, normalizedOwnershipContractId, effectiveLimit, effectiveOffset]);
+    const results = await this.fetchTokenHistory(manager, query, [tokenId, normalizedContractAddress, effectiveLimit, effectiveOffset]);
 
     return results.length > 0 ? results : null;
   }

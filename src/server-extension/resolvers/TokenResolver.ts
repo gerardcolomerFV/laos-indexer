@@ -28,11 +28,11 @@ export class TokenResolver {
 
   @Query(() => TokenQueryResult, { nullable: true })
   async token(
-    @Arg('ownershipContractId', () => String) ownershipContractId: string,
+    @Arg('contractAddress', () => String) contractAddress: string,
     @Arg('tokenId', () => String) tokenId: string
   ): Promise<TokenQueryResult | null> {
     const manager = await this.tx();
-    const { query, parameters } = await this.queryBuilderService.buildTokenByIdQuery(ownershipContractId, tokenId);
+    const { query, parameters } = await this.queryBuilderService.buildTokenByIdQuery(contractAddress, tokenId);
     const result = await manager.query(query, parameters);
 
     if (result.length === 0) {

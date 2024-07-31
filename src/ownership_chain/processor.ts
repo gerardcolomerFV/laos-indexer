@@ -10,7 +10,7 @@ import { Store } from '@subsquid/typeorm-store';
 import * as ERC721UniversalContract from '../abi/UniversalContract'
 
 export const processor = new EvmBatchProcessor()
-    .setGateway('https://v2.archive.subsquid.io/network/polygon-mainnet')
+    .setGateway(process.env.GATEWAY_ENDPOINT!)
     .setDataSource({
         chain: process.env.RPC_ENDPOINT!,
     })

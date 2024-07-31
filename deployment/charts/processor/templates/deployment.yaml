@@ -29,13 +29,15 @@ spec:
             - name: DB_NAME
               value: {{ .Values.postgresDb }}
             - name: DB_PORT
-              value: "5432"
+              value: {{ .Values.postgresPort | quote }}
             - name: DB_HOST
               value: {{ .Values.postgresDbHost }}
             - name: DB_PASS
               value: {{ .Values.postgresPassword }}
             - name: DB_USER
               value: {{ .Values.postgresUser }}
+            - name: GATEWAY_ENDPOINT
+              value: {{ .Values.gatewayEndpoint }}
             - name: PRIVATE_IPFS_GATEWAY
               valueFrom:
                 secretKeyRef:

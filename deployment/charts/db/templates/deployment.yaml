@@ -29,6 +29,7 @@ spec:
           volumeMounts:
             - name: {{ .Values.mountName }}
               mountPath: {{ .Values.mountPath }}
+          args: ["-p", {{ .Values.containerPort | quote }}]
       volumes:
         - name: {{ .Values.mountName }}
           persistentVolumeClaim:

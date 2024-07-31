@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: laos-indexer-api
+  name: {{ .Values.name }}
   labels:
-    app.kubernetes.io/app: laos-indexer-api
+    app.kubernetes.io/app: {{ .Values.name }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/app: laos-indexer-api
+      app.kubernetes.io/app: {{ .Values.name }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/app: laos-indexer-api
+        app.kubernetes.io/app: {{ .Values.name }}
     spec:
       containers:
-        - name: laos-indexer-api
+        - name: {{ .Values.name }}
           image: freeverseio/laos-indexer:{{ .Values.imageTag }}
           imagePullPolicy: Always
           resources:
@@ -29,9 +29,9 @@ spec:
             - name: DB_NAME
               value: {{ .Values.postgresDb }}
             - name: DB_PORT
-              value: "5432"
+              value: {{ .Values.postgresPort | quote }}
             - name: DB_HOST
-              value: "laos-indexer-db"
+              value: {{ .Values.postgresDbHost }}
             - name: PRIVATE_IPFS_GATEWAY
               valueFrom:
                 secretKeyRef:
@@ -42,7 +42,7 @@ spec:
             - name: DB_USER
               value: {{ .Values.postgresUser }}
             - name: GQL_PORT
-              value: "4350"
+              value: {{ .Values.gqlPort | quote }}
           command: ["sqd", "serve:prod"]
           ports:
-            - containerPort: 4350
+            - containerPort: {{ .Values.gqlPort }}

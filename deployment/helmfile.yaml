@@ -14,46 +14,67 @@ environments:
       - ./environments/staging/values.yaml
 
 helmfiles:
+  {{- range .Values.indexerInstances }}
   - path: 'charts/db/helmfile.yaml'
     values:
-      - namespace: {{ .Values.namespace }}
-      - postgresDb: {{ .Values.postgresDb }}
-      - postgresPassword: {{ .Values.postgresPassword }}
-      - postgresUser: {{ .Values.postgresUser }}
+      - namespace: {{ $.Values.namespace }}
+      - postgresDb: {{ .postgresDb }}
+      - postgresPassword: {{ .postgresPassword }}
+      - postgresUser: {{ .postgresUser }}
+      - pvcName: {{ .pvcName }}
+      - podName: {{ .dbPodName }}
+      - servicePort: {{ .servicePort }}
+      - containerPort: {{ .containerPort }}
+      - mountPath: {{ .mountPath }}
+      - mountName: {{ .mountName }}
   - path: 'charts/processor/helmfile.yaml'
     values:
-      - name: "laos-indexer-ownership-processor"
-      - namespace: {{ .Values.namespace }}
+      - name: {{ .ownershipProcessor }}
+      - namespace: {{ $.Values.namespace }}
       - imageTag: {{ requiredEnv "CIRCLE_SHA1" }}
-      - postgresDb: {{ .Values.postgresDb }}
-      - postgresPassword: {{ .Values.postgresPassword }}
-      - postgresUser: {{ .Values.postgresUser }}
-      - laosGlobalConsensus: {{ .Values.laosGlobalConsensus }}
-      - laosParachain: {{ .Values.laosParachain }}
-      - laosPalletInstance: {{ .Values.laosPalletInstance }}
-      - startingBlockOwnership: {{ .Values.startingBlockOwnership }}
-      - startingBlockLaos: {{ .Values.startingBlockLaos }}
+      - postgresDb: {{ .postgresDb }}
+      - postgresDbHost: {{ .dbPodName }}
+      - postgresPassword: {{ .postgresPassword }}
+      - postgresUser: {{ .postgresUser }}
+      - postgresPort: {{ .servicePort }}
+      - gatewayEndpoint: {{ .gatewayEndpoint }}
+      - rpcEndpointSecretKey: {{ .rpcEndpointSecretKey }}
+      - laosGlobalConsensus: {{ $.Values.laosGlobalConsensus }}
+      - laosParachain: {{ $.Values.laosParachain }}
+      - laosPalletInstance: {{ $.Values.laosPalletInstance }}
+      - startingBlockOwnership: {{ .startingBlockOwnership }}
+      - startingBlockLaos: {{ $.Values.startingBlockLaos }}
       - command: "process:prod:ownership_chain"
   - path: 'charts/processor/helmfile.yaml'
     values:
-      - name: "laos-indexer-laos-processor"
-      - namespace: {{ .Values.namespace }}
+      - name: {{ .laosProcessor }}
+      - namespace: {{ $.Values.namespace }}
       - imageTag: {{ requiredEnv "CIRCLE_SHA1" }}
-      - postgresDb: {{ .Values.postgresDb }}
-      - postgresPassword: {{ .Values.postgresPassword }}
-      - postgresUser: {{ .Values.postgresUser }}
-      - laosGlobalConsensus: {{ .Values.laosGlobalConsensus }}
-      - laosParachain: {{ .Values.laosParachain }}
-      - laosPalletInstance: {{ .Values.laosPalletInstance }}
-      - startingBlockOwnership: {{ .Values.startingBlockOwnership }}
-      - startingBlockLaos: {{ .Values.startingBlockLaos }}
+      - postgresDb: {{ .postgresDb }}
+      - postgresDbHost: {{ .dbPodName }}
+      - postgresPassword: {{ .postgresPassword }}
+      - postgresUser: {{ .postgresUser }}
+      - postgresPort: {{ .servicePort }}
+      - gatewayEndpoint: ""
+      - rpcEndpointSecretKey: {{ .rpcEndpointSecretKey }}
+      - laosGlobalConsensus: {{ $.Values.laosGlobalConsensus }}
+      - laosParachain: {{ $.Values.laosParachain }}
+      - laosPalletInstance: {{ $.Values.laosPalletInstance }}
+      - startingBlockOwnership: {{ .startingBlockOwnership }}
+      - startingBlockLaos: {{ $.Values.startingBlockLaos }}
       - command: "process:prod:laos"
   - path: 'charts/api/helmfile.yaml'
     values:
-      - namespace: {{ .Values.namespace }}
+      - name: {{ .apiProcessor }}
+      - namespace: {{ $.Values.namespace }}
       - imageTag: {{ requiredEnv "CIRCLE_SHA1" }}
-      - postgresDb: {{ .Values.postgresDb }}
-      - postgresPassword: {{ .Values.postgresPassword }}
-      - postgresUser: {{ .Values.postgresUser }}
-      - host: {{ .Values.host }}
+      - postgresDb: {{ .postgresDb }}
+      - postgresDbHost: {{ .dbPodName }}
+      - postgresPort: {{ .servicePort }}
+      - postgresPassword: {{ .postgresPassword }}
+      - postgresUser: {{ .postgresUser }}
+      - host: {{ .host }}
+      - gqlPort: {{ .gqlPort }}
+{{- end }}
+  
 

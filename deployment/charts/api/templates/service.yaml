@@ -1,16 +1,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: laos-indexer-api
+  name: {{ .Values.name }}
   labels:
-    app.kubernetes.io/app: laos-indexer-api
+    app.kubernetes.io/app: {{ .Values.name }}
 spec:
   type: ClusterIP
   selector:
-    app.kubernetes.io/app: laos-indexer-api
+    app.kubernetes.io/app: {{ .Values.name }}
   ports:
-    - port: 4350
-      targetPort: 4350
+    - port: {{ .Values.gqlPort }}
+      targetPort: {{ .Values.gqlPort }}
       protocol: TCP
       name: api
   

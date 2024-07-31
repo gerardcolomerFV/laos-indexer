@@ -1,15 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: laos-indexer-db
+  name: {{ .Values.podName }}
   labels:
-    app: laos-indexer-db
+    app: {{ .Values.podName }}
 spec:
   type: ClusterIP
   ports:
-    - port: 5432
-      targetPort: 5432
+    - port: {{ .Values.servicePort }}
+      targetPort: {{ .Values.containerPort }}
       protocol: TCP
-      name: postgres
+      name: {{ .Values.podName }}
   selector:
-    app.kubernetes.io/app: laos-indexer-db
+    app.kubernetes.io/app: {{ .Values.podName }}

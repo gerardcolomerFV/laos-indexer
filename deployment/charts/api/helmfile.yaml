@@ -1,11 +1,15 @@
 releases:
-  - name: indexer-release
+  - name:  {{ .Values.name }}-release
     namespace: '{{ .Values.namespace }}'
     createNamespace: false
     chart: .
     values:
+      - name: {{ .Values.name }}
       - imageTag: {{ .Values.imageTag }}
       - postgresDb: {{ .Values.postgresDb }}
+      - postgresPort: {{ .Values.postgresPort }}
+      - postgresDbHost: {{ .Values.postgresDbHost }}
       - postgresPassword: {{ .Values.postgresPassword }}
       - postgresUser: {{ .Values.postgresUser }}
       - host: {{ .Values.host }}
+      - gqlPort: {{ .Values.gqlPort }}

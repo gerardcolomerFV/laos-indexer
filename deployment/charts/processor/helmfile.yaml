@@ -7,8 +7,12 @@ releases:
       - name: {{ .Values.name }}
       - imageTag: {{ .Values.imageTag }}
       - postgresDb: {{ .Values.postgresDb }}
+      - postgresDbHost: {{ .Values.postgresDbHost }}
       - postgresPassword: {{ .Values.postgresPassword }}
       - postgresUser: {{ .Values.postgresUser }}
+      - postgresPort: {{ .Values.postgresPort }}
+      - gatewayEndpoint: {{ .Values.gatewayEndpoint }}
+      - rpcEndpointSecretKey: {{ .Values.rpcEndpointSecretKey }}
       - laosGlobalConsensus: {{ .Values.laosGlobalConsensus }}
       - laosParachain: {{ .Values.laosParachain }}
       - laosPalletInstance: {{ .Values.laosPalletInstance }}

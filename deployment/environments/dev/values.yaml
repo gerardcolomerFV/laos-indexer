@@ -3,7 +3,7 @@ postgresDb: squid
 postgresDbHost: indexer-db-polygon
 postgresPassword: postgres
 postgresUser: postgres
-postgresPort: 5432
+postgresPort: "5432"
 rpcEndpointSecretKey: "indexerEthereumRpcEndpoint"
 ipfsGateway: https://subsquid-laos.mypinata.cloud/ipfs/
 host: indexer.gorengine.com

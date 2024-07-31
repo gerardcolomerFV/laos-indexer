@@ -16,7 +16,7 @@ indexerInstances:
     mountName: indexer-pvc
     ownershipProcessor: indexer-polygon-processor
     gatewayEndpoint: https://v2.archive.subsquid.io/network/polygon-mainnet
-    startingBlockOwnership: "59659603"
+    startingBlockOwnership: "59689828"
     rpcEndpointSecretKey: "indexerPolygonRpcEndpoint"
     laosProcessor: indexer-laos-processor-polygon
     apiProcessor: indexer-laos-polygon-api
@@ -33,7 +33,7 @@ indexerInstances:
     mountName: indexer-pvc-ethereum
     ownershipProcessor: indexer-ethereum-processor
     gatewayEndpoint: https://v2.archive.subsquid.io/network/ethereum-mainnet
-    startingBlockOwnership: "59689828"
+    startingBlockOwnership: "20365510"
     rpcEndpointSecretKey: "indexerEthereumRpcEndpoint"
     laosProcessor: indexer-laos-processor-ethereum
     apiProcessor: indexer-laos-ethereum-api

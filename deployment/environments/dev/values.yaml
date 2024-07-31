@@ -7,6 +7,7 @@ postgresPort: "5432"
 rpcEndpointSecretKey: "indexerPolygonRpcEndpoint"
 ipfsGateway: https://subsquid-laos.mypinata.cloud/ipfs/
 host: indexer.gorengine.com
+gqlPort: 4000
 rpcOwnership: https://rpc.ankr.com/polygon
 rpcLaos: wss://rpc.laossigma.laosfoundation.io
 laosGlobalConsensus: "0:0x77afd6190f1554ad45fd0d31aee62aacc33c6db0ea801129acb813f913e0764f"

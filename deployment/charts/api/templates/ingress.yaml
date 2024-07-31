@@ -24,6 +24,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: laos-indexer-api
+                name: {{ .Values.name }}
                 port:
-                  number: 4350
+                  number: {{ .Values.gqlPort }}

@@ -14,12 +14,12 @@ indexerInstances:
     containerPort: 5432
     mountPath: /var/lib/postgresql/pvdata
     mountName: indexer-pvc
-    ownershipProcessor: laos-indexer-polygon-processor
+    ownershipProcessor: indexer-polygon-processor
     gatewayEndpoint: https://v2.archive.subsquid.io/network/polygon-mainnet
     startingBlockOwnership: "59659603"
     rpcEndpointSecretKey: "indexerPolygonRpcEndpoint"
-    laosProcessor: laos-processor-polygon
-    apiProcessor: laos-indexer-polygon-api
+    laosProcessor: indexer-laos-processor-polygon
+    apiProcessor: indexer-laos-polygon-api
     host: indexer.gorengine.com
     gqlPort: 4000
   - dbPodName: indexer-db-ethereum
@@ -31,11 +31,11 @@ indexerInstances:
     containerPort: 5433
     mountPath: /var/lib/postgresql/pvdata2
     mountName: indexer-pvc-ethereum
-    ownershipProcessor: laos-indexer-ethereum-processor
+    ownershipProcessor: indexer-ethereum-processor
     gatewayEndpoint: https://v2.archive.subsquid.io/network/ethereum-mainnet
     startingBlockOwnership: "20222263"
     rpcEndpointSecretKey: "indexerEthereumRpcEndpoint"
-    laosProcessor: laos-processor-ethereum
-    apiProcessor: laos-indexer-ethereum-api
+    laosProcessor: indexer-laos-processor-ethereum
+    apiProcessor: indexer-laos-ethereum-api
     host: indexer-ethereum.gorengine.com
     gqlPort: 4000

@@ -10,6 +10,10 @@ Block 1: Apr 15 2024 11:14:06 AM (+02:00 UTC)
 Polygon: 55830815 (Block timestamp: Sun, 14 Apr 2024 23:59:57 GMT)
 Ethereum: 19657200 (Block timestamp: Sun, 14 Apr 2024 23:59:59 GMT)
 
+LAOS Sigma
+Block 1: Apr 15 2024 11:14:06 AM (+02:00 UTC)
+Polygon: 59689828 (Block timestamp: 23 Jul 2024)
+Ethereum: 20365510 (Block timestamp: 23 Jul 2024)
 
 LAOS Network
 Block 1: Jul 03 2024 17:36:18 PM (+02:00 UTC)

@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: laos-indexer-db
+  name: {{ .Values.podName }}
   labels:
-    app.kubernetes.io/app: laos-indexer-db
+    app.kubernetes.io/app: {{ .Values.podName }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/app: laos-indexer-db
+      app.kubernetes.io/app: {{ .Values.podName }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/app: laos-indexer-db
+        app.kubernetes.io/app: {{ .Values.podName }}
     spec:
       containers:
         - name: postgres
@@ -21,15 +21,15 @@ spec:
             - name: POSTGRES_PASSWORD
               value: {{ .Values.postgresPassword }}
             - name: POSTGRES_DB
-              value: squid
+              value: {{ .Values.postgresDb }}
             - name: POSTGRES_USER
               value: {{ .Values.postgresUser }}
           ports:
-            - containerPort: 5432
+            - containerPort: {{ .Values.containerPort }}
           volumeMounts:
-            - name: indexer-pvc
-              mountPath: /var/lib/postgresql/pvdata
+            - name: {{ .Values.mountName }}
+              mountPath: {{ .Values.mountPath }}
       volumes:
-        - name: indexer-pvc
+        - name: {{ .Values.mountName }}
           persistentVolumeClaim:
-            claimName: indexer-pvc
+            claimName: {{ .Values.pvcName }}

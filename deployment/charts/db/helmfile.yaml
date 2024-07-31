@@ -1,5 +1,5 @@
 releases:
-  - name: indexer-db-release
+  - name: {{ .Values.podName }}-db-release
     namespace: '{{ .Values.namespace }}'
     createNamespace: false
     chart: .
@@ -7,3 +7,9 @@ releases:
       - postgresDb: {{ .Values.postgresDb }}
       - postgresPassword: {{ .Values.postgresPassword }}
       - postgresUser: {{ .Values.postgresUser }}
+      - pvcName: {{ .Values.pvcName }}
+      - podName: {{ .Values.podName }}
+      - servicePort: {{ .Values.servicePort }}
+      - containerPort: {{ .Values.containerPort }}
+      - mountPath: {{ .Values.mountPath }}
+      - mountName: {{ .Values.mountName }}

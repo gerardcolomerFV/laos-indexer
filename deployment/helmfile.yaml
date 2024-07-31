@@ -14,20 +14,30 @@ environments:
       - ./environments/staging/values.yaml
 
 helmfiles:
+  {{- range .Values.postgresInstances }}
   - path: 'charts/db/helmfile.yaml'
     values:
-      - namespace: {{ .Values.namespace }}
-      - postgresDb: {{ .Values.postgresDb }}
-      - postgresPassword: {{ .Values.postgresPassword }}
-      - postgresUser: {{ .Values.postgresUser }}
+      - namespace: {{ $.Values.namespace }}
+      - postgresDb: {{ .postgresDb }}
+      - postgresPassword: {{ .postgresPassword }}
+      - postgresUser: {{ .postgresUser }}
+      - pvcName: {{ .pvcName }}
+      - podName: {{ .name }}
+      - servicePort: {{ .servicePort }}
+      - containerPort: {{ .containerPort }}
+      - mountPath: {{ .mountPath }}
+      - mountName: {{ .mountName }}
+{{- end }}
   - path: 'charts/processor/helmfile.yaml'
     values:
       - name: "laos-indexer-ownership-processor"
       - namespace: {{ .Values.namespace }}
       - imageTag: {{ requiredEnv "CIRCLE_SHA1" }}
       - postgresDb: {{ .Values.postgresDb }}
+      - postgresDbHost: {{ .Values.postgresDbHost }}
       - postgresPassword: {{ .Values.postgresPassword }}
       - postgresUser: {{ .Values.postgresUser }}
+      - postgresPort: {{ .Values.postgresPort }}
       - laosGlobalConsensus: {{ .Values.laosGlobalConsensus }}
       - laosParachain: {{ .Values.laosParachain }}
       - laosPalletInstance: {{ .Values.laosPalletInstance }}
@@ -40,6 +50,8 @@ helmfiles:
       - namespace: {{ .Values.namespace }}
       - imageTag: {{ requiredEnv "CIRCLE_SHA1" }}
       - postgresDb: {{ .Values.postgresDb }}
+      - postgresDbHost: {{ .Values.postgresDbHost }}
+      - postgresPort: {{ .Values.postgresPort }}
       - postgresPassword: {{ .Values.postgresPassword }}
       - postgresUser: {{ .Values.postgresUser }}
       - laosGlobalConsensus: {{ .Values.laosGlobalConsensus }}
@@ -53,6 +65,8 @@ helmfiles:
       - namespace: {{ .Values.namespace }}
       - imageTag: {{ requiredEnv "CIRCLE_SHA1" }}
       - postgresDb: {{ .Values.postgresDb }}
+      - postgresDbHost: {{ .Values.postgresDbHost }}
+      - postgresPort: {{ .Values.postgresPort }}
       - postgresPassword: {{ .Values.postgresPassword }}
       - postgresUser: {{ .Values.postgresUser }}
       - host: {{ .Values.host }}

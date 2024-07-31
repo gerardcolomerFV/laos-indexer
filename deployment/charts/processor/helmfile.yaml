@@ -7,6 +7,7 @@ releases:
       - name: {{ .Values.name }}
       - imageTag: {{ .Values.imageTag }}
       - postgresDb: {{ .Values.postgresDb }}
+      - postgresDbHost: {{ .Values.postgresDbHost }}
       - postgresPassword: {{ .Values.postgresPassword }}
       - postgresUser: {{ .Values.postgresUser }}
       - laosGlobalConsensus: {{ .Values.laosGlobalConsensus }}

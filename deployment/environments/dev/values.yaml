@@ -1,13 +1,35 @@
 namespace: protostar
 postgresDb: squid
+postgresDbHost: indexer-db-polygon
 postgresPassword: postgres
 postgresUser: postgres
+postgresPort: 5432
+rpcEndpointSecretKey: "indexerEthereumRpcEndpoint"
 ipfsGateway: https://subsquid-laos.mypinata.cloud/ipfs/
 host: indexer.gorengine.com
 rpcOwnership: https://rpc.ankr.com/polygon
-rpcLaos: wss://rpc.laossun.gorengine.com
-laosGlobalConsensus: "0:0x4756c4042a431ad2bbe61d8c4b966c1328e7a8daa0110e9bbd3d4013138a0bd4"
-laosParachain: "2000"
+rpcLaos: wss://rpc.laossigma.laosfoundation.io
+laosGlobalConsensus: "0:0x77afd6190f1554ad45fd0d31aee62aacc33c6db0ea801129acb813f913e0764f"
+laosParachain: "4006"
 laosPalletInstance: "51"
-startingBlockLaos: "622000"
-startingBlockOwnership: "59228000"
+startingBlockLaos: "1"
+startingBlockOwnership: "59659603"
+postgresInstances:
+  - name: indexer-db-polygon
+    postgresDb: squid
+    postgresPassword: postgres
+    postgresUser: postgres
+    pvcName: pvc-squid-1
+    servicePort: 5432
+    containerPort: 5432
+    mountPath: /var/lib/postgresql/pvdata
+    mountName: indexer-pvc
+  - name: indexer-db-polygon-ethereum
+    postgresDb: squid-ethereum
+    postgresPassword: postgres
+    postgresUser: postgres
+    pvcName: pvc-squid-ethereum-1
+    servicePort: 5433
+    containerPort: 5433
+    mountPath: /var/lib/postgresql/pvdata2
+    mountName: indexer-pvc-ethereum

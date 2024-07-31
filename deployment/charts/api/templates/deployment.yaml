@@ -29,9 +29,9 @@ spec:
             - name: DB_NAME
               value: {{ .Values.postgresDb }}
             - name: DB_PORT
-              value: "5432"
+              value: {{ .Values.postgresPort }}
             - name: DB_HOST
-              value: "laos-indexer-db"
+              value: {{ .Values.postgresDbHost }}
             - name: PRIVATE_IPFS_GATEWAY
               valueFrom:
                 secretKeyRef:

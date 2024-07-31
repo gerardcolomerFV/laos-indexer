@@ -6,6 +6,8 @@ releases:
     values:
       - imageTag: {{ .Values.imageTag }}
       - postgresDb: {{ .Values.postgresDb }}
+      - postgresPort: {{ .Values.postgresPort }}
+      - postgresDbHost: {{ .Values.postgresDbHost }}
       - postgresPassword: {{ .Values.postgresPassword }}
       - postgresUser: {{ .Values.postgresUser }}
       - host: {{ .Values.host }}

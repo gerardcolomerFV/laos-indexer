@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: indexer-pvc
+  name: {{ .Values.pvcName }}
 spec:
   accessModes:
     - ReadWriteOnce

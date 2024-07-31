@@ -13,19 +13,11 @@ A custom GraphQL API retrieves real-time information from the two independent so
 - Node.js
 - Docker
 
-## Current State
-
-- Capturing `NewERC721Universal` events on a specified EVM chain and their transfer events.
-
-## Pending
-
-- Capture mint and evolution events in LAOS.
-- Custom GraphQL queries:
-    - `getTokenById`
-    - `getTokensByOwner`
-    - `getTokensByCollection`
-    - `getTransfersByTokenId`
-    - `getEvolutionsByTokenId`
+##  GraphQL queries:
+`token`: Retrieves current details about a particular NFT.
+`tokenHistory`: Returns all changes associated with the NFT's metadata.
+`tokens`: Lists NFTs based on the owner's address or a collection address.
+`transfers`: Shows all transfer events associated with a specific NFT.
 
 ## Quickstart
 

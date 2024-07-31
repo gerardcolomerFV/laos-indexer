@@ -33,7 +33,7 @@ indexerInstances:
     mountName: indexer-pvc-ethereum
     ownershipProcessor: indexer-ethereum-processor
     gatewayEndpoint: https://v2.archive.subsquid.io/network/ethereum-mainnet
-    startingBlockOwnership: "20222263"
+    startingBlockOwnership: "59689828"
     rpcEndpointSecretKey: "indexerEthereumRpcEndpoint"
     laosProcessor: indexer-laos-processor-ethereum
     apiProcessor: indexer-laos-ethereum-api
